@@ -1,4 +1,4 @@
-(defproject org.domaindrivenarchitecture.org/dda-user-crate "0.1.0-SNAPSHOT"
+(defproject org.domaindrivenarchitecture/dda-user-crate "0.1.0-SNAPSHOT"
   :description "A crate to handle configuration, their dependencies, documentation and validation"
   :url "http://example.com/FIXME"
   :license {:name "Apache License, Version 2.0"
