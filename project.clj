@@ -1,6 +1,6 @@
 (defproject org.domaindrivenarchitecture/dda-user-crate "0.1.1-SNAPSHOT"
   :description "A crate to handle configuration, their dependencies, documentation and validation"
-  :url "http://example.com/FIXME"
+  :url "https://www.domaindrivenarchitecture.org"
   :license {:name "Apache License, Version 2.0"
              :url "https://www.apache.org/licenses/LICENSE-2.0.html"}
   :dependencies [[org.clojure/clojure "1.6.0"]
