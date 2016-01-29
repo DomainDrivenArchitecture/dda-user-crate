@@ -14,23 +14,21 @@
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
 
-(ns org.domaindrivenarchitecture.pallet.crate.config.ssh-key
- )
+(ns org.domaindrivenarchitecture.pallet.crate.config.ssh-key-test
+  (:require
+    [clojure.test :refer :all]
+    [org.domaindrivenarchitecture.pallet.crate.config.ssh-key :as sut]
+    ))
 
-(defrecord SshKey
-  [type public-key comment private-key])
+(deftest public-key
+  (testing 
+    "format public key string for ssh authorized keys"
+    (is (= "ssh-rsa public-key comment"
+           (sut/format-public-key 
+             (sut/new-ssh-key
+                  "ssh-rsa"
+                  "public-key"
+                  "comment"))
+           ))
+    ))
 
-(defn new-ssh-key
-  "Constructor for ssh key"
-  ([type public-key comment]
-    (SshKey. type public-key comment nil))
-  ([type public-key comment private-key]
-    (SshKey. type public-key comment private-key)))
-
-(defn format-public-key
-  ""
-  [ssh-key-record]
-  (str 
-    (:type ssh-key-record) " " 
-    (:public-key ssh-key-record) " " 
-    (:comment ssh-key-record)))

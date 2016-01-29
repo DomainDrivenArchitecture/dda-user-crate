@@ -22,6 +22,7 @@
     [org.domaindrivenarchitecture.pallet.crate.config.ssh-key :as ssh-key-record]
     ))
 
+;; Todo: use overwrit instead of wrapped for generating authorized keys
 (defn- add-authorized-keys-to-user-wrapped 
   [user-name 
    authorized-key-ids 
@@ -59,7 +60,7 @@
     :authorized-key-ids)
   )
 
-(defn authorized-key-config
+(defn ssh-key-config
   [global-config]
   (-> global-config
     :ssh-keys)
@@ -86,6 +87,39 @@
     result)
   )
 
+(defn configure-ssh-credentials-to-user 
+  [& {:keys [user-name 
+            key-ids 
+            key-config
+            result]
+      :or {result {} }}] 
+    (let [key-id 
+        (first key-ids)]
+    (if (empty? key-ids)
+      result
+      (recur 
+        user-name 
+        (pop key-ids)
+        key-config 
+        (let [key-key
+              (keyword (peek key-ids))
+              ssh-key-record 
+              (key-key key-config)]
+          (when-exits? (:private-key ssh-key-record)
+                       (merge
+                         result
+                         {key-key
+                          (ssh-key/install-key
+                                user-name
+                                "id_rsa"
+                                (:private-key ssh-key-record)
+                                (ssh-key-record/format-public-key ssh-key-record))}
+                         )
+                       result)
+          ))
+      )
+    ))
+
 (defn configure-sudo-for-user
   ""
   [user-name]
@@ -110,7 +144,8 @@ So password test1234 is representet by 3hLlUVSs1Aa1c"
   [& {:keys [user-name 
              encrypted-password
              authorized-key-ids 
-             authorized-key-config]
+             authorized-key-config
+             ssh-key-config]
       :or {authorized-key-ids []
            authorized-key-config {} }}] 
   (actions/group "sudo" :action :create)
@@ -124,5 +159,9 @@ So password test1234 is representet by 3hLlUVSs1Aa1c"
     :user-name user-name 
     :authorized-key-ids authorized-key-ids 
     :authorized-key-config authorized-key-config)
+  (configure-ssh-credentials-to-user 
+    :user-name user-name 
+    :authorized-key-ids authorized-key-ids 
+    :ssh-key-config ssh-key-config)
   (configure-sudo-for-user user-name)
   )
