@@ -90,36 +90,19 @@
 (defn configure-ssh-credentials-to-user 
   [& {:keys [user-name 
             key-ids 
-            key-config
-            result]
-      :or {result {} }}] 
-    (let [key-id 
-        (first key-ids)]
-    (if (empty? key-ids)
-      result
-      (recur 
-        user-name 
-        (pop key-ids)
-        key-config 
-        (let [key-key
-              (keyword (peek key-ids))
-              ssh-key-record 
-              (key-key key-config)]
-          (when-exits? (:private-key ssh-key-record)
-                       (merge
-                         result
-                         {key-key
-                          (ssh-key/install-key
-                                user-name
-                                "id_rsa"
-                                (:private-key ssh-key-record)
-                                (ssh-key-record/format-public-key ssh-key-record))}
-                         )
-                       result)
-          ))
-      )
-    ))
-
+            key-config]}]
+  (doseq [key-id key-ids]
+    (let [key-key (keyword (peek key-ids))
+          ssh-key-record (key-key key-config)]
+      (when (some? (:private-key ssh-key-record))
+        (ssh-key/install-key
+          user-name
+          "id_rsa"
+          (:private-key ssh-key-record)
+          (ssh-key-record/format-public-key ssh-key-record))
+        )))    
+    )
+  
 (defn configure-sudo-for-user
   ""
   [user-name]
