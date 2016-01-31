@@ -14,21 +14,37 @@
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
 
-(ns org.domaindrivenarchitecture.pallet.crate.config.ssh-key-test
+;Deprercated
+
+(ns org.domaindrivenarchitecture.pallet.crate.user.cm-user
   (:require
-    [clojure.test :refer :all]
-    [org.domaindrivenarchitecture.pallet.crate.config.ssh-key :as sut]
-    ))
+    [pallet.api :as api])
+  (:gen-class :main true))
 
-(deftest public-key
-  (testing 
-    "format public key string for ssh authorized keys"
-    (is (= "ssh-rsa public-key comment"
-           (sut/format-public-key 
-             (sut/new-ssh-key
-                  "ssh-rsa"
-                  "public-key"
-                  "comment"))
-           ))
+(defn get-cm-user
+  ([node]
+  (let [user-name (:pallet-cm-user-name node)
+        user-pwd (:pallet-cm-user-password node)]
+    (get-cm-user user-name user-pwd)
     ))
+  ([user-name user-pwd]
+    (if (nil? user-pwd)
+      (api/make-user user-name)
+      (api/make-user 
+        user-name 
+        :password user-pwd 
+        :no-sudo (= user-name "root")))
+    )  
+  )
 
+(defn password-user-for-cm
+  "create the user to bootstrap the system"
+  [user-name user-password]
+  (api/make-user user-name :password user-password :no-sudo (= user-name "root"))
+  )
+
+(defn pallet-user-for-cm
+  "create the user for regular further configuration"
+  []
+  (api/make-user "pallet")
+  )

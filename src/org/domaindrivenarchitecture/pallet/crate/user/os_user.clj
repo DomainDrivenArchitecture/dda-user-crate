@@ -14,23 +14,19 @@
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
 
-(ns org.domaindrivenarchitecture.pallet.crate.config.ssh-key
- )
+(ns org.domaindrivenarchitecture.pallet.crate.user.os-user
+  (:gen-class :main true))
 
-(defrecord SshKey
-  [type public-key comment private-key])
+(defrecord OsUser
+  [encrypted-password authorized-key-ids])
 
-(defn new-ssh-key
-  "Constructor for ssh key"
-  ([type public-key comment]
-    (SshKey. type public-key comment nil))
-  ([type public-key comment private-key]
-    (SshKey. type public-key comment private-key)))
-
-(defn format-public-key
-  ""
-  [ssh-key-record]
-  (str 
-    (:type ssh-key-record) " " 
-    (:public-key ssh-key-record) " " 
-    (:comment ssh-key-record)))
+(defn new-os-user
+  "Creates a operating system user with 
+* pw: encrypted - can be generated e.g. by mkpasswd test123. 
+  So password test123 is representet by sqliZ6M65Vfjo.
+* authorized-keys: Vector of authorized-key-ids"
+  ([authorized-keys]
+    (new-os-user nil authorized-keys))
+  ([encrypted-password authorized-keys]
+    (OsUser. encrypted-password authorized-keys))
+  )

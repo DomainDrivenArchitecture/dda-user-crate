@@ -14,19 +14,17 @@
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
 
-(ns org.domaindrivenarchitecture.pallet.crate.config.os-user
- )
+(ns org.domaindrivenarchitecture.pallet.crate.user-test
+  (:require
+    [clojure.test :refer :all]
+    [org.domaindrivenarchitecture.pallet.crate.user :as sut]
+    ))
 
-(defrecord OsUser
-  [encrypted-password authorized-key-ids])
+(deftest public-key
+  (testing 
+    "format public key string for ssh authorized keys"
+    (is (=  nil
+           (sut/ssh-key-config {})
+           ))
+    ))
 
-(defn new-os-user
-  "Creates a operating system user with 
-* pw: encrypted - can be generated e.g. by mkpasswd test123. 
-  So password test123 is representet by sqliZ6M65Vfjo.
-* authorized-keys: Vector of authorized-key-ids"
-  ([authorized-keys]
-    (new-os-user nil authorized-keys))
-  ([encrypted-password authorized-keys]
-    (OsUser. encrypted-password authorized-keys))
-  )

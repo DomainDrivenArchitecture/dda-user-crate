@@ -19,11 +19,11 @@
   (:require
     [pallet.actions :as actions]
     [pallet.crate.ssh-key :as ssh-key]
-    [org.domaindrivenarchitecture.pallet.crate.config.ssh-key :as ssh-key-record]
+    [org.domaindrivenarchitecture.pallet.crate.user.ssh-key :as ssh-key-record]
     ))
 
 ;; Todo: use overwrit instead of wrapped for generating authorized keys
-(defn- add-authorized-keys-to-user-wrapped 
+(defn add-authorized-keys-to-user-wrapped 
   [user-name 
    authorized-key-ids 
    authorized-key-config
@@ -54,24 +54,15 @@
 
 (defn users-authorized-key-ids
   [username-key global-config]
-  (-> global-config
-    :os-user
-    username-key
-    :authorized-key-ids)
-  )
+  (:authorized-key-ids username-key :authorized-key-ids global-config))
 
 (defn ssh-key-config
   [global-config]
-  (-> global-config
-    :ssh-keys)
-  )
+  (:ssh-keys global-config))
 
 (defn pallet-user-encrypted-password
   [username-key global-config]
-  (-> global-config
-    :os-user
-    username-key
-    :encrypted-password)
+  (:encrypted-password username-key :os-user global-config)
   )
 
 (defn add-authorized-keys-to-user 
@@ -84,8 +75,7 @@
     user-name 
     authorized-key-ids
     authorized-key-config
-    result)
-  )
+    result))
 
 (defn configure-ssh-credentials-to-user 
   [& {:keys [user-name 
