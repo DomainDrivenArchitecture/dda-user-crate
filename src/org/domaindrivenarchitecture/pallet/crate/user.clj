@@ -54,15 +54,15 @@
 
 (defn users-authorized-key-ids
   [username-key global-config]
-  (:authorized-key-ids username-key :authorized-key-ids global-config))
+  (-> global-config :os-user username-key :authorized-key-ids))
 
 (defn ssh-key-config
   [global-config]
-  (:ssh-keys global-config))
+  (-> global-config :ssh-keys))
 
 (defn pallet-user-encrypted-password
   [username-key global-config]
-  (:encrypted-password username-key :os-user global-config)
+  (-> global-config :os-user username-key :encrypted-password)
   )
 
 (defn add-authorized-keys-to-user 
