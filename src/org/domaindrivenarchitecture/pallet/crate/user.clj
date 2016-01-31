@@ -15,7 +15,7 @@
 ; limitations under the License.
 
 
-(ns org.domaindrivenarchitecture.pallet.crate.user 
+(ns org.domaindrivenarchitecture.pallet.crate.user
   (:require
     [pallet.actions :as actions]
     [pallet.crate.ssh-key :as ssh-key]
@@ -52,7 +52,7 @@
       )
     ))
 
-(defn get-users-authorized-key-ids
+(defn users-authorized-key-ids
   [username-key global-config]
   (-> global-config
     :os-user
