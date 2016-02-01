@@ -29,6 +29,32 @@
                   "ssh-rsa"
                   "public-key"
                   "comment"))
+           )))
+  (testing 
+    "creation of new ssh records"
+    (is (= #org.domaindrivenarchitecture.pallet.crate.user.ssh_key.SshKey{:type
+                                                                         "ssh-rsa",
+                                                                         :public-key
+                                                                         "public-key",
+                                                                         :comment
+                                                                         "comment",
+                                                                         :private-key
+                                                                         nil}
+           (sut/new-ssh-key "ssh-rsa" "public-key" "comment")
            ))
-    ))
+    (is (= #org.domaindrivenarchitecture.pallet.crate.user.ssh_key.SshKey{:type
+                                                                         "ssh-rsa",
+                                                                         :public-key
+                                                                         "public-key",
+                                                                         :comment
+                                                                         "comment",
+                                                                         :private-key
+                                                                         "private-key"}
+           (sut/new-ssh-key
+                "ssh-rsa"
+                "public-key"
+                "comment"
+                "private-key")
+           )))
+  )
 
