@@ -14,8 +14,7 @@
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
 
-(ns org.domaindrivenarchitecture.pallet.crate.user.os-user
-  (:gen-class :main true))
+(ns org.domaindrivenarchitecture.pallet.crate.user.os-user)
 
 (defrecord OsUser
   [encrypted-password authorized-key-ids])

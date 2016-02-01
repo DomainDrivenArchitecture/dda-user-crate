@@ -14,8 +14,7 @@
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
 
-(ns org.domaindrivenarchitecture.pallet.crate.user.ssh-key
-  (:gen-class :main true))
+(ns org.domaindrivenarchitecture.pallet.crate.user.ssh-key)
 
 (defrecord SshKey
   [type public-key comment private-key])
