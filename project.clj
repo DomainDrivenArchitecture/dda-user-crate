@@ -14,6 +14,15 @@
                         ["releases" :clojars]]
   :pallet {:source-paths ["src"]}
   :local-repo-classpath true
+  :profiles {:dev
+            {:dependencies
+             [[com.palletops/pallet "0.8.10" :classifier "tests"]
+              [org.domaindrivenarchitecture/dda-config-crate "0.3.0-SNAPSHOT" :classifier "tests"]]
+             :plugins
+             [[com.palletops/pallet-lein "0.8.0-alpha.1"]]}
+             :leiningen/reply
+              {:dependencies [[org.slf4j/jcl-over-slf4j "1.7.2"]]
+               :exclusions [commons-logging]}}
   :classifiers {:tests {:source-paths ^:replace ["test"]
                         :resource-paths ^:replace []}}
 )

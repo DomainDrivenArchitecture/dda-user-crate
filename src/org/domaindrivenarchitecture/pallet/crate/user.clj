@@ -83,14 +83,19 @@
             key-config]}]
   (doseq [key-id key-ids]
     (let [key-key (keyword (peek key-ids))
-          ssh-key-record (key-key key-config)]
+          ssh-key-record (key-key key-config)
+          ssh-dir (str "/home/" user-name "/.ssh/")]
       (when (some? (:private-key ssh-key-record))
-        (ssh-key/install-key
-          user-name
-          "id_rsa"
-          (:private-key ssh-key-record)
-          (ssh-key-record/format-public-key ssh-key-record))
-        )))    
+          (actions/directory ssh-dir :owner user-name :mode "755")
+          (actions/remote-file
+            (str ssh-dir "id_rsa")
+            :owner user-name :mode "600"
+            :content (:private-key ssh-key-record))
+          (actions/remote-file
+           (str ssh-dir "id_rsa.pub")
+           :owner user-name :mode "644"
+           :content (ssh-key-record/format-public-key ssh-key-record))
+          )))   
     )
   
 (defn configure-sudo-for-user
@@ -134,7 +139,7 @@ So password test1234 is representet by 3hLlUVSs1Aa1c"
     :authorized-key-config authorized-key-config)
   (configure-ssh-credentials-to-user 
     :user-name user-name 
-    :authorized-key-ids authorized-key-ids 
-    :ssh-key-config ssh-key-config)
+    :key-ids authorized-key-ids 
+    :key-config ssh-key-config)
   (configure-sudo-for-user user-name)
   )
