@@ -14,10 +14,10 @@
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
 
-(ns org.domaindrivenarchitecture.pallet.crate.user.cm-user-test
+(ns org.domaindrivenarchitecture.pallet.crate.user.user-for-transport-test
   (:require
     [clojure.test :refer :all]
-    [org.domaindrivenarchitecture.pallet.crate.user.cm-user :as sut]
+    [org.domaindrivenarchitecture.pallet.crate.user.user-for-transport :as sut]
     ))
 
 (deftest public-key

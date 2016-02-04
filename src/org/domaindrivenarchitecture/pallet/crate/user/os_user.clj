@@ -14,18 +14,47 @@
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
 
-(ns org.domaindrivenarchitecture.pallet.crate.user.os-user)
+(ns org.domaindrivenarchitecture.pallet.crate.user.os-user
+  (:require [org.domaindrivenarchitecture.pallet.crate.user.ssh-key :as ssh-key]))
 
 (defrecord OsUser
-  [encrypted-password authorized-key-ids])
+  [user-name encrypted-password authorized-keys personal-key])
+
+(defn users-authorized-key-ids
+  [username-key global-config]
+  (-> global-config :os-user username-key :authorized-keys))
+
+(defn users-personal-key-id
+  [username-key global-config]
+  (-> global-config :os-user username-key :personal-key))
+
+(defn pallet-user-encrypted-password
+  [username-key global-config]
+  (-> global-config :os-user username-key :encrypted-password))
 
 (defn new-os-user
   "Creates a operating system user with 
 * pw: encrypted - can be generated e.g. by mkpasswd test123. 
   So password test123 is representet by sqliZ6M65Vfjo.
 * authorized-keys: Vector of authorized-key-ids"
-  ([authorized-keys]
-    (new-os-user nil authorized-keys))
-  ([encrypted-password authorized-keys]
-    (OsUser. encrypted-password authorized-keys))
+  ([user-name authorized-keys]
+    (new-os-user user-name nil authorized-keys nil))
+  ([user-name encrypted-password authorized-keys]
+    (new-os-user user-name encrypted-password authorized-keys nil))
+  ([user-name encrypted-password authorized-keys personal-key]
+    (OsUser. user-name encrypted-password authorized-keys personal-key))
+  )
+
+(defn new-os-user-from-config
+  "creates a new os user from configuration"
+  [user-key global-config]
+  (new-os-user
+    (name user-key)
+    (pallet-user-encrypted-password user-key global-config)
+    (ssh-key/create-keys-from-config 
+      (users-authorized-key-ids user-key global-config) 
+      (ssh-key/ssh-key-config global-config))
+    (ssh-key/create-key-from-config
+      (users-personal-key-id user-key global-config) 
+      (ssh-key/ssh-key-config global-config)))
   )

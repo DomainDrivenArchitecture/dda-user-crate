@@ -20,41 +20,38 @@
     [org.domaindrivenarchitecture.pallet.crate.user.ssh-key :as sut]
     ))
 
-(deftest public-key
+(def config
+  {:k1 {:type "ssh-rsa"
+        :public-key "pub1"
+        :comment "c1"}
+   :k2 {:type "ssh-rsa"
+        :public-key "pub2"
+        :comment "c2"
+        :private-key "priv2"}})
+
+(deftest key-to-string
   (testing 
     "format public key string for ssh authorized keys"
     (is (= "ssh-rsa public-key comment"
-           (sut/format-public-key 
+           (sut/public-key-formated
              (sut/new-ssh-key
                   "ssh-rsa"
                   "public-key"
                   "comment"))
+           ))))
+  
+(deftest key-from-config
+  (testing 
+    "create key from config"
+    (is (= (sut/new-ssh-key "ssh-rsa" "pub1" "c1" nil)
+           (sut/create-key-from-config
+             :k1 config)
            )))
   (testing 
-    "creation of new ssh records"
-    (is (= #org.domaindrivenarchitecture.pallet.crate.user.ssh_key.SshKey{:type
-                                                                         "ssh-rsa",
-                                                                         :public-key
-                                                                         "public-key",
-                                                                         :comment
-                                                                         "comment",
-                                                                         :private-key
-                                                                         nil}
-           (sut/new-ssh-key "ssh-rsa" "public-key" "comment")
-           ))
-    (is (= #org.domaindrivenarchitecture.pallet.crate.user.ssh_key.SshKey{:type
-                                                                         "ssh-rsa",
-                                                                         :public-key
-                                                                         "public-key",
-                                                                         :comment
-                                                                         "comment",
-                                                                         :private-key
-                                                                         "private-key"}
-           (sut/new-ssh-key
-                "ssh-rsa"
-                "public-key"
-                "comment"
-                "private-key")
-           )))
-  )
-
+    "create seq of keys from config"
+    (is (= (list (sut/new-ssh-key "ssh-rsa" "pub2" "c2" "priv2")
+             (sut/new-ssh-key "ssh-rsa" "pub1" "c1" nil))
+           (sut/create-keys-from-config
+             (list :k2 :k1) config)
+           ))))
+  

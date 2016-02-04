@@ -17,89 +17,44 @@
 
 (ns org.domaindrivenarchitecture.pallet.crate.user
   (:require
+    [clojure.string :as string]
     [pallet.actions :as actions]
-    [pallet.crate.ssh-key :as ssh-key]
-    [org.domaindrivenarchitecture.pallet.crate.user.ssh-key :as ssh-key-record]
-    ))
+    [org.domaindrivenarchitecture.pallet.crate.user.ssh-key :as ssh-key]))
 
-;; Todo: use overwrit instead of wrapped for generating authorized keys
-(defn add-authorized-keys-to-user-wrapped 
-  [user-name 
-   authorized-key-ids 
-   authorized-key-config
-   result] 
-  (let [authorized-key-id 
-        (first authorized-key-ids)]
-    (if (empty? authorized-key-ids)
-      result
-      (recur 
-        user-name 
-        (pop authorized-key-ids)
-        authorized-key-config 
-        (let [authorized-key-key
-              (keyword (peek authorized-key-ids))
-              ssh-key-record 
-              (authorized-key-key authorized-key-config)                  
-              ]
-          (merge
-            result
-            {authorized-key-key
-             (ssh-key/authorize-key
-                   user-name
-                   (ssh-key-record/format-public-key ssh-key-record))}
-            )
-          ))
-      )
-    ))
+(defn configure-authorized-keys
+  "configer the authorized_keys for a given user."
+  [os-user]
+  (let [user-name (:user-name os-user)
+        ssh-dir (str "/home/" user-name "/.ssh/")]
+    (actions/directory ssh-dir :owner user-name :mode "755")
+    (actions/remote-file
+      (str ssh-dir "authorized_keys")
+      :owner user-name :mode "644"
+      :content (string/join
+                 (map ssh-key/public-key-formated (:authorized-keys os-user))
+                 \n)
+      )))
 
-(defn users-authorized-key-ids
-  [username-key global-config]
-  (-> global-config :os-user username-key :authorized-key-ids))
-
-(defn ssh-key-config
-  [global-config]
-  (-> global-config :ssh-keys))
-
-(defn pallet-user-encrypted-password
-  [username-key global-config]
-  (-> global-config :os-user username-key :encrypted-password)
-  )
-
-(defn add-authorized-keys-to-user 
-  [& {:keys [user-name 
-            authorized-key-ids 
-            authorized-key-config
-            result]
-      :or {result {} }}] 
-  (add-authorized-keys-to-user-wrapped 
-    user-name 
-    authorized-key-ids
-    authorized-key-config
-    result))
-
-(defn configure-ssh-credentials-to-user 
-  [& {:keys [user-name 
-            key-ids 
-            key-config]}]
-  (doseq [key-id key-ids]
-    (let [key-key (keyword (peek key-ids))
-          ssh-key-record (key-key key-config)
-          ssh-dir (str "/home/" user-name "/.ssh/")]
-      (when (some? (:private-key ssh-key-record))
-          (actions/directory ssh-dir :owner user-name :mode "755")
-          (actions/remote-file
-            (str ssh-dir "id_rsa")
-            :owner user-name :mode "600"
-            :content (:private-key ssh-key-record))
-          (actions/remote-file
-           (str ssh-dir "id_rsa.pub")
-           :owner user-name :mode "644"
-           :content (ssh-key-record/format-public-key ssh-key-record))
-          )))   
-    )
+(defn configure-ssh-key
+  "configer the users ssh_key."
+  [os-user]
+  (let [user-name (:user-name os-user)
+        ssh-key (:personal-key os-user)
+        ssh-dir (str "/home/" user-name "/.ssh/")]
+    (when (some? (:private-key ssh-key))
+      (actions/directory ssh-dir :owner user-name :mode "755")
+      (actions/remote-file
+        (str ssh-dir "id_rsa")
+        :owner user-name :mode "600"
+        :content (:private-key ssh-key))
+      (actions/remote-file
+       (str ssh-dir "id_rsa.pub")
+       :owner user-name :mode "644"
+       :content (ssh-key/public-key-formated ssh-key))
+      )))
   
-(defn configure-sudo-for-user
-  ""
+(defn configure-sudo
+  "Add user to sudoers without password."
   [user-name]
   (actions/remote-file 
     (str "/etc/sudoers.d/" user-name) 
@@ -108,38 +63,23 @@
     :mode "440"
     :literal true
     :content (str 
-               user-name
-               "    ALL = NOPASSWD: ALL\n"
-               "pallet"
-               "    ALL=(" user-name ") NOPASSWD: ALL\n")
-    )
-  )
+               user-name "    ALL = NOPASSWD: ALL\n"
+               "pallet    ALL=(" user-name ") NOPASSWD: ALL\n")
+    ))
 
 (defn create-sudo-user
   "creates a sudo user with pw is encrypted handed over. 
 Passwords can be generated e.g. by mkpasswd test123. 
 So password test1234 is representet by 3hLlUVSs1Aa1c"
-  [& {:keys [user-name 
-             encrypted-password
-             authorized-key-ids 
-             authorized-key-config
-             ssh-key-config]
-      :or {authorized-key-ids []
-           authorized-key-config {} }}] 
+  [os-user]
   (actions/group "sudo" :action :create)
-  (actions/user user-name 
+  (actions/user (:user-name os-user) 
                 :action :create 
                 :create-home true 
                 :shell :bash
                 :groups ["sudo"]
-                :password encrypted-password)
-  (add-authorized-keys-to-user 
-    :user-name user-name 
-    :authorized-key-ids authorized-key-ids 
-    :authorized-key-config authorized-key-config)
-  (configure-ssh-credentials-to-user 
-    :user-name user-name 
-    :key-ids authorized-key-ids 
-    :key-config ssh-key-config)
-  (configure-sudo-for-user user-name)
+                :password (:encrypted-password os-user))
+  (configure-authorized-keys os-user)
+  (configure-ssh-key os-user)
+  (configure-sudo os-user)
   )

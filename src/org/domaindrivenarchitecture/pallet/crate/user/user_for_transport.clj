@@ -16,10 +16,9 @@
 
 ;Deprercated
 
-(ns org.domaindrivenarchitecture.pallet.crate.user.cm-user
+(ns org.domaindrivenarchitecture.pallet.crate.user.user-for-transport
   (:require
-    [pallet.api :as api])
-  (:gen-class :main true))
+    [pallet.api :as api]))
 
 (defn get-cm-user
   ([node]
