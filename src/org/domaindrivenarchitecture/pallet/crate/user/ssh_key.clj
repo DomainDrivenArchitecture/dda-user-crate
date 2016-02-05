@@ -26,7 +26,7 @@
 (defn new-ssh-key
   "Constructor for ssh key"
   ([type public-key comment]
-    (SshKey. type public-key comment nil))
+    (new-ssh-key type public-key comment nil))
   ([type public-key comment private-key]
     (SshKey. type public-key comment private-key)))
 
