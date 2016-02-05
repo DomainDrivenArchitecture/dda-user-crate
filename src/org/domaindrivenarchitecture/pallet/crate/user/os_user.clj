@@ -48,13 +48,15 @@
 (defn new-os-user-from-config
   "creates a new os user from configuration"
   [user-key global-config]
-  (new-os-user
-    (name user-key)
-    (pallet-user-encrypted-password user-key global-config)
-    (ssh-key/create-keys-from-config 
-      (users-authorized-key-ids user-key global-config) 
-      (ssh-key/ssh-key-config global-config))
-    (ssh-key/create-key-from-config
-      (users-personal-key-id user-key global-config) 
-      (ssh-key/ssh-key-config global-config)))
-  )
+  (let [personal-key (users-personal-key-id user-key global-config)]
+    (new-os-user
+      (name user-key)
+      (pallet-user-encrypted-password user-key global-config)
+      (ssh-key/create-keys-from-config 
+        (users-authorized-key-ids user-key global-config) 
+        (ssh-key/ssh-key-config global-config))
+      (when (some? personal-key)
+        (ssh-key/create-key-from-config
+          personal-key 
+          (ssh-key/ssh-key-config global-config))))
+  ))

@@ -32,10 +32,21 @@
                     :authorized-keys [:k1 :k2]
                     :personal-key :k2}}
    })
+(def config2
+  {:ssh-keys {:k1 {:type "ssh-rsa"
+                   :public-key "pub1"
+                   :comment "c1"}
+              :k2 {:type "ssh-rsa"
+                   :public-key "pub2"
+                   :comment "c2"
+                   :private-key "priv2"}}
+   :os-user {:usr2 {:encrypted-password "enc1" 
+                    :authorized-keys [:k1 :k2]}}
+   })
   
 (deftest key-from-config
   (testing 
-    "create seq of keys from config"
+    "create a full blown os-user from config"
     (is (= (sut/new-os-user 
              "usr1" 
              "enc1"
@@ -43,4 +54,14 @@
                (ssh-key/new-ssh-key "ssh-rsa" "pub2" "c2" "priv2")]
              (ssh-key/new-ssh-key "ssh-rsa" "pub2" "c2" "priv2"))
            (sut/new-os-user-from-config :usr1 config)
+           )))
+  (testing 
+    "create a os-user without private key from config"
+    (is (= (sut/new-os-user 
+             "usr2" 
+             "enc1"
+              [(ssh-key/new-ssh-key "ssh-rsa" "pub1" "c1" nil)
+               (ssh-key/new-ssh-key "ssh-rsa" "pub2" "c2" "priv2")]
+             nil)
+           (sut/new-os-user-from-config :usr2 config2)
            ))))
