@@ -44,7 +44,8 @@
                     :authorized-keys [:k1 :k2]}}
    })
   
-(deftest key-from-config
+
+(deftest user-from-config
   (testing 
     "create a full blown os-user from config"
     (is (= (sut/new-os-user 
@@ -65,3 +66,14 @@
              nil)
            (sut/new-os-user-from-config :usr2 config2)
            ))))
+
+
+(deftest authorized-keys-for-user
+  (testing 
+    "generation of authorized keys"
+    (is (= ["ssh-rsa pub1 c1" "ssh-rsa pub2 c2"]
+           (map ssh-key/public-key-formated 
+                (:authorized-keys 
+                  (sut/new-os-user-from-config :usr1 config))))))
+  )
+  

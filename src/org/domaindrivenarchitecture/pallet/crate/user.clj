@@ -25,15 +25,19 @@
   "configer the authorized_keys for a given user."
   [os-user]
   (let [user-name (:user-name os-user)
-        ssh-dir (str "/home/" user-name "/.ssh/")]
+        ssh-dir (str "/home/" user-name "/.ssh/")
+        authorized-keys (into [] 
+                              (map 
+                                ssh-key/public-key-formated 
+                                (:authorized-keys os-user)))]
     (actions/directory ssh-dir :owner user-name :mode "755")
     (actions/remote-file
       (str ssh-dir "authorized_keys")
       :owner user-name :mode "644"
       :content (string/join
-                 (map ssh-key/public-key-formated (:authorized-keys os-user))
-                 \n)
-      )))
+                 \n
+                 authorized-keys))
+      ))
 
 (defn configure-ssh-key
   "configer the users ssh_key."
