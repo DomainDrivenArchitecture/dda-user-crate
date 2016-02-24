@@ -35,7 +35,7 @@
       (str ssh-dir "authorized_keys")
       :owner user-name :mode "644"
       :content (string/join
-                 \n
+                 \newline
                  authorized-keys))
       ))
 
