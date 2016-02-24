@@ -76,4 +76,20 @@
                 (:authorized-keys 
                   (sut/new-os-user-from-config :usr1 config))))))
   )
-  
+
+(deftest user-home
+  (testing 
+    "user-home path"
+    (is (= "/root" 
+          (sut/user-home-dir 
+            (sut/new-os-user "root" "enc1"))))
+    (is (= "/home/other" 
+          (sut/user-home-dir 
+            (sut/new-os-user "other" "enc1"))))
+    )
+  (testing 
+    "user .ssh path"
+    (is (= "/root/.ssh/" 
+          (sut/user-ssh-dir 
+            (sut/new-os-user "root" "enc1"))))
+    ))

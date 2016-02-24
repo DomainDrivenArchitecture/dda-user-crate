@@ -19,13 +19,14 @@
   (:require
     [clojure.string :as string]
     [pallet.actions :as actions]
+    [org.domaindrivenarchitecture.pallet.crate.user.os-user :as os-user]
     [org.domaindrivenarchitecture.pallet.crate.user.ssh-key :as ssh-key]))
 
 (defn configure-authorized-keys
   "configer the authorized_keys for a given user."
   [os-user]
   (let [user-name (:user-name os-user)
-        ssh-dir (str "/home/" user-name "/.ssh/")
+        ssh-dir (os-user/user-ssh-dir os-user)
         authorized-keys (into [] 
                               (map 
                                 ssh-key/public-key-formated 
@@ -44,7 +45,7 @@
   [os-user]
   (let [user-name (:user-name os-user)
         ssh-key (:personal-key os-user)
-        ssh-dir (str "/home/" user-name "/.ssh/")]
+        ssh-dir (os-user/user-ssh-dir os-user)]
     (when (some? (:private-key ssh-key))
       (actions/directory ssh-dir :owner user-name :mode "755")
       (actions/remote-file

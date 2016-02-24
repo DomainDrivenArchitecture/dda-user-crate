@@ -60,3 +60,16 @@
           personal-key 
           (ssh-key/ssh-key-config global-config))))
   ))
+
+(defn user-home-dir
+  "provides the user home path."
+  [os-user]
+  (let [user-name (:user-name os-user)]
+  (if (= user-name "root") 
+    "/root" 
+    (str "/home/" user-name))))
+
+(defn user-ssh-dir
+  "provides the user .ssh path."
+  [os-user]
+  (str (user-home-dir os-user) "/.ssh/"))
