@@ -59,17 +59,18 @@
   
 (defn configure-sudo
   "Add user to sudoers without password."
-  [user-name]
-  (actions/remote-file 
-    (str "/etc/sudoers.d/" user-name) 
-    :owner "root" 
-    :group "root"
-    :mode "440"
-    :literal true
-    :content (str 
-               user-name "    ALL = NOPASSWD: ALL\n"
-               "pallet    ALL=(" user-name ") NOPASSWD: ALL\n")
-    ))
+  [os-user]
+  (let [user-name (:user-name os-user)]
+    (actions/remote-file 
+      (str "/etc/sudoers.d/" user-name) 
+      :owner "root" 
+      :group "root"
+      :mode "440"
+      :literal true
+      :content (str 
+                 user-name "    ALL = NOPASSWD: ALL\n"
+                 "pallet    ALL=(" user-name ") NOPASSWD: ALL\n")
+      )))
 
 (defn create-sudo-user
   "creates a sudo user with pw is encrypted handed over. 
