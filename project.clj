@@ -3,10 +3,9 @@
   :url "https://www.domaindrivenarchitecture.org"
   :license {:name "Apache License, Version 2.0"
              :url "https://www.apache.org/licenses/LICENSE-2.0.html"}
-  :dependencies [[org.clojure/clojure "1.6.0"]
-                 [com.palletops/pallet "0.8.10"]
+  :dependencies [[org.clojure/clojure "1.7.0"]
+                 [com.palletops/pallet "0.8.11"]
                  [com.palletops/stevedore "0.8.0-beta.7"]
-                 [ch.qos.logback/logback-classic "1.0.9"]
                  [org.domaindrivenarchitecture/dda-config-crate "0.3.0-SNAPSHOT"]]
   :repositories [["snapshots" :clojars]
                  ["releases" :clojars]]
@@ -16,7 +15,7 @@
   :local-repo-classpath true
   :profiles {:dev
             {:dependencies
-             [[com.palletops/pallet "0.8.10" :classifier "tests"]
+             [[com.palletops/pallet "0.8.11" :classifier "tests"]
               [org.domaindrivenarchitecture/dda-config-crate "0.3.0-SNAPSHOT" :classifier "tests"]]
              :plugins
              [[com.palletops/pallet-lein "0.8.0-alpha.1"]]}
