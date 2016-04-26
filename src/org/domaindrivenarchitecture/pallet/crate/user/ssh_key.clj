@@ -14,7 +14,8 @@
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
 
-(ns org.domaindrivenarchitecture.pallet.crate.user.ssh-key)
+(ns org.domaindrivenarchitecture.pallet.crate.user.ssh-key
+  (require [clojure.string :as str]))
 
 (defrecord SshKey
   [type public-key comment private-key])
@@ -25,6 +26,12 @@
 
 (defn new-ssh-key
   "Constructor for ssh key"
+  ([public-key-formated]
+    (new-ssh-key public-key-formated nil))
+  ([public-key-formated private-key]
+    (let [public-keys (str/split public-key-formated #"\s")
+          all-keys (concat public-keys private-key)]
+      (apply new-ssh-key all-keys)))
   ([type public-key comment]
     (new-ssh-key type public-key comment nil))
   ([type public-key comment private-key]

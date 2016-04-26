@@ -29,6 +29,13 @@
         :comment "c2"
         :private-key "priv2"}})
 
+(deftest key-from-string
+  (testing 
+    "format public key string for ssh authorized keys"
+    (is (= (sut/new-ssh-key "a" "b" "c")
+           (sut/new-ssh-key "a b c"))
+           )))
+
 (deftest key-to-string
   (testing 
     "format public key string for ssh authorized keys"
