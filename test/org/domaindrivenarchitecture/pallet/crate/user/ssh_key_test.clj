@@ -33,8 +33,10 @@
   (testing 
     "format public key string for ssh authorized keys"
     (is (= (sut/new-ssh-key "a" "b" "c")
-           (sut/new-ssh-key "a b c"))
-           )))
+           (sut/new-ssh-key "a b c")))
+    (is (= (sut/new-ssh-key "a" "b" "c" "d")
+           (sut/new-ssh-key "a b c" "d")))
+    ))
 
 (deftest key-to-string
   (testing 

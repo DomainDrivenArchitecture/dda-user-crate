@@ -18,7 +18,10 @@
   (:require [org.domaindrivenarchitecture.pallet.crate.user.ssh-key :as ssh-key]))
 
 (defrecord OsUser
-  [user-name encrypted-password authorized-keys personal-key])
+  [user-name 
+   encrypted-password 
+   authorized-keys 
+   personal-key])
 
 (defn users-authorized-key-ids
   [username-key global-config]

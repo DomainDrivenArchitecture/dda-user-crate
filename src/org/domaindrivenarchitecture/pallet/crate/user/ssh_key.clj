@@ -15,27 +15,25 @@
 ; limitations under the License.
 
 (ns org.domaindrivenarchitecture.pallet.crate.user.ssh-key
-  (require [clojure.string :as str]))
+  (require 
+    [schema.core :as s]
+    [clojure.string :as str]))
 
-(defrecord SshKey
-  [type public-key comment private-key])
+(def SshKeyConfig
+  {:type
+   :public-key
+   :comment
+   (s/optional-key :private-key)})
+
+(s/defrecord SshKey
+  [type :- s/Str
+   public-key :- s/Str
+   comment :- s/Str
+   private-key :- s/Str])
 
 (defn ssh-key-config
   [global-config]
   (-> global-config :ssh-keys))
-
-(defn new-ssh-key
-  "Constructor for ssh key"
-  ([public-key-formated]
-    (new-ssh-key public-key-formated nil))
-  ([public-key-formated private-key]
-    (let [public-keys (str/split public-key-formated #"\s")
-          all-keys (concat public-keys private-key)]
-      (apply new-ssh-key all-keys)))
-  ([type public-key comment]
-    (new-ssh-key type public-key comment nil))
-  ([type public-key comment private-key]
-    (SshKey. type public-key comment private-key)))
 
 (defn public-key-formated
   "returns a authorized_keys formated public key string."
@@ -44,6 +42,20 @@
     (:type ssh-key-record) " " 
     (:public-key ssh-key-record) " " 
     (:comment ssh-key-record)))
+
+
+(s/defn new-ssh-key
+  "Constructor for ssh key"
+  ([public-key-formated :- s/Str]
+    (new-ssh-key public-key-formated nil))
+  ([public-key-formated private-key]
+    (let [public-keys (str/split public-key-formated #"\s")
+          all-keys (concat public-keys [private-key])]
+      (apply new-ssh-key all-keys)))
+  ([type public-key comment]
+    (new-ssh-key type public-key comment nil))
+  ([type public-key comment private-key]
+    (SshKey. type public-key comment private-key)))
 
 (defn create-key-from-config
   "consrtucts a sequence of authorized keys from given key-keys and config."
