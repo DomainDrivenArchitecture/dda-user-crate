@@ -1,4 +1,4 @@
-(defproject org.domaindrivenarchitecture/dda-user-crate "0.3.3-SNAPSHOT"
+(defproject org.domaindrivenarchitecture/dda-user-crate "0.3.3"
   :description "A crate to handle users"
   :url "https://www.domaindrivenarchitecture.org"
   :license {:name "Apache License, Version 2.0"
@@ -18,7 +18,7 @@
             {:dependencies
              [[org.clojure/test.check "0.9.0"]
               [com.palletops/pallet "0.8.12" :classifier "tests"]
-              [org.domaindrivenarchitecture/dda-pallet-commons "0.1.3" :classifier "tests"]]
+              [org.domaindrivenarchitecture/dda-pallet-commons "0.2.0" :classifier "tests"]]
              :plugins
              [[com.palletops/pallet-lein "0.8.0-alpha.1"]]}
              :leiningen/reply
