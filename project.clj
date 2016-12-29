@@ -18,11 +18,11 @@
             {:dependencies
              [[org.clojure/test.check "0.9.0"]
               [com.palletops/pallet "0.8.12" :classifier "tests"]
-              [org.domaindrivenarchitecture/dda-pallet-commons "0.2.2-SNAPSHOT" :classifier "tests"]]
+              [org.domaindrivenarchitecture/dda-pallet-commons "0.3.0" :classifier "tests"]]
              :plugins
              [[com.palletops/pallet-lein "0.8.0-alpha.1"]]}
              :leiningen/reply
-              {:dependencies [[org.slf4j/jcl-over-slf4j "1.7.21"]]
+              {:dependencies [[org.slf4j/jcl-over-slf4j "1.7.22"]]
                :exclusions [commons-logging]}}
   :classifiers {:tests {:source-paths ^:replace ["test"]
                         :resource-paths ^:replace []}}
