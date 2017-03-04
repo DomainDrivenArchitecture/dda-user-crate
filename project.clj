@@ -1,4 +1,4 @@
-(defproject org.domaindrivenarchitecture/dda-user-crate "0.3.5-SNAPSHOT"
+(defproject org.domaindrivenarchitecture/dda-user-crate "0.3.5"
   :description "A crate to handle users"
   :url "https://www.domaindrivenarchitecture.org"
   :license {:name "Apache License, Version 2.0"
@@ -22,7 +22,7 @@
              :plugins
              [[com.palletops/pallet-lein "0.8.0-alpha.1"]]}
              :leiningen/reply
-              {:dependencies [[org.slf4j/jcl-over-slf4j "1.7.22"]]
+              {:dependencies [[org.slf4j/jcl-over-slf4j "1.7.24"]]
                :exclusions [commons-logging]}}
   :classifiers {:tests {:source-paths ^:replace ["test"]
                         :resource-paths ^:replace []}}
