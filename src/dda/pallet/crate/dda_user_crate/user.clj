@@ -19,11 +19,12 @@
   (:require
     [clojure.string :as string]
     [pallet.actions :as actions]
-    [org.domaindrivenarchitecture.pallet.crate.user.os-user :as os-user]
-    [org.domaindrivenarchitecture.pallet.crate.user.ssh-key :as ssh-key]))
+    [dda.pallet.crate.dda-user-crate.user.os-user :as os-user]
+    [dda.pallet.crate.dda-user-crate.user.ssh-key :as ssh-key]))
 
+;this needs to be adjusted for dynamic authorized-key functionality
 (defn configure-authorized-keys
-  "configer the authorized_keys for a given user."
+  "configure the authorized_keys for a given user."
   [os-user]
   (let [user-name (:user-name os-user)
         ssh-dir (os-user/user-ssh-dir os-user)
@@ -57,7 +58,7 @@
        :owner user-name :mode "644"
        :content (ssh-key/public-key-formated ssh-key))
       )))
-  
+
 (defn configure-sudo
   "Add user to sudoers without password."
   [os-user]

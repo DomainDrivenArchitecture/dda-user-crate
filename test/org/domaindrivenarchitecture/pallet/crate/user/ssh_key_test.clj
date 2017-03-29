@@ -17,7 +17,7 @@
 (ns org.domaindrivenarchitecture.pallet.crate.user.ssh-key-test
   (:require
     [clojure.test :refer :all]
-    [org.domaindrivenarchitecture.pallet.crate.user.ssh-key :as sut]
+    [dda.pallet.crate.dda-user-crate.user.ssh-key :as sut]
     ))
 
 (def config
