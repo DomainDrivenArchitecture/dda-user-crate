@@ -15,12 +15,10 @@
 (defn install-user [config]
   (user/create-sudo-user config))
 
-;maybe replace juxt with something that doesnt return a vector?
 (defn configure-user [config]
-  ((juxt 
-    user/configure-authorized-keys user/configure-ssh-key user/configure-sudo)
-    (:os-user-config config))
-  nil) 
+  (user/configure-authorized-keys (:os-user-config config))
+  (user/configure-ssh-key (:os-user-config config))
+  (user/configure-sudo  (:os-user-config config)))
 
 (s/defmethod dda-crate/dda-install facility 
   [dda-crate config]

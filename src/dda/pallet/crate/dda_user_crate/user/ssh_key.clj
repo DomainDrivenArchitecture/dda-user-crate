@@ -24,17 +24,25 @@
    :public-key s/Str
    :comment s/Str})
 
-(def ssh-private-key-config
-  {:private-key s/Str})
+(def ssh-private-key-config s/Str)
 
 (def ssh-key-pair-config
   {:public-key ssh-public-key-config
    :private-key ssh-private-key-config})
 
-(defn format-key
+(defn format-public-key
   "returns a formatted public-key from an ssh-config"
   [ssh-public-key-config]
   (str 
-    (:type ssh-key-config) " " 
-    (:public-key ssh-key-config) " " 
-    (:comment ssh-key-config)))
+    (:type ssh-public-key-config) " " 
+    (:public-key ssh-public-key-config) " " 
+    (:comment ssh-public-key-config)))
+
+(s/defn string-to-pub-key-config [pub-key :- s/Str] :- ssh-public-key-config
+"function takes a public-key as a string and returns it as a ssh-public-key-config"
+  (let [col (clojure.string/split-lines pub-key)]
+    {:type (first col)
+    :public-key (second col)
+    :comment (nth col 2)}
+    ))
+

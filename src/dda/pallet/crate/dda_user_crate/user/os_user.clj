@@ -19,7 +19,6 @@
    [dda.pallet.crate.dda-user-crate.user.ssh-key :as ssh-key]
    [schema.core :as s]))
 
-;not exactly sure if personal-key should be optional
 (def os-user-config
   {:user-name s/Str
    :encrypted-password s/Str
@@ -50,3 +49,19 @@
   "provides the user .ssh path."
   [os-user]
   (str (user-home-dir os-user) "/.ssh/"))
+
+(s/defn ssh-priv-key-from-env :- s/Str
+  "function reads ssh private key from environment variable and returns it as a String"
+  []
+  (let [env-variable "SSH_PRIV_KEY"]
+    (System/getenv env-variable)))
+
+(defn read-ssh-keys-to-pair-config
+  [& {:keys [ssh-path read-from-env?]}] :- ssh-key/ssh-key-pair-config
+  "read ssh-keys from current node to ssh-key-pair-config. If read-from-env? flag is specified, 
+   ssh-private-key will be read from enviroment variable SSH_PRIV_KEY"
+    (let [ssh-dir (if ssh-path ssh-path (str (System/getenv "HOME") "/.ssh"))]
+    {:public-key (ssh-key/string-to-pub-key-config (slurp (str ssh-dir "/id_rsa.pub")))
+     :private-key (if read-from-env? (ssh-priv-key-from-env) (slurp (str ssh-dir "/id_rsa")))}
+    ))
+

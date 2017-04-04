@@ -25,13 +25,12 @@
 ;this needs to be adjusted for dynamic authorized-key functionality
 (defn configure-authorized-keys
   "configure the authorized_keys for a given user."
-  [os-user]
-  (let [user-name (:user-name os-user)
-        ssh-dir (os-user/user-ssh-dir os-user)
-        authorized-keys (into [] 
-                              (map 
-                                ssh-key/public-key-formated 
-                                (:authorized-keys os-user)))]
+  [os-user-config]
+  (let [user-name (:user-name os-user-config)
+        ssh-dir (os-user/user-ssh-dir os-user-config)
+        authorized-keys (map
+                         ssh-key/format-public-key 
+                         (:authorized-keys os-user-config))]
     (actions/directory ssh-dir :owner user-name :mode "755")
     (actions/remote-file
       (str ssh-dir "authorized_keys")
@@ -39,7 +38,10 @@
       :content (string/join
                  \newline
                  authorized-keys))
-      ))
+    ))
+
+
+
 
 (defn configure-ssh-key
   "configer the users ssh_key."
@@ -56,7 +58,7 @@
       (actions/remote-file
        (str ssh-dir "id_rsa.pub")
        :owner user-name :mode "644"
-       :content (ssh-key/public-key-formated ssh-key))
+       :content (ssh-key/format-public-key ssh-key))
       )))
 
 (defn configure-sudo
