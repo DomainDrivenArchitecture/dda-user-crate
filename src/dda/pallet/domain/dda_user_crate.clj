@@ -1,5 +1,5 @@
 (ns dda.pallet.domain.dda_user_crate
-  (:require 
+  (:require
    [schema.core :as s]
    [pallet.api :as api]
    [org.domaindrivenarchitecture.pallet.crate.config :as config-crate]
@@ -9,9 +9,8 @@
   user-crate/UserCrateConfig)
 
 (def UserCrateStackConfig
-  {:group-specific-config 
-   {:dda-user-group {:dda-user user-crate/UserCrateConfig}}}
-  )
+  {:group-specific-config
+   {:dda-user-group {:dda-user user-crate/UserCrateConfig}}})
 
 (s/defn ^:always-validate dda-user-crate-stack-configuration :- UserCrateStackConfig
   [convention-config :- UserDomainConfig]

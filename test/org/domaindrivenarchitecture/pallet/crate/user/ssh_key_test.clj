@@ -16,51 +16,23 @@
 
 (ns org.domaindrivenarchitecture.pallet.crate.user.ssh-key-test
   (:require
-    [clojure.test :refer :all]
-    [dda.pallet.crate.dda-user-crate.user.ssh-key :as sut]
-    ))
+   [clojure.test :refer :all]
+   [dda.pallet.crate.dda-user-crate.user.ssh-key :as sut]
+   [schema.core :as s]))
 
-(def config
-  {:k1 {:type "ssh-rsa"
-        :public-key "pub1"
-        :comment "c1"}
-   :k2 {:type "ssh-rsa"
-        :public-key "pub2"
-        :comment "c2"
-        :private-key "priv2"}})
+(def valid-ssh-pub-key-config
+  {:type "type"
+   :public-key "pub-key"
+   :comment "a comment"})
 
-(deftest key-from-string
-  (testing 
-    "format public key string for ssh authorized keys"
-    (is (= (sut/new-ssh-key "a" "b" "c")
-           (sut/new-ssh-key "a b c")))
-    (is (= (sut/new-ssh-key "a" "b" "c" "d")
-           (sut/new-ssh-key "a b c" "d")))
-    ))
+(def valid-ssh-priv-key-config
+  "private key")
 
-(deftest key-to-string
-  (testing 
-    "format public key string for ssh authorized keys"
-    (is (= "ssh-rsa public-key comment"
-           (sut/public-key-formated
-             (sut/new-ssh-key
-                  "ssh-rsa"
-                  "public-key"
-                  "comment"))
-           ))))
-  
-(deftest key-from-config
-  (testing 
-    "create key from config"
-    (is (= (sut/new-ssh-key "ssh-rsa" "pub1" "c1" nil)
-           (sut/create-key-from-config
-             :k1 config)
-           )))
-  (testing 
-    "create seq of keys from config"
-    (is (= (list (sut/new-ssh-key "ssh-rsa" "pub2" "c2" "priv2")
-             (sut/new-ssh-key "ssh-rsa" "pub1" "c1" nil))
-           (sut/create-keys-from-config
-             (list :k2 :k1) config)
-           ))))
-  
+(def ssh-key-pair-config
+  {:public-key valid-ssh-pub-key-config
+   :private-key valid-ssh-priv-key-config})
+
+(deftest test-configs
+  (is (s/validate sut/ssh-public-key-config valid-ssh-pub-key-config))
+  (is (s/validate sut/ssh-private-key-config valid-ssh-priv-key-config))
+  (is (s/validate sut/ssh-key-pair-config ssh-key-pair-config)))

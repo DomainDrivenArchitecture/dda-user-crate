@@ -15,7 +15,7 @@
 ; limitations under the License.
 
 (ns dda.pallet.crate.dda-user-crate.user.os-user
-  (:require 
+  (:require
    [dda.pallet.crate.dda-user-crate.user.ssh-key :as ssh-key]
    [schema.core :as s]))
 
@@ -41,9 +41,9 @@
   "provides the user home path."
   [os-user-config]
   (let [user-name (:user-name os-user-config)]
-  (if (= user-name "root") 
-    "/root" 
-    (str "/home/" user-name))))
+    (if (= user-name "root")
+      "/root"
+      (str "/home/" user-name))))
 
 (defn user-ssh-dir
   "provides the user .ssh path."
@@ -60,8 +60,7 @@
   [& {:keys [ssh-path read-from-env?]}] :- ssh-key/ssh-key-pair-config
   "read ssh-keys from current node to ssh-key-pair-config. If read-from-env? flag is specified, 
    ssh-private-key will be read from enviroment variable SSH_PRIV_KEY"
-    (let [ssh-dir (if ssh-path ssh-path (str (System/getenv "HOME") "/.ssh"))]
+  (let [ssh-dir (or ssh-path (str (System/getenv "HOME") "/.ssh"))]
     {:public-key (ssh-key/string-to-pub-key-config (slurp (str ssh-dir "/id_rsa.pub")))
-     :private-key (if read-from-env? (ssh-priv-key-from-env) (slurp (str ssh-dir "/id_rsa")))}
-    ))
+     :private-key (if read-from-env? (ssh-priv-key-from-env) (slurp (str ssh-dir "/id_rsa")))}))
 

@@ -3,30 +3,35 @@
 
 (ns dda.pallet.crate.dda-user-crate.instantiate-existing
   (:require
-   [clojure.inspector :as inspector]
    [schema.core :as s]
-   [pallet.api :as api]
-   [pallet.compute :as compute]
-   [pallet.compute.node-list :as node-list]
    [org.domaindrivenarchitecture.cm.operation :as operation]
-   [dda.pallet.crate.dda-git-crate.existing :as exisiting]
-   [dda.pallet.domain.dda_user_crate :as user]))
+   [dda.pallet.domain.dda_user_crate :as user]
+   [dda.pallet.crate.dda-user-crate.user.os-user :as os-user]))
+
+(def valid-ssh-pub-key-config
+  {:type "type"
+   :public-key "pub-key"
+   :comment "a comment"})
+
+(def valid-ssh-priv-key-config
+  "private key")
+
+(def ssh-key-pair-config
+  {:public-key valid-ssh-pub-key-config
+   :private-key valid-ssh-priv-key-config})
 
 (def provisioning-ip
-  "192.168.56.103")
-
-
+  "10.0.2.7")
 
 (def provisioning-user
-  {:login "jem"
+  {:login "jan"
    :password "test1234"})
 
 (def domain-config
   {:user-name "krj"
-   :encrypted-password ""
-   :authorized-keys []
-   :personal-key ""}
-  )
+   :encrypted-password "XfmJhkOyEUsx6"
+   :authorized-keys ["auth_key_1" "auth_key_2"]
+   :personal-key ssh-key-pair-config})
 
 (defn provider []
   (exisiting/provider provisioning-ip))
@@ -42,8 +47,6 @@
    :group-name s/Keyword
    :image {:login-user {:login s/Str
                         :password s/Str}}})
-
-
 
 (defn apply-install []
   (operation/do-apply-install (provider) (integrated-group-spec)))

@@ -16,80 +16,30 @@
 
 (ns org.domaindrivenarchitecture.pallet.crate.user.os-user-test
   (:require
-    [clojure.test :refer :all]
-    [dda.pallet.crate.dda-user-crate.user.ssh-key :as ssh-key]
-    [dda.pallet.crate.dda-user-crate.user.os-user :as sut]))
+   [clojure.test :refer :all]
+   [dda.pallet.crate.dda-user-crate.user.os-user :as sut]
+   [schema.core :as s]))
 
-(def config
-  {:ssh-keys {:k1 {:type "ssh-rsa"
-                   :public-key "pub1"
-                   :comment "c1"}
-              :k2 {:type "ssh-rsa"
-                   :public-key "pub2"
-                   :comment "c2"
-                   :private-key "priv2"}}
-   :os-user {:usr1 {:encrypted-password "enc1" 
-                    :authorized-keys [:k1 :k2]
-                    :personal-key :k2}}
-   })
-(def config2
-  {:ssh-keys {:k1 {:type "ssh-rsa"
-                   :public-key "pub1"
-                   :comment "c1"}
-              :k2 {:type "ssh-rsa"
-                   :public-key "pub2"
-                   :comment "c2"
-                   :private-key "priv2"}}
-   :os-user {:usr2 {:encrypted-password "enc1" 
-                    :authorized-keys [:k1 :k2]}}
-   })
-  
+(def ssh-pub-key
+  {:type "type"
+  :public-key "pub-key"
+  :comment "this is a comment"})
 
-(deftest user-from-config
-  (testing 
-    "create a full blown os-user from config"
-    (is (= (sut/new-os-user 
-             "usr1" 
-             "enc1"
-              [(ssh-key/new-ssh-key "ssh-rsa" "pub1" "c1" nil)
-               (ssh-key/new-ssh-key "ssh-rsa" "pub2" "c2" "priv2")]
-             (ssh-key/new-ssh-key "ssh-rsa" "pub2" "c2" "priv2"))
-           (sut/new-os-user-from-config :usr1 config)
-           )))
-  (testing 
-    "create a os-user without private key from config"
-    (is (= (sut/new-os-user 
-             "usr2" 
-             "enc1"
-              [(ssh-key/new-ssh-key "ssh-rsa" "pub1" "c1" nil)
-               (ssh-key/new-ssh-key "ssh-rsa" "pub2" "c2" "priv2")]
-             nil)
-           (sut/new-os-user-from-config :usr2 config2)
-           ))))
+(def ssh-priv-key "priv-key")
 
+(def ssh-key-pair
+  {:public-key ssh-pub-key
+   :private-key ssh-priv-key})
 
-(deftest authorized-keys-for-user
-  (testing 
-    "generation of authorized keys"
-    (is (= ["ssh-rsa pub1 c1" "ssh-rsa pub2 c2"]
-           (map ssh-key/public-key-formated 
-                (:authorized-keys 
-                  (sut/new-os-user-from-config :usr1 config))))))
-  )
+(def os-user-valid-config
+  {:user-name "pete"
+  :encrypted-password "secret-pw"})
 
-(deftest user-home
-  (testing 
-    "user-home path"
-    (is (= "/root" 
-          (sut/user-home-dir 
-            (sut/new-os-user "root" "enc1"))))
-    (is (= "/home/other" 
-          (sut/user-home-dir 
-            (sut/new-os-user "other" "enc1"))))
-    )
-  (testing 
-    "user .ssh path"
-    (is (= "/root/.ssh/" 
-          (sut/user-ssh-dir 
-            (sut/new-os-user "root" "enc1"))))
-    ))
+(def os-user-valid-complete-config
+  (merge os-user-valid-config
+         {:authorized-keys [ssh-pub-key]
+         :personal-key ssh-key-pair}))
+
+(deftest valid-configurations
+  (is (s/validate sut/os-user-config os-user-valid-config))
+  (is (s/validate sut/os-user-config os-user-valid-complete-config)))

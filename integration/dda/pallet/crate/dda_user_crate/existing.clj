@@ -20,7 +20,7 @@
 
 (defn remote-node [provisioning-ip]
   (node-list/make-node
-    "mmanaged-ide"
+    "managed-ide"
     "managed-ide-group"
     provisioning-ip
     :ubuntu

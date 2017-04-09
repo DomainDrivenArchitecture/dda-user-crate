@@ -15,9 +15,9 @@
 ; limitations under the License.
 
 (ns dda.pallet.crate.dda-user-crate.user.ssh-key
-  (require 
-    [schema.core :as s]
-    [clojure.string :as str]))
+  (:require
+   [schema.core :as s]
+   [clojure.string :as str]))
 
 (def ssh-public-key-config
   {:type s/Str
@@ -33,16 +33,15 @@
 (defn format-public-key
   "returns a formatted public-key from an ssh-config"
   [ssh-public-key-config]
-  (str 
-    (:type ssh-public-key-config) " " 
-    (:public-key ssh-public-key-config) " " 
-    (:comment ssh-public-key-config)))
+  (str
+   (:type ssh-public-key-config) " "
+   (:public-key ssh-public-key-config) " "
+   (:comment ssh-public-key-config)))
 
 (s/defn string-to-pub-key-config [pub-key :- s/Str] :- ssh-public-key-config
-"function takes a public-key as a string and returns it as a ssh-public-key-config"
+  "function takes a public-key as a string and returns it as a ssh-public-key-config"
   (let [col (clojure.string/split-lines pub-key)]
     {:type (first col)
-    :public-key (second col)
-    :comment (nth col 2)}
-    ))
+     :public-key (second col)
+     :comment (nth col 2)}))
 
