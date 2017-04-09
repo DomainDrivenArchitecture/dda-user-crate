@@ -15,12 +15,11 @@
 (s/defn ^:always-validate dda-user-crate-stack-configuration :- UserCrateStackConfig
   [convention-config :- UserDomainConfig]
   {:group-specific-config
-   {:dda-user-group {:dda-git user-crate/UserCrateConfig}}})
+   {:dda-user-group {:dda-user convention-config}}})
 
 (s/defn ^:always-validate dda-user-group
   [domain-config :- UserDomainConfig]
-  (let [target (get-in domain-config [:target])
-        config (dda-user-crate-stack-configuration domain-config)]
+  (let [config (dda-user-crate-stack-configuration domain-config)]
     (api/group-spec
      "dda-user-group"
      :extends [(config-crate/with-config config)

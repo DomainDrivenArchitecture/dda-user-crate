@@ -6,39 +6,44 @@
    [schema.core :as s]
    [org.domaindrivenarchitecture.cm.operation :as operation]
    [dda.pallet.domain.dda_user_crate :as user]
-   [dda.pallet.crate.dda-user-crate.user.os-user :as os-user]))
+   [dda.pallet.crate.dda-user-crate.user.os-user :as os-user]
+   [dda.pallet.crate.dda-user-crate.existing :as exisiting]))
 
-(def valid-ssh-pub-key-config
+(def ssh-pub-key
   {:type "type"
-   :public-key "pub-key"
-   :comment "a comment"})
+  :public-key "pub-key"
+  :comment "this is a comment"})
 
-(def valid-ssh-priv-key-config
-  "private key")
+(def ssh-priv-key "priv-key")
 
-(def ssh-key-pair-config
-  {:public-key valid-ssh-pub-key-config
-   :private-key valid-ssh-priv-key-config})
+(def ssh-key-pair
+  {:public-key ssh-pub-key
+   :private-key ssh-priv-key})
+
+(def domain-config
+  {:user-name "krj"
+   :encrypted-password "secret-pw"
+   :authorized-keys [ssh-pub-key]
+   :personal-key ssh-key-pair})
+
+
+
+
+
 
 (def provisioning-ip
-  "10.0.2.7")
+    "10.0.2.7")
 
 (def provisioning-user
   {:login "jan"
    :password "test1234"})
-
-(def domain-config
-  {:user-name "krj"
-   :encrypted-password "XfmJhkOyEUsx6"
-   :authorized-keys ["auth_key_1" "auth_key_2"]
-   :personal-key ssh-key-pair-config})
 
 (defn provider []
   (exisiting/provider provisioning-ip))
 
 (defn integrated-group-spec []
   (merge
-   (user/dda-user-group user/UserDomainConfig)
+   (user/dda-user-group domain-config)
    (exisiting/node-spec provisioning-user)))
 
 (def PalletGroupSpec
