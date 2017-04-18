@@ -9,6 +9,7 @@
    [dda.pallet.crate.dda-user-crate.user.os-user :as os-user]
    [dda.pallet.crate.dda-user-crate.existing :as exisiting]))
 
+
 (def ssh-pub-key
   {:type "type"
   :public-key "pub-key"
@@ -26,11 +27,6 @@
    :authorized-keys [ssh-pub-key]
    :personal-key ssh-key-pair})
 
-
-
-
-
-
 (def provisioning-ip
     "10.0.2.7")
 
@@ -38,10 +34,10 @@
   {:login "jan"
    :password "test1234"})
 
-(defn provider []
-  (exisiting/provider provisioning-ip))
+(def provider
+  (exisiting/remote-node provisioning-ip))
 
-(defn integrated-group-spec []
+(def integrated-group-spec
   (merge
    (user/dda-user-group domain-config)
    (exisiting/node-spec provisioning-user)))
@@ -54,10 +50,12 @@
                         :password s/Str}}})
 
 (defn apply-install []
-  (operation/do-apply-install (provider) (integrated-group-spec)))
+  (operation/do-apply-install provider integrated-group-spec))
+
+(apply-install)
 
 (defn apply-config []
-  (operation/do-apply-configure (provider) (integrated-group-spec)))
+  (operation/do-apply-configure provider integrated-group-spec))
 
 (defn server-test []
-  (operation/do-server-test (provider) (integrated-group-spec)))
+  (operation/do-server-test provider integrated-group-spec))

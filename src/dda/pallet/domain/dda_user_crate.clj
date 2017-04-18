@@ -3,7 +3,8 @@
    [schema.core :as s]
    [pallet.api :as api]
    [org.domaindrivenarchitecture.pallet.crate.config :as config-crate]
-   [dda.pallet.crate.dda-user-crate :as user-crate]))
+   [dda.pallet.crate.dda-user-crate :as user-crate]
+   [org.domaindrivenarchitecture.pallet.crate.init :as init]))
 
 (def UserDomainConfig
   user-crate/UserCrateConfig)
@@ -23,4 +24,5 @@
     (api/group-spec
      "dda-user-group"
      :extends [(config-crate/with-config config)
+               init/with-init
                user-crate/with-user])))

@@ -6,7 +6,9 @@
   :dependencies [[org.clojure/clojure "1.7.0"]                 
                  [prismatic/schema "1.1.5"]
                  [com.palletops/pallet "0.8.12" :exclusions [org.clojure/tools.cli]]
-                 [org.domaindrivenarchitecture/dda-pallet "0.4.0-SNAPSHOT"]]
+                 [org.domaindrivenarchitecture/dda-pallet "0.4.0-SNAPSHOT"]
+                 [org.domaindrivenarchitecture/dda-init-crate "0.2.1"]
+                 [org.clojure/tools.trace "0.7.9"]]
   :profiles {:dev
              {:source-paths ["integration"]
               :resource-paths ["dev-resources"]
@@ -25,4 +27,6 @@
   :repositories [["snapshots" :clojars]
                  ["releases" :clojars]]
   :deploy-repositories [["snapshots" :clojars]
-                        ["releases" :clojars]])
+                        ["releases" :clojars]]
+  :classifiers {:tests {:source-paths ^:replace ["test" "integration"]
+                         :resource-paths ^:replace ["dev-resources"]}})

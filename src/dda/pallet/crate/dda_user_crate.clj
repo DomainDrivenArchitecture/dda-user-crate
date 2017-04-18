@@ -10,15 +10,15 @@
 (def version [0 3 7])
 
 (def UserCrateConfig
-  {:os-user-config os-user/os-user-config})
+  os-user/os-user-config)
 
 (defn install-user [config]
   (user/create-sudo-user config))
 
 (defn configure-user [config]
-  (user/configure-authorized-keys (:os-user-config config))
-  (user/configure-ssh-key (:os-user-config config))
-  (user/configure-sudo  (:os-user-config config)))
+  (user/configure-authorized-keys config)
+  (user/configure-ssh-key config)
+  (user/configure-sudo  config))
 
 (s/defmethod dda-crate/dda-install facility
   [dda-crate config]
