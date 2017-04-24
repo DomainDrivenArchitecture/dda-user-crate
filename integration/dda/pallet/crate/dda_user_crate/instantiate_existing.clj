@@ -2,13 +2,10 @@
 ; You must not remove this notice, or any other, from this software.
 
 (ns dda.pallet.crate.dda-user-crate.instantiate-existing
-  (:require
-   [schema.core :as s]
-   [org.domaindrivenarchitecture.cm.operation :as operation]
-   [dda.pallet.domain.dda_user_crate :as user]
-   [dda.pallet.crate.dda-user-crate.user.os-user :as os-user]
-   [dda.pallet.crate.dda-user-crate.existing :as exisiting]))
-
+  (:require [dda.pallet.crate.dda-user-crate.existing :as exisiting]
+            [dda.pallet.domain.dda_user_crate :as user]
+            [org.domaindrivenarchitecture.cm.operation :as operation]
+            [schema.core :as s]))
 
 (def ssh-pub-key
   {:type "type"
@@ -51,8 +48,6 @@
 
 (defn apply-install []
   (operation/do-apply-install provider integrated-group-spec))
-
-(apply-install)
 
 (defn apply-config []
   (operation/do-apply-configure provider integrated-group-spec))

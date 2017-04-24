@@ -1,0 +1,18 @@
+2017-04-24 10:45:02,301 ERROR [nREPL-worker-5] p.contracts Invalid lift-options:
+2017-04-24 10:45:02,318 ERROR [nREPL-worker-5] p.contracts   lift-options error: Value managed-ide-group	 :ubuntu true public: 10.0.2.7  private: null  :meissa-ide, at path [:compute], did not match predicate '(fn [x] (= nil x))'.
+2017-04-24 10:45:02,318 ERROR [nREPL-worker-5] p.contracts   lift-options error: Value managed-ide-group	 :ubuntu true public: 10.0.2.7  private: null  :meissa-ide, at path [:compute], did not match predicate 'pallet.compute/compute-service?'.
+2017-04-24 10:46:08,576 ERROR [nREPL-worker-5] p.contracts Invalid lift-options:
+2017-04-24 10:46:08,576 ERROR [nREPL-worker-5] p.contracts   lift-options error: Value managed-ide-group	 :ubuntu true public: 10.0.2.7  private: null  :meissa-ide, at path [:compute], did not match predicate '(fn [x] (= nil x))'.
+2017-04-24 10:46:08,577 ERROR [nREPL-worker-5] p.contracts   lift-options error: Value managed-ide-group	 :ubuntu true public: 10.0.2.7  private: null  :meissa-ide, at path [:compute], did not match predicate 'pallet.compute/compute-service?'.
+2017-04-24 11:01:57,580 ERROR [nREPL-worker-12] p.contracts Invalid lift-options:
+2017-04-24 11:01:57,582 ERROR [nREPL-worker-12] p.contracts   lift-options error: Value managed-ide-group	 :ubuntu true public: 10.0.2.7  private: null  :meissa-ide, at path [:compute], did not match predicate '(fn [x] (= nil x))'.
+2017-04-24 11:01:57,583 ERROR [nREPL-worker-12] p.contracts   lift-options error: Value managed-ide-group	 :ubuntu true public: 10.0.2.7  private: null  :meissa-ide, at path [:compute], did not match predicate 'pallet.compute/compute-service?'.
+2017-04-24 16:09:01,598 ERROR [nREPL-worker-13] p.contracts Invalid lift-options:
+2017-04-24 16:09:01,598 ERROR [nREPL-worker-13] p.contracts   lift-options error: Value managed-ide-group	 :ubuntu true public: 10.0.2.7  private: null  :meissa-ide, at path [:compute], did not match predicate '(fn [x] (= nil x))'.
+2017-04-24 16:09:01,599 ERROR [nREPL-worker-13] p.contracts   lift-options error: Value managed-ide-group	 :ubuntu true public: 10.0.2.7  private: null  :meissa-ide, at path [:compute], did not match predicate 'pallet.compute/compute-service?'.
+2017-04-24 16:09:24,969 ERROR [nREPL-worker-13] p.contracts Invalid lift-options:
+2017-04-24 16:09:24,970 ERROR [nREPL-worker-13] p.contracts   lift-options error: Value managed-ide-group	 :ubuntu true public: 10.0.2.7  private: null  :meissa-ide, at path [:compute], did not match predicate '(fn [x] (= nil x))'.
+2017-04-24 16:09:24,970 ERROR [nREPL-worker-13] p.contracts   lift-options error: Value managed-ide-group	 :ubuntu true public: 10.0.2.7  private: null  :meissa-ide, at path [:compute], did not match predicate 'pallet.compute/compute-service?'.
+2017-04-24 16:11:28,514 ERROR [nREPL-worker-0] p.contracts Invalid lift-options:
+2017-04-24 16:11:28,522 ERROR [nREPL-worker-0] p.contracts   lift-options error: Value dda-user-group	 :ubuntu true public: 10.0.2.7  private: null  :meissa-ide, at path [:compute], did not match predicate 'pallet.compute/compute-service?'.
+2017-04-24 16:11:28,522 ERROR [nREPL-worker-0] p.contracts   lift-options error: Value dda-user-group	 :ubuntu true public: 10.0.2.7  private: null  :meissa-ide, at path [:compute], did not match predicate '(fn [x] (= nil x))'.

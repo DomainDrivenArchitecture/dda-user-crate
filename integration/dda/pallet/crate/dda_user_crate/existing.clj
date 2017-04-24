@@ -20,8 +20,8 @@
 
 (defn remote-node [provisioning-ip]
   (node-list/make-node
-    "managed-ide"
-    "managed-ide-group"
+    "user-test-node"
+    "dda-user-group"
     provisioning-ip
     :ubuntu
     :id :meissa-ide))

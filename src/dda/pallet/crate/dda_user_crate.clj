@@ -1,7 +1,7 @@
 (ns dda.pallet.crate.dda-user-crate
   (:require
    [schema.core :as s]
-   [org.domaindrivenarchitecture.pallet.core.dda-crate :as dda-crate]
+   [dda.pallet.core.dda-crate :as dda-crate]
    [dda.pallet.crate.dda-user-crate.user :as user]
    [dda.pallet.crate.dda-user-crate.user.os-user :as os-user]
    [dda.pallet.crate.dda-user-crate.user.ssh-key :as ssh-key]))
