@@ -13,7 +13,7 @@
 ; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
-(ns dda.pallet.crate.dda-git-crate.instantiate-aws
+(ns dda.pallet.crate.dda-user-crate.instantiate-aws
   (:require
     [clojure.inspector :as inspector]
     [schema.core :as s]
@@ -23,16 +23,29 @@
     [org.domaindrivenarchitecture.pallet.commons.session-tools :as session-tools]
     [org.domaindrivenarchitecture.pallet.commons.pallet-schema :as ps]
     [org.domaindrivenarchitecture.cm.operation :as operation]
-    [dda.pallet.crate.dda-git-crate.aws :as cloud-target]
-    [dda.pallet.domain.dda-git-crate :as domain]))
+    [dda.pallet.crate.dda-user-crate.aws :as cloud-target]
+    [dda.pallet.domain.dda-user-crate :as domain]))
 
+  (def ssh-pub-key
+    {:type "type"
+    :public-key "pub-key"
+    :comment "this is a comment"})
 
-(def domain-config
-  {:repo-groups #{:dda-pallet}})
+  (def ssh-priv-key "priv-key")
+
+  (def ssh-key-pair
+    {:public-key ssh-pub-key
+     :private-key ssh-priv-key})
+
+  (def domain-config
+    {:user-name "krj"
+     :encrypted-password "secret-pw"
+     :authorized-keys [ssh-pub-key]
+     :personal-key ssh-key-pair})
 
 (defn integrated-group-spec [count]
   (merge
-    (domain/dda-git-group (domain/dda-git-crate-stack-configuration domain-config))
+    (domain/dda-user-group (domain/dda-user-group domain-config))
     (cloud-target/node-spec)
     {:count count}))
 

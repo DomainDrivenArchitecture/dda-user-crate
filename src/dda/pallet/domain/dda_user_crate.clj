@@ -1,4 +1,4 @@
-(ns dda.pallet.domain.dda_user_crate
+(ns dda.pallet.domain.dda-user-crate
   (:require
    [schema.core :as s]
    [pallet.api :as api]

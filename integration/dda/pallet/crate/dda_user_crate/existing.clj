@@ -15,7 +15,7 @@
 ; limitations under the License.
 (ns dda.pallet.crate.dda-user-crate.existing
   (:require
-    [pallet.compute.node-list :as node-list]    
+    [pallet.compute.node-list :as node-list]
     [pallet.compute :as compute]))
 
 (defn remote-node [provisioning-ip]
@@ -23,8 +23,7 @@
     "user-test-node"
     "dda-user-group"
     provisioning-ip
-    :ubuntu
-    :id :meissa-ide))
+    :ubuntu))
 
 (defn provider [provisioning-ip]
   (compute/instantiate-provider
@@ -32,5 +31,5 @@
     :node-list [(remote-node provisioning-ip)]))
 
 (defn node-spec [provisioning-user]
-  {:image 
+  {:image
    {:login-user provisioning-user}})
