@@ -3,8 +3,10 @@
 
 (ns dda.pallet.crate.dda-user-crate.instantiate-existing
   (:require [dda.pallet.crate.dda-user-crate.existing :as exisiting]
-            [dda.pallet.domain.dda_user_crate :as user]
+            [dda.pallet.domain.dda-user-crate :as user]
             [org.domaindrivenarchitecture.cm.operation :as operation]
+            [pallet.compute :as compute]
+            [pallet.compute.node-list :as node-list]
             [schema.core :as s]))
 
 (def ssh-pub-key
@@ -32,7 +34,7 @@
    :password "test1234"})
 
 (def provider
-  (exisiting/remote-node provisioning-ip))
+  (exisiting/provider provisioning-ip))
 
 (def integrated-group-spec
   (merge

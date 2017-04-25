@@ -20,10 +20,11 @@
 
 (defn remote-node [provisioning-ip]
   (node-list/make-node
-    "user-test-node"
+    "user-crate-node"
     "dda-user-group"
     provisioning-ip
-    :ubuntu))
+    :ubuntu
+    :id :meissa-ide))
 
 (defn provider [provisioning-ip]
   (compute/instantiate-provider

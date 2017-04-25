@@ -39,7 +39,6 @@
       [aws-encrypted-credentials (get-in (pallet.configure/pallet-config) [:services :aws])
        aws-decrypted-credentials (crypto/decrypt
                                   (crypto/get-secret-key
-                                   ;i think using absolute paths is not the way to go here...
                                      {:user-home "/home/mje/"
                                       :key-id key-id})
                                    aws-encrypted-credentials
