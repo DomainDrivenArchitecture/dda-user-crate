@@ -25,18 +25,6 @@
    (s/optional-key :authorized-keys) [ssh-key/ssh-public-key-config]
    (s/optional-key :personal-key) ssh-key/ssh-key-pair-config})
 
-(defn users-authorized-key-ids
-  [username-key global-config]
-  (-> global-config :os-user username-key :authorized-keys))
-
-(defn users-personal-key-id
-  [username-key global-config]
-  (-> global-config :os-user username-key :personal-key))
-
-(defn pallet-user-encrypted-password
-  [username-key global-config]
-  (-> global-config :os-user username-key :encrypted-password))
-
 (defn user-home-dir
   "provides the user home path."
   [os-user-config]
@@ -50,17 +38,29 @@
   [os-user]
   (str (user-home-dir os-user) "/.ssh/"))
 
-(s/defn ssh-priv-key-from-env :- s/Str
+(s/defn ssh-priv-key-from-env-to-config :- s/Str
   "function reads ssh private key from environment variable and returns it as a String"
   []
   (let [env-variable "SSH_PRIV_KEY"]
     (System/getenv env-variable)))
 
+(defn read-ssh-pub-key-to-config
+  "read the ssh-public-key to a config"
+  [& {:keys [ssh-dir-path]}]
+  (let [ssh-dir (or ssh-dir-path (str (System/getenv "HOME") "/.ssh"))]
+    (ssh-key/string-to-pub-key-config (slurp (str ssh-dir "/id_rsa.pub")))))
+
+(defn read-ssh-priv-key-to-config
+  "read the ssh-private-key to a config"
+  [& {:keys [ssh-dir-path read-from-env?]}]
+  (let [ssh-dir (or ssh-dir-path (str (System/getenv "HOME") "/.ssh"))]
+    (if read-from-env? (ssh-priv-key-from-env-to-config) (slurp (str ssh-dir "/id_rsa")))))
+
 (defn read-ssh-keys-to-pair-config
-  [& {:keys [ssh-path read-from-env?]}] :- ssh-key/ssh-key-pair-config
+  [& {:keys [ssh-dir-path read-from-env?]}]
   "read ssh-keys from current node to ssh-key-pair-config. If read-from-env? flag is specified, 
    ssh-private-key will be read from enviroment variable SSH_PRIV_KEY"
-  (let [ssh-dir (or ssh-path (str (System/getenv "HOME") "/.ssh"))]
-    {:public-key (ssh-key/string-to-pub-key-config (slurp (str ssh-dir "/id_rsa.pub")))
-     :private-key (if read-from-env? (ssh-priv-key-from-env) (slurp (str ssh-dir "/id_rsa")))}))
+    {:public-key (read-ssh-pub-key-to-config :ssh-dir-path ssh-dir-path)
+     :private-key (read-ssh-priv-key-to-config :ssh-dir-path ssh-dir-path
+                                               :read-from-env? read-from-env?)})
 

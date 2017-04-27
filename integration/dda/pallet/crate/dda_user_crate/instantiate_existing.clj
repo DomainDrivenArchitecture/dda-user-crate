@@ -3,35 +3,32 @@
 
 (ns dda.pallet.crate.dda-user-crate.instantiate-existing
   (:require [dda.pallet.crate.dda-user-crate.existing :as exisiting]
+            [dda.pallet.crate.dda-user-crate.user.os-user :as os-user]
             [dda.pallet.domain.dda-user-crate :as user]
             [org.domaindrivenarchitecture.cm.operation :as operation]
-            [pallet.compute :as compute]
-            [pallet.compute.node-list :as node-list]
             [schema.core :as s]))
 
 (def ssh-pub-key
-  {:type "type"
-  :public-key "pub-key"
-  :comment "this is a comment"})
+  (os-user/read-ssh-pub-key-to-config))
 
-(def ssh-priv-key "priv-key")
+(def ssh-priv-key "$YOUR_PRIVATE_KEY")
 
 (def ssh-key-pair
   {:public-key ssh-pub-key
    :private-key ssh-priv-key})
 
 (def domain-config
-  {:user-name "krj"
-   :encrypted-password "secret-pw"
+  {:user-name "USERNAME_TO_BE_CREATED"
+   :encrypted-password  "USER_PASSWORD"
    :authorized-keys [ssh-pub-key]
    :personal-key ssh-key-pair})
 
 (def provisioning-ip
-    "10.0.2.7")
+    "TARGET_IP")
 
 (def provisioning-user
-  {:login "jan"
-   :password "test1234"})
+  {:login "EXISTING_USER_LOGINjan"
+   :password "EXISTING_USER_PASSWORD"})
 
 (def provider
   (exisiting/provider provisioning-ip))

@@ -40,7 +40,7 @@
 
 (s/defn string-to-pub-key-config [pub-key :- s/Str] :- ssh-public-key-config
   "function takes a public-key as a string and returns it as a ssh-public-key-config"
-  (let [col (clojure.string/split-lines pub-key)]
+  (let [col (clojure.string/split pub-key #" ")]
     {:type (first col)
      :public-key (second col)
      :comment (nth col 2)}))

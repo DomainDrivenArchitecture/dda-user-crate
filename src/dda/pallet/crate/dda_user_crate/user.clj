@@ -30,8 +30,8 @@
   (let [user-name (:user-name os-user-config)
         ssh-dir (os-user/user-ssh-dir os-user-config)
         authorized-keys (map
-                         ssh-key/format-public-key
-                         (:authorized-keys os-user-config))]
+                          ssh-key/format-public-key
+                          (:authorized-keys os-user-config))]
     (actions/directory ssh-dir :owner user-name :mode "755" :force true)
     (actions/remote-file
      (str ssh-dir "authorized_keys")
@@ -74,8 +74,8 @@
 
 (defn create-sudo-user
   "creates a sudo user with pw is encrypted handed over. 
-Passwords can be generated e.g. by mkpasswd test123. 
-So password test1234 is representet by 3hLlUVSs1Aa1c"
+  Passwords can be generated e.g. by mkpasswd test123. 
+  So password test1234 is representet by 3hLlUVSs1Aa1c"
   [os-user]
   (actions/group "sudo" :action :create)
   (actions/user (:user-name os-user)
@@ -83,7 +83,4 @@ So password test1234 is representet by 3hLlUVSs1Aa1c"
                 :create-home true
                 :shell :bash
                 :groups ["sudo"]
-                :password (:encrypted-password os-user))
-  (configure-authorized-keys os-user)
-  (configure-ssh-key os-user)
-  (configure-sudo os-user))
+                :password (:encrypted-password os-user)))
