@@ -46,18 +46,18 @@
 (defn integrated-group-spec [count]
   (merge
     (domain/dda-user-group domain-config)
-    (cloud-target/node-spec)
+    (cloud-target/aws-node-spec)
     {:count count}))
 
 (defn converge-install
   ([count]
-   (operation/do-converge-install (cloud-target/provider) (integrated-group-spec count)))
+   (operation/do-converge-install (cloud-target/aws-provider) (integrated-group-spec count)))
   ([key-id key-passphrase count]
-   (operation/do-converge-install (cloud-target/provider key-id key-passphrase) (integrated-group-spec count))))
+   (operation/do-converge-install (cloud-target/aws-provider key-id key-passphrase) (integrated-group-spec count))))
 
 
 (defn server-test
   ([]
-   (operation/do-server-test (cloud-target/provider) (integrated-group-spec count)))
+   (operation/do-server-test (cloud-target/aws-provider) (integrated-group-spec count)))
   ([key-id key-passphrase]
-   (operation/do-server-test (cloud-target/provider) (integrated-group-spec count))))
+   (operation/do-server-test (cloud-target/aws-provider) (integrated-group-spec count))))

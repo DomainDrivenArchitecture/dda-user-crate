@@ -24,7 +24,7 @@
     [org.domaindrivenarchitecture.pallet.commons.pallet-schema :as ps]
     [org.domaindrivenarchitecture.cm.operation :as operation]))
 
-(defn provider
+(defn aws-provider
   ([]
     (let
       [aws-decrypted-credentials (get-in (pallet.configure/pallet-config) [:services :aws])]
@@ -50,7 +50,7 @@
        :endpoint "eu-central-1"
        :subnet-ids ["subnet-f929df91"]))))
 
-(defn node-spec []
+(defn aws-node-spec []
   (api/node-spec
     :location {:location-id "eu-central-1a"
                ;:location-id "eu-west-1b"
