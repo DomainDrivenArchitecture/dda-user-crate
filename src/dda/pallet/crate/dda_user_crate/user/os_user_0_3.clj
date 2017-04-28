@@ -14,13 +14,13 @@
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
 
-(ns org.domaindrivenarchitecture.pallet.crate.user.os-user
-  (:require [org.domaindrivenarchitecture.pallet.crate.user.ssh-key :as ssh-key]))
+(ns dda.pallet.crate.user.os-user-0-3
+  (:require [dda.pallet.crate.user.ssh-key :as ssh-key]))
 
 (defrecord OsUser
-  [user-name 
-   encrypted-password 
-   authorized-keys 
+  [user-name
+   encrypted-password
+   authorized-keys
    personal-key])
 
 (defn users-authorized-key-ids
@@ -36,8 +36,8 @@
   (-> global-config :os-user username-key :encrypted-password))
 
 (defn new-os-user
-  "Creates a operating system user with 
-* pw: encrypted - can be generated e.g. by mkpasswd test123. 
+  "Creates a operating system user with
+* pw: encrypted - can be generated e.g. by mkpasswd test123.
   So password test123 is representet by sqliZ6M65Vfjo.
 * authorized-keys: Vector of authorized-key-ids"
   ([user-name authorized-keys]
@@ -55,12 +55,12 @@
     (new-os-user
       (name user-key)
       (pallet-user-encrypted-password user-key global-config)
-      (ssh-key/create-keys-from-config 
-        (users-authorized-key-ids user-key global-config) 
+      (ssh-key/create-keys-from-config
+        (users-authorized-key-ids user-key global-config)
         (ssh-key/ssh-key-config global-config))
       (when (some? personal-key)
         (ssh-key/create-key-from-config
-          personal-key 
+          personal-key
           (ssh-key/ssh-key-config global-config))))
   ))
 
@@ -68,8 +68,8 @@
   "provides the user home path."
   [os-user]
   (let [user-name (:user-name os-user)]
-  (if (= user-name "root") 
-    "/root" 
+  (if (= user-name "root")
+    "/root"
     (str "/home/" user-name))))
 
 (defn user-ssh-dir

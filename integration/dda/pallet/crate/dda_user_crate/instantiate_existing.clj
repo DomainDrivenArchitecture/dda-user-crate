@@ -5,7 +5,7 @@
   (:require [dda.pallet.crate.dda-user-crate.existing :as exisiting]
             [dda.pallet.crate.dda-user-crate.user.os-user :as os-user]
             [dda.pallet.domain.dda-user-crate :as user]
-            [org.domaindrivenarchitecture.cm.operation :as operation]
+            [dda.cm.operation :as operation]
             [schema.core :as s]))
 
 (def ssh-pub-key

@@ -14,8 +14,8 @@
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
 
-(ns org.domaindrivenarchitecture.pallet.crate.user.ssh-key
-  (require 
+(ns dda.pallet.crate.user.ssh-key-0-3
+  (require
     [schema.core :as s]
     [clojure.string :as str]))
 
@@ -38,9 +38,9 @@
 (defn public-key-formated
   "returns a authorized_keys formated public key string."
   [ssh-key-record]
-  (str 
-    (:type ssh-key-record) " " 
-    (:public-key ssh-key-record) " " 
+  (str
+    (:type ssh-key-record) " "
+    (:public-key ssh-key-record) " "
     (:comment ssh-key-record)))
 
 
@@ -61,7 +61,7 @@
   "consrtucts a sequence of authorized keys from given key-keys and config."
   [key-id key-config]
   (let [key-map (key-id key-config)]
-    (new-ssh-key (:type key-map) 
+    (new-ssh-key (:type key-map)
                  (:public-key key-map)
                  (:comment key-map)
                  (:private-key key-map))))
