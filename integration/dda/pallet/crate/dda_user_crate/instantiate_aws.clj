@@ -24,7 +24,11 @@
     [org.domaindrivenarchitecture.pallet.commons.pallet-schema :as ps]
     [org.domaindrivenarchitecture.cm.operation :as operation]
     [dda.pallet.crate.dda-user-crate.aws :as cloud-target]
+    [dda.pallet.crate.dda-user-crate.user.os-user :as os-user]
     [dda.pallet.domain.dda-user-crate :as domain]))
+
+  (def my-ssh-pub-key
+    (os-user/read-ssh-pub-key-to-config))
 
   (def ssh-pub-key
     {:type "type"
@@ -40,7 +44,7 @@
   (def domain-config
     {:user-name "krj"
      :encrypted-password "secret-pw"
-     :authorized-keys [ssh-pub-key]
+     :authorized-keys [ssh-pub-key my-ssh-pub-key]
      :personal-key ssh-key-pair})
 
 (defn integrated-group-spec [count]
