@@ -1,12 +1,25 @@
-; Copyright (c) meissa GmbH. All rights reserved.
-; You must not remove this notice, or any other, from this software.
-
+; Licensed to the Apache Software Foundation (ASF) under one
+; or more contributor license agreements. See the NOTICE file
+; distributed with this work for additional information
+; regarding copyright ownership. The ASF licenses this file
+; to you under the Apache License, Version 2.0 (the
+; "License"); you may not use this file except in compliance
+; with the License. You may obtain a copy of the License at
+;
+; http://www.apache.org/licenses/LICENSE-2.0
+;
+; Unless required by applicable law or agreed to in writing, software
+; distributed under the License is distributed on an "AS IS" BASIS,
+; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+; See the License for the specific language governing permissions and
+; limitations under the License.
 (ns dda.pallet.crate.dda-user-crate.instantiate-existing
-  (:require [dda.pallet.crate.dda-user-crate.existing :as exisiting]
-            [dda.pallet.crate.dda-user-crate.user.os-user :as os-user]
-            [dda.pallet.domain.dda-user-crate :as user]
-            [dda.cm.operation :as operation]
-            [schema.core :as s]))
+  (:require
+   [dda.pallet.crate.dda-user-crate.existing :as exisiting]
+   [dda.pallet.crate.dda-user-crate.user.os-user :as os-user]
+   [dda.pallet.domain.dda-user-crate :as user]
+   [dda.cm.operation :as operation]
+   [schema.core :as s]))
 
 (def ssh-pub-key
   (os-user/read-ssh-pub-key-to-config))
@@ -27,7 +40,7 @@
     "TARGET_IP")
 
 (def provisioning-user
-  {:login "EXISTING_USER_LOGINjan"
+  {:login "EXISTING_USER_LOGIN"
    :password "EXISTING_USER_PASSWORD"})
 
 (def provider

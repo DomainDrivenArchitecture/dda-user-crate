@@ -27,24 +27,19 @@
     [dda.pallet.crate.dda-user-crate.user.os-user :as os-user]
     [dda.pallet.domain.dda-user-crate :as domain]))
 
-  (def my-ssh-pub-key
+  (def ssh-pub-key
     (os-user/read-ssh-pub-key-to-config))
 
-  (def ssh-pub-key
-    {:type "type"
-    :public-key "pub-key"
-    :comment "this is a comment"})
-
-  (def ssh-priv-key "priv-key")
+  (def ssh-priv-key "YOUR_PRIVATE_KEY")
 
   (def ssh-key-pair
     {:public-key ssh-pub-key
      :private-key ssh-priv-key})
 
   (def domain-config
-    {:user-name "krj"
-     :encrypted-password "secret-pw"
-     :authorized-keys [ssh-pub-key my-ssh-pub-key]
+    {:user-name "USERNAME_TO_BE_CREATED"
+     :encrypted-password "USER_PASSWORD"
+     :authorized-keys [ssh-pub-key]
      :personal-key ssh-key-pair})
 
 (defn integrated-group-spec [count]
