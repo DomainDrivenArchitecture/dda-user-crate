@@ -13,25 +13,24 @@
 ; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
-(ns org.domaindrivenarchitecture.pallet.crate.user.ssh-key-test
+(ns dda.pallet.crate.dda-user-crate.existing
   (:require
-   [clojure.test :refer :all]
-   [dda.pallet.crate.dda-user-crate.user.ssh-key :as sut]
-   [schema.core :as s]))
+    [pallet.compute.node-list :as node-list]
+    [pallet.compute :as compute]))
 
-(def valid-ssh-pub-key-config
-  {:type "type"
-   :public-key "pub-key"
-   :comment "a comment"})
+(defn remote-node [provisioning-ip]
+  (node-list/make-node
+    "user-crate-node"
+    "dda-user-group"
+    provisioning-ip
+    :ubuntu
+    :id :meissa-ide))
 
-(def valid-ssh-priv-key-config
-  "private key")
+(defn provider [provisioning-ip]
+  (compute/instantiate-provider
+    "node-list"
+    :node-list [(remote-node provisioning-ip)]))
 
-(def ssh-key-pair-config
-  {:public-key valid-ssh-pub-key-config
-   :private-key valid-ssh-priv-key-config})
-
-(deftest test-configs
-  (is (s/validate sut/ssh-public-key-config valid-ssh-pub-key-config))
-  (is (s/validate sut/ssh-private-key-config valid-ssh-priv-key-config))
-  (is (s/validate sut/ssh-key-pair-config ssh-key-pair-config)))
+(defn node-spec [provisioning-user]
+  {:image
+   {:login-user provisioning-user}})
