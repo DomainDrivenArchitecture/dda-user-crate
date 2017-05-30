@@ -19,23 +19,21 @@
    [schema.core :as s]))
 
 (def os-user-config
-  {:user-name s/Str
-   :encrypted-password s/Str
+  {:encrypted-password s/Str
    (s/optional-key :authorized-keys) [ssh-key/ssh-public-key-config]
    (s/optional-key :personal-key) ssh-key/ssh-key-pair-config})
 
 (defn user-home-dir
   "provides the user home path."
-  [os-user-config]
-  (let [user-name (:user-name os-user-config)]
-    (if (= user-name "root")
-      "/root"
-      (str "/home/" user-name))))
+  [user-name]
+  (if (= user-name "root")
+    "/root"
+    (str "/home/" user-name)))
 
 (defn user-ssh-dir
   "provides the user .ssh path."
-  [os-user]
-  (str (user-home-dir os-user) "/.ssh/"))
+  [user-name]
+  (str user-name "/.ssh/"))
 
 (s/defn ssh-priv-key-from-env-to-config :- s/Str
   "function reads ssh private key from environment variable and returns it as a String"

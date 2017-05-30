@@ -25,7 +25,7 @@
 (def version [0 3 7])
 
 (def UserCrateConfig
-  os-user/os-user-config)
+  {s/Keyword os-user/os-user-config})
 
 (defn read-ssh-pub-key-to-config
   ( []

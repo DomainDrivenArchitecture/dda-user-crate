@@ -26,7 +26,7 @@
   authorized_keys will be overwritten."
   [os-user-config]
   (let [user-name (:user-name os-user-config)
-        ssh-dir (os-user/user-ssh-dir os-user-config)
+        ssh-dir (os-user/user-ssh-dir user-name)
         authorized-keys (map
                           ssh-key/format-public-key
                           (:authorized-keys os-user-config))]
@@ -44,7 +44,7 @@
   [os-user-config]
   (let [user-name (:user-name os-user-config)
         ssh-key (:personal-key os-user-config)
-        ssh-dir (os-user/user-ssh-dir os-user-config)]
+        ssh-dir (os-user/user-ssh-dir user-name)]
     (when (some? (:private-key ssh-key))
       (actions/directory ssh-dir :owner user-name :mode "755")
       (actions/remote-file
@@ -71,8 +71,8 @@
                "pallet    ALL=(" user-name ") NOPASSWD: ALL\n"))))
 
 (defn create-sudo-user
-  "creates a sudo user with pw is encrypted handed over. 
-  Passwords can be generated e.g. by mkpasswd test123. 
+  "creates a sudo user with pw is encrypted handed over.
+  Passwords can be generated e.g. by mkpasswd test123.
   So password test1234 is representet by 3hLlUVSs1Aa1c"
   [os-user]
   (actions/group "sudo" :action :create)

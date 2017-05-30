@@ -33,15 +33,17 @@
    :private-key ssh-priv-key})
 
 (def domain-config
-  {:user-name "USERNAME_TO_BE_CREATED"
-   :encrypted-password "USER_PASSWORD"
-   :authorized-keys [ssh-pub-key]
-   :personal-key ssh-key-pair})
+  {:test1 {:encrypted-password "USER_PASSWORD"
+           :authorized-keys [ssh-pub-key]
+           :personal-key ssh-key-pair}
+   :test2 {:encrypted-password "USER_PASSWORD"
+           :authorized-keys [ssh-pub-key]
+           :personal-key ssh-key-pair}})
 
 (defn integrated-group-spec [count]
   (merge
     (domain/dda-user-group domain-config)
-    (cloud-target/aws-node-spec "jem")
+    (cloud-target/node-spec "jem")
     {:count count}))
 
 (defn converge-install

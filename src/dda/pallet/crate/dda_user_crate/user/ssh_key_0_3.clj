@@ -13,7 +13,7 @@
 ; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
-(ns dda.pallet.crate.user.ssh-key-0-3
+(ns dda.pallet.crate.dda-user-crate.user.ssh-key-0-3
   (require
     [schema.core :as s]
     [clojure.string :as str]))
@@ -46,15 +46,15 @@
 (s/defn new-ssh-key
   "Constructor for ssh key"
   ([public-key-formated :- s/Str]
-    (new-ssh-key public-key-formated nil))
+   (new-ssh-key public-key-formated nil))
   ([public-key-formated private-key]
-    (let [public-keys (str/split public-key-formated #"\s")
-          all-keys (concat public-keys [private-key])]
-      (apply new-ssh-key all-keys)))
+   (let [public-keys (str/split public-key-formated #"\s")
+         all-keys (concat public-keys [private-key])]
+     (apply new-ssh-key all-keys)))
   ([type public-key comment]
-    (new-ssh-key type public-key comment nil))
+   (new-ssh-key type public-key comment nil))
   ([type public-key comment private-key]
-    (SshKey. type public-key comment private-key)))
+   (SshKey. type public-key comment private-key)))
 
 (defn create-key-from-config
   "consrtucts a sequence of authorized keys from given key-keys and config."
