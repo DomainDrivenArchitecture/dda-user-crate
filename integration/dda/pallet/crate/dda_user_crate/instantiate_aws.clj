@@ -16,14 +16,10 @@
 (ns dda.pallet.crate.dda-user-crate.instantiate-aws
   (:require
     [clojure.inspector :as inspector]
-    [schema.core :as s]
-    [pallet.api :as api]
-    [pallet.compute :as compute]
-    [org.domaindrivenarchitecture.pallet.commons.encrypted-credentials :as crypto]
     [org.domaindrivenarchitecture.pallet.commons.session-tools :as session-tools]
     [org.domaindrivenarchitecture.pallet.commons.pallet-schema :as ps]
     [dda.cm.operation :as operation]
-    [dda.pallet.crate.dda-user-crate.aws :as cloud-target]
+    [dda.cm.aws :as cloud-target]
     [dda.pallet.crate.dda-user-crate.user.os-user :as os-user]
     [dda.pallet.domain.dda-user-crate :as domain]))
 
@@ -45,18 +41,17 @@
 (defn integrated-group-spec [count]
   (merge
     (domain/dda-user-group domain-config)
-    (cloud-target/aws-node-spec)
+    (cloud-target/aws-node-spec "jem")
     {:count count}))
 
 (defn converge-install
   ([count]
-   (operation/do-converge-install (cloud-target/aws-provider) (integrated-group-spec count)))
+   (operation/do-converge-install (cloud-target/provider) (integrated-group-spec count)))
   ([key-id key-passphrase count]
-   (operation/do-converge-install (cloud-target/aws-provider key-id key-passphrase) (integrated-group-spec count))))
-
+   (operation/do-converge-install (cloud-target/provider key-id key-passphrase) (integrated-group-spec count))))
 
 (defn server-test
-  ([]
-   (operation/do-server-test (cloud-target/aws-provider) (integrated-group-spec count)))
-  ([key-id key-passphrase]
-   (operation/do-server-test (cloud-target/aws-provider) (integrated-group-spec count))))
+  ([count]
+   (operation/do-server-test (cloud-target/provider) (integrated-group-spec count)))
+  ([key-id key-passphrase count]
+   (operation/do-server-test (cloud-target/provider key-id key-passphrase) (integrated-group-spec count))))
