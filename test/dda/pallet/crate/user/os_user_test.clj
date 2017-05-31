@@ -13,25 +13,31 @@
 ; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
-(ns org.domaindrivenarchitecture.pallet.crate.user.ssh-key-test
+(ns dda.pallet.crate.user.os-user-test
   (:require
    [clojure.test :refer :all]
-   [dda.pallet.crate.dda-user-crate.user.ssh-key :as sut]
+   [dda.pallet.crate.dda-user-crate.user.os-user :as sut]
    [schema.core :as s]))
 
-(def valid-ssh-pub-key-config
+(def ssh-pub-key
   {:type "type"
    :public-key "pub-key"
-   :comment "a comment"})
+   :comment "this is a comment"})
 
-(def valid-ssh-priv-key-config
-  "private key")
+(def ssh-priv-key "priv-key")
 
-(def ssh-key-pair-config
-  {:public-key valid-ssh-pub-key-config
-   :private-key valid-ssh-priv-key-config})
+(def ssh-key-pair
+  {:public-key ssh-pub-key
+   :private-key ssh-priv-key})
 
-(deftest test-configs
-  (is (s/validate sut/ssh-public-key-config valid-ssh-pub-key-config))
-  (is (s/validate sut/ssh-private-key-config valid-ssh-priv-key-config))
-  (is (s/validate sut/ssh-key-pair-config ssh-key-pair-config)))
+(def os-user-valid-config
+  {:encrypted-password "secret-pw"})
+
+(def os-user-valid-complete-config
+  (merge os-user-valid-config
+         {:authorized-keys [ssh-pub-key]
+          :personal-key ssh-key-pair}))
+
+(deftest valid-configurations
+  (is (s/validate sut/os-user-config os-user-valid-config))
+  (is (s/validate sut/os-user-config os-user-valid-complete-config)))
