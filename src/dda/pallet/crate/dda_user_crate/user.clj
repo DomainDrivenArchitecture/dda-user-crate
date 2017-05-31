@@ -24,9 +24,8 @@
 (defn configure-authorized-keys
   "configure the authorized_keys for a given user, all existing
   authorized_keys will be overwritten."
-  [os-user-config]
-  (let [user-name (:user-name os-user-config)
-        ssh-dir (os-user/user-ssh-dir user-name)
+  [user-name os-user-config]
+  (let [ssh-dir (os-user/user-ssh-dir user-name)
         authorized-keys (map
                           ssh-key/format-public-key
                           (:authorized-keys os-user-config))]
@@ -41,9 +40,8 @@
 
 (defn configure-ssh-key
   "configer the users ssh_key."
-  [os-user-config]
-  (let [user-name (:user-name os-user-config)
-        ssh-key (:personal-key os-user-config)
+  [user-name os-user-config]
+  (let [ssh-key (:personal-key os-user-config)
         ssh-dir (os-user/user-ssh-dir user-name)]
     (when (some? (:private-key ssh-key))
       (actions/directory ssh-dir :owner user-name :mode "755")
@@ -58,27 +56,26 @@
 
 (defn configure-sudo
   "Add user to sudoers without password."
-  [os-user]
-  (let [user-name (:user-name os-user)]
-    (actions/remote-file
-     (str "/etc/sudoers.d/" user-name)
-     :owner "root"
-     :group "root"
-     :mode "440"
-     :literal true
-     :content (str
-               user-name "    ALL = NOPASSWD: ALL\n"
-               "pallet    ALL=(" user-name ") NOPASSWD: ALL\n"))))
+  [user-name]
+  (actions/remote-file
+   (str "/etc/sudoers.d/" user-name)
+   :owner "root"
+   :group "root"
+   :mode "440"
+   :literal true
+   :content (str
+             user-name "    ALL = NOPASSWD: ALL\n"
+             "pallet    ALL=(" user-name ") NOPASSWD: ALL\n")))
 
 (defn create-sudo-user
   "creates a sudo user with pw is encrypted handed over.
   Passwords can be generated e.g. by mkpasswd test123.
   So password test1234 is representet by 3hLlUVSs1Aa1c"
-  [os-user]
+  [user-name user-config]
   (actions/group "sudo" :action :create)
-  (actions/user (:user-name os-user)
+  (actions/user user-name
                 :action :create
                 :create-home true
                 :shell :bash
                 :groups ["sudo"]
-                :password (:encrypted-password os-user)))
+                :password (:encrypted-password user-config)))

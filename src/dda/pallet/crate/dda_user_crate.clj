@@ -49,12 +49,14 @@
     :read-from-env? read-from-env?)))
 
 (defn install-user [config]
-  (user/create-sudo-user config))
+  (doseq [[k v] config]
+    (user/create-sudo-user (name k) v)))
 
 (defn configure-user [config]
-  (user/configure-authorized-keys config)
-  (user/configure-ssh-key config)
-  (user/configure-sudo  config))
+  (doseq [[k v] config]
+    (user/configure-authorized-keys (name k) v)
+    (user/configure-ssh-key (name k) v)
+    (user/configure-sudo (name k))))
 
 (s/defmethod dda-crate/dda-install facility
   [dda-crate config]
