@@ -42,7 +42,7 @@
 
 (defn integrated-group-spec [count]
   (merge
-    (domain/dda-user-group domain-config)
+    (domain/dda-user-group (domain/crate-stack-configuration domain-config))
     (cloud-target/node-spec "jem")
     {:count count}))
 

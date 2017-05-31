@@ -48,7 +48,7 @@
 
 (def integrated-group-spec
   (merge
-   (user/dda-user-group domain-config)
+   (user/dda-user-group (domain/crate-stack-configuration domain-config))
    (exisiting/node-spec provisioning-user)))
 
 (defn integrated-group-spec []
