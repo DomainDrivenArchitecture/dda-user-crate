@@ -36,7 +36,7 @@
   {:test1 {:encrypted-password "USER_PASSWORD"
            :authorized-keys [ssh-pub-key]
            :personal-key ssh-key-pair}
-   :test2 {:encrypted-password "USER_PASSWORD"
+   :test2 {:encrypted-password "ZvLZwke.Bvczw"
            :authorized-keys [ssh-pub-key]
            :personal-key ssh-key-pair}})
 

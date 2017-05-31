@@ -25,14 +25,17 @@ For example:
   {:public-key ssh-pub-key
    :private-key ssh-priv-key})
 
+```
 (def domain-config
-  {:user-name "$USERNAME_TO_BE_CREATED"
-   :encrypted-password "$ENCRYPTED_PASSWORD_TO_BE_USED"
-   :authorized-keys [ssh-pub-key]
-   :personal-key ssh-key-pair})
+  :[user-name] { :encrypted-password "$ENCRYPTED_PASSWORD_TO_BE_USED"
+                 :authorized-keys [ssh-pub-key]
+                 :personal-key ssh-key-pair})
+```
 
 You can add more public-keys to the authorized-keys. Please note that adding your
 private-key is optional. After defining your configuration you can start the execution
 on the node by calling:
 
 dda.pallet.crate.dda-user-crate.instantiate-existing> (apply-install)
+
+Encrypted passwords can be generated e.g. by `mkpasswd test1234`.
