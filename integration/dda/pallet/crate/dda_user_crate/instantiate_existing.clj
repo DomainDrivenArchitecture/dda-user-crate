@@ -31,10 +31,9 @@
    :private-key ssh-priv-key})
 
 (def domain-config
-  {:user-name "USERNAME_TO_BE_CREATED"
-   :encrypted-password  "USER_PASSWORD"
-   :authorized-keys [ssh-pub-key]
-   :personal-key ssh-key-pair})
+  {:test {:encrypted-password  "USER_PASSWORD"
+          :authorized-keys [ssh-pub-key]
+          :personal-key ssh-key-pair}})
 
 (def provisioning-ip
     "TARGET_IP")
