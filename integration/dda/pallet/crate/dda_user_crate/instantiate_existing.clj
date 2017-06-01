@@ -15,7 +15,7 @@
 ; limitations under the License.
 (ns dda.pallet.crate.dda-user-crate.instantiate-existing
   (:require
-   [dda.cm.existing :as exisiting]
+   [dda.cm.existing :as existing]
    [dda.pallet.crate.dda-user-crate.user.os-user :as os-user]
    [dda.pallet.domain.dda-user-crate :as user]
    [dda.cm.operation :as operation]
@@ -43,12 +43,12 @@
    :password "EXISTING_USER_PASSWORD"})
 
 (def provider
-  (exisiting/provider provisioning-ip "node-id" "dda-httpd-group"))
+  (existing/provider provisioning-ip "node-id" "dda-httpd-group"))
 
 (def integrated-group-spec
   (merge
-   (user/dda-user-group (domain/crate-stack-configuration domain-config))
-   (exisiting/node-spec provisioning-user)))
+   (user/dda-user-group (user/crate-stack-configuration domain-config))
+   (existing/node-spec provisioning-user)))
 
 (defn integrated-group-spec []
   (merge
