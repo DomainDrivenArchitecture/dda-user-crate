@@ -38,8 +38,7 @@
 
 (s/defn ^:always-validate dda-user-group
   [config :- UserCrateStackConfig]
-  (let
-    [group-name (name (key (first (:group-specific-config config))))]
+  (let [group-name (name (key (first (:group-specific-config config))))]
     (api/group-spec
       group-name
       :extends [(config-crate/with-config config)
