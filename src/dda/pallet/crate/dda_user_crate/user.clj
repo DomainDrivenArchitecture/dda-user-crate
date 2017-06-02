@@ -58,7 +58,7 @@
         (str ssh-dir "id_rsa")
         :overwrite-changes true
         :owner user-name
-        :group username
+        :group user-name
         :mode "600"
         :content (:private-key ssh-key))
       (actions/remote-file
