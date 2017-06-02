@@ -25,16 +25,22 @@
 
 (def UserCrateStackConfig
   {:group-specific-config
-   {:dda-user-group {:dda-user user-crate/UserCrateConfig}}})
+   {s/Keyword {:dda-user user-crate/UserCrateConfig}}})
 
-(s/defn ^:always-validate crate-stack-configuration :- UserCrateStackConfig
-  [domain-config :- UserDomainConfig]
-  {:group-specific-config
-   {:dda-user-group {:dda-user domain-config}}})
+(defn crate-stack-configuration [domain-config
+                                 & {:keys [group-key] :or {group-key :dda-user-group}}]
+   (s/validate s/Keyword group-key)
+   (s/validate UserDomainConfig domain-config)
+   (s/validate
+    UserCrateStackConfig
+    {:group-specific-config
+      {group-key {:dda-user domain-config}}}))
 
 (s/defn ^:always-validate dda-user-group
   [config :- UserCrateStackConfig]
-  (api/group-spec
-    "dda-user-group"
-    :extends [(config-crate/with-config config)
-              user-crate/with-user]))
+  (let
+    [group-name (name (key (first (:group-specific-config config))))]
+    (api/group-spec
+      group-name
+      :extends [(config-crate/with-config config)
+                user-crate/with-user])))

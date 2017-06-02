@@ -33,7 +33,7 @@
 (defn user-ssh-dir
   "provides the user .ssh path."
   [user-name]
-  (str user-name "/.ssh/"))
+  (str (user-home-dir user-name) "/.ssh/"))
 
 (s/defn ssh-priv-key-from-env-to-config :- s/Str
   "function reads ssh private key from environment variable and returns it as a String"

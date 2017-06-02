@@ -26,7 +26,7 @@
 (def ssh-pub-key
   (os-user/read-ssh-pub-key-to-config))
 
-(def ssh-priv-key "YOUR_PRIVATE_KEY")
+(def ssh-priv-key "$YOUR_PRIVATE_KEY")
 
 (def ssh-key-pair
   {:public-key ssh-pub-key

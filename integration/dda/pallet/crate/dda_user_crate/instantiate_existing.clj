@@ -15,11 +15,12 @@
 ; limitations under the License.
 (ns dda.pallet.crate.dda-user-crate.instantiate-existing
   (:require
-   [dda.cm.existing :as existing]
-   [dda.pallet.crate.dda-user-crate.user.os-user :as os-user]
-   [dda.pallet.domain.dda-user-crate :as user]
-   [dda.cm.operation :as operation]
-   [schema.core :as s]))
+    [schema.core :as s]
+    [dda.cm.operation :as operation]
+    [dda.cm.existing :as existing]
+    [dda.pallet.crate.dda-user-crate.user.os-user :as os-user]
+    [dda.pallet.domain.dda-user-crate :as user]
+    [dda.pallet.domain.dda-user-crate :as domain]))
 
 (def ssh-pub-key
   (os-user/read-ssh-pub-key-to-config))
@@ -43,17 +44,12 @@
    :password "EXISTING_USER_PASSWORD"})
 
 (def provider
-  (existing/provider provisioning-ip "node-id" "dda-httpd-group"))
+  (existing/provider provisioning-ip "node-id" "dda-user-group"))
 
 (def integrated-group-spec
   (merge
-   (user/dda-user-group (user/crate-stack-configuration domain-config))
+   (domain/dda-user-group (domain/crate-stack-configuration domain-config))
    (existing/node-spec provisioning-user)))
-
-(defn integrated-group-spec []
-  (merge
-    (domain/dda-httpd-group domain-config)
-    (existing/node-spec provisioning-user)))
 
 (defn apply-install []
   (operation/do-apply-install (provider) (integrated-group-spec)))
