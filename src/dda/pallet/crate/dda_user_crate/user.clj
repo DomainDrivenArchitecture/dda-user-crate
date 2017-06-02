@@ -26,17 +26,22 @@
   authorized_keys will be overwritten."
   [user-name os-user-config]
   (let [ssh-dir (os-user/user-ssh-dir user-name)
-        authorized-keys (map
-                          ssh-key/format-public-key
-                          (:authorized-keys os-user-config))]
-    (actions/directory ssh-dir :owner user-name :mode "755" :force true)
+        authorized-keys (map ssh-key/format-public-key
+                            (:authorized-keys os-user-config))]
+    (actions/directory
+      ssh-dir
+      :owner user-name
+      :group user-name
+      :mode "755")
     (actions/remote-file
-     (str ssh-dir "authorized_keys")
-     :owner user-name :mode "644"
-     :content (string/join
-               \newline
-               authorized-keys)
-     :force true)))
+      (str ssh-dir "authorized_keys")
+      :overwrite-changes true
+      :owner user-name
+      :group user-name
+      :mode "644"
+      :content (string/join
+                \newline
+                authorized-keys))))
 
 (defn configure-ssh-key
   "configer the users ssh_key."
@@ -44,15 +49,25 @@
   (let [ssh-key (:personal-key os-user-config)
         ssh-dir (os-user/user-ssh-dir user-name)]
     (when (some? (:private-key ssh-key))
-      (actions/directory ssh-dir :owner user-name :mode "755")
+      (actions/directory
+        ssh-dir
+        :owner user-name
+        :group user-name
+        :mode "755")
       (actions/remote-file
-       (str ssh-dir "id_rsa")
-       :owner user-name :mode "600"
-       :content (:private-key ssh-key))
+        (str ssh-dir "id_rsa")
+        :overwrite-changes true
+        :owner user-name
+        :group username
+        :mode "600"
+        :content (:private-key ssh-key))
       (actions/remote-file
-       (str ssh-dir "id_rsa.pub")
-       :owner user-name :mode "644"
-       :content (ssh-key/format-public-key (:public-key ssh-key))))))
+        (str ssh-dir "id_rsa.pub")
+        :overwrite-changes true
+        :owner user-name
+        :group user-name
+        :mode "644"
+        :content (ssh-key/format-public-key (:public-key ssh-key))))))
 
 (defn configure-sudo
   "Add user to sudoers without password."
