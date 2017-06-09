@@ -13,27 +13,17 @@
 ; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
-(ns dda.pallet.domain.dda-user-crate
+(ns dda.pallet.crate.dda-user-crate.group
   (:require
    [schema.core :as s]
-   [dda.pallet.core.dda-crate :as dda-crate]
-   [dda.pallet.crate.dda-user-crate :as user-crate]))
+   [pallet.api :as api]
+   [dda.pallet.crate.config :as config-crate]
+   [dda.pallet.domain.dda-user-crate :as user]))
 
-(def UserDomainConfig
-  user-crate/UserCrateConfig)
-
-(def UserCrateStackConfig
-  {:group-specific-config
-   {s/Keyword {:dda-user user-crate/UserCrateConfig}}})
-
-(defn crate-stack-configuration [domain-config
-                                 & {:keys [group-key] :or {group-key :dda-user-group}}]
-   (s/validate s/Keyword group-key)
-   (s/validate UserDomainConfig domain-config)
-   (s/validate
-    UserCrateStackConfig
-    {:group-specific-config
-      {group-key {:dda-user domain-config}}}))
-
-(def with-user
-  (dda-crate/create-server-spec user-crate/user-crate))
+(s/defn ^:always-validate dda-user-group
+  [config :- user/UserCrateStackConfig]
+  (let [group-name (name (key (first (:group-specific-config config))))]
+    (api/group-spec
+      group-name
+      :extends [(config-crate/with-config config)
+                user/with-user])))

@@ -21,6 +21,7 @@
     [dda.cm.operation :as operation]
     [dda.cm.aws :as cloud-target]
     [dda.pallet.crate.dda-user-crate.user.os-user :as os-user]
+    [dda.pallet.crate.dda-user-crate.group :as group]
     [dda.pallet.domain.dda-user-crate :as domain]))
 
 (def ssh-pub-key
@@ -42,7 +43,7 @@
 
 (defn integrated-group-spec [count]
   (merge
-    (domain/dda-user-group (domain/crate-stack-configuration domain-config))
+    (group/dda-user-group (domain/crate-stack-configuration domain-config))
     (cloud-target/node-spec "jem")
     {:count count}))
 

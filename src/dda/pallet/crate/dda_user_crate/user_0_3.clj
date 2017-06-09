@@ -13,12 +13,12 @@
 ; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
-(ns dda.pallet.crate.user-0-3
+(ns dda.pallet.crate.dda-user-crate.user-0-3
   (:require
     [clojure.string :as string]
     [pallet.actions :as actions]
-    [dda.pallet.crate.user.os-user :as os-user]
-    [dda.pallet.crate.user.ssh-key :as ssh-key]))
+    [dda.pallet.crate.dda-user-crate.user.os-user-0-3 :as os-user]
+    [dda.pallet.crate.dda-user-crate.user.ssh-key-0-3 :as ssh-key]))
 
 (defn configure-authorized-keys
   "configer the authorized_keys for a given user."
@@ -35,8 +35,8 @@
       :owner user-name :mode "644"
       :content (string/join
                  \newline
-                 authorized-keys))
-      ))
+                 authorized-keys))))
+
 
 (defn configure-ssh-key
   "configer the users ssh_key."
@@ -53,8 +53,8 @@
       (actions/remote-file
        (str ssh-dir "id_rsa.pub")
        :owner user-name :mode "644"
-       :content (ssh-key/public-key-formated ssh-key))
-      )))
+       :content (ssh-key/public-key-formated ssh-key)))))
+
 
 (defn configure-sudo
   "Add user to sudoers without password."
@@ -68,8 +68,8 @@
       :literal true
       :content (str
                  user-name "    ALL = NOPASSWD: ALL\n"
-                 "pallet    ALL=(" user-name ") NOPASSWD: ALL\n")
-      )))
+                 "pallet    ALL=(" user-name ") NOPASSWD: ALL\n"))))
+
 
 (defn create-sudo-user
   "creates a sudo user with pw is encrypted handed over.
@@ -85,5 +85,4 @@ So password test1234 is representet by 3hLlUVSs1Aa1c"
                 :password (:encrypted-password os-user))
   (configure-authorized-keys os-user)
   (configure-ssh-key os-user)
-  (configure-sudo os-user)
-  )
+  (configure-sudo os-user))

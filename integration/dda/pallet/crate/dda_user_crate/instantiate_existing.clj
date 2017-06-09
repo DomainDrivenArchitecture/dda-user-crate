@@ -20,6 +20,7 @@
     [dda.cm.existing :as existing]
     [dda.pallet.crate.dda-user-crate.user.os-user :as os-user]
     [dda.pallet.domain.dda-user-crate :as user]
+    [dda.pallet.crate.dda-user-crate.group :as group]
     [dda.pallet.domain.dda-user-crate :as domain]))
 
 (def ssh-pub-key
@@ -48,7 +49,7 @@
 
 (def integrated-group-spec
   (merge
-   (domain/dda-user-group (domain/crate-stack-configuration domain-config))
+   (group/dda-user-group (domain/crate-stack-configuration domain-config))
    (existing/node-spec provisioning-user)))
 
 (defn apply-install []

@@ -13,9 +13,9 @@
 ; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
-(ns dda.pallet.crate.user.os-user-0-3
+(ns dda.pallet.crate.dda-user-crate.user.os-user-0-3
   (:require
-   [dda.pallet.crate.user.ssh-key :as ssh-key]))
+   [dda.pallet.crate.dda-user-crate.user.ssh-key-0-3 :as ssh-key]))
 
 (defrecord OsUser
   [user-name
@@ -41,12 +41,12 @@
   So password test123 is representet by sqliZ6M65Vfjo.
 * authorized-keys: Vector of authorized-key-ids"
   ([user-name authorized-keys]
-    (new-os-user user-name nil authorized-keys nil))
+   (new-os-user user-name nil authorized-keys nil))
   ([user-name encrypted-password authorized-keys]
-    (new-os-user user-name encrypted-password authorized-keys nil))
+   (new-os-user user-name encrypted-password authorized-keys nil))
   ([user-name encrypted-password authorized-keys personal-key]
-    (OsUser. user-name encrypted-password authorized-keys personal-key))
-  )
+   (OsUser. user-name encrypted-password authorized-keys personal-key)))
+
 
 (defn new-os-user-from-config
   "creates a new os user from configuration"
@@ -61,16 +61,16 @@
       (when (some? personal-key)
         (ssh-key/create-key-from-config
           personal-key
-          (ssh-key/ssh-key-config global-config))))
-  ))
+          (ssh-key/ssh-key-config global-config))))))
+
 
 (defn user-home-dir
   "provides the user home path."
   [os-user]
   (let [user-name (:user-name os-user)]
-  (if (= user-name "root")
-    "/root"
-    (str "/home/" user-name))))
+   (if (= user-name "root")
+     "/root"
+     (str "/home/" user-name))))
 
 (defn user-ssh-dir
   "provides the user .ssh path."

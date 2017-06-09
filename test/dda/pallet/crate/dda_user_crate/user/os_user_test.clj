@@ -13,7 +13,7 @@
 ; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
-(ns dda.pallet.crate.user.os-user-test
+(ns dda.pallet.crate.dda-user-crate.user.os-user-test
   (:require
    [clojure.test :refer :all]
    [dda.pallet.crate.dda-user-crate.user.os-user :as sut]

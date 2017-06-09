@@ -72,6 +72,3 @@
   (dda-crate/make-dda-crate
    :facility facility
    :version version))
-
-(def with-user
-  (dda-crate/create-server-spec user-crate))
