@@ -24,22 +24,26 @@
     [dda.pallet.crate.dda-user-crate.group :as group]
     [dda.pallet.domain.dda-user-crate :as domain]))
 
-(def ssh-pub-key
-  (os-user/read-ssh-pub-key-to-config))
+(def shantanu-key
+  {:type "ssh-rsa"
+   :public-key "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDY96t89DVhJsCw1yulH1fi6YUiguAc2a6nKCXwvo+IxP/JZyq5j2zM+j84Sj9vdGcRnpeFDW/OhiNIA1gxmgvWnCbm3AI6uoLF08bWXCWaGpcQIANpuIWyh2oQhHD+3twaL8jPZXHZvBWNYxlXY+z1JSpSJ2r8JHebwe4mcypCWtXCkoBw4+/j4iU3ksPpFhJFRY1ij1bWEFnUSYhMWNCIvps4OPz9tLKRDjBd7rWYSSia04AuFjRgMHiZ79rY+brxQSVj4a0fnppomfe9QOsGzl0LlQMAea7ahOxFOtuenngyHA56U2kv5Fhu71ZBtEikIJpY6S6TNJEhiITfvEdB"
+   :comment "kumar.shantanu@gmail.com"})
 
-(def ssh-priv-key "$YOUR_PRIVATE_KEY")
+(def jem-key-host
+ {:type "ssh-rsa"
+  :public-key "AAAAB3NzaC1yc2EAAAADAQABAAABAQDd0NIMownb4CSsifH2OBoO3+Hv7I04EjblR5S1VdEOZ2a59nVjWJMIwVj+JkFoon7YaYhgRoqzmDuR7nX8yfHXTljJ2VRwecvbcPV3exaNTcWSMUZMwBKIAEKdTwaZ5wHogJRYeGtPTBYf6k433sGS3TH2zy6YOCwftGKFKc4LkhB7ZnjHTQ4AWefmazt6FV8xi4ohZv/sgy3Tnm9ylxI7vHdVwvwZM4MzOoCIQTHNJWvOMgxuFmSj9vZlwj/IpwmHimxEjBszMf1gzoA7lb/3MShfCB8u3WFpTUiHOlNu1xsbrzC3f0sK9PO1qpQ2QunModw7r3Avx7lE5mK0xPW/"
+  :comment "mje@host"})
 
-(def ssh-key-pair
-  {:public-key ssh-pub-key
-   :private-key ssh-priv-key})
+(def jem-key-vm
+ {:type "ssh-rsa"
+  :public-key "AAAAB3NzaC1yc2EAAAADAQABAAABAQCeO+eiYDonq3OfxyaUx259y/1OqbhLciD4UlCkguD5PgOuXw+kCXS1Wbdor9cvU8HnsL2j70sPSwCWkcDrrGQ0kpC0GuNO47pKawAOSv07ELpSIIp/nPK5AX2+qI1H3MADBWBE5N1L7sdgatON2A/cC3u5pzcWDaEH7/IJdOkRm8H+qqG+uva6ceFUoYFiJKDixmsmaUXhhDcfYhfpAPBUCSes+HTeT/hk6pdLTX9xXd4H5wyAc+j1e6kPq9ZcxvzZNr9qEMIFjnNL/S9w1ozxQa3sKJQHj8SyVZDlwjvepGS7fKrdlRps938A7I3Y4BaXGX//M1y2HNbUWbMOllLL"
+  :comment "mje@jergerProject"})
 
 (def domain-config
-  {:test1 {:encrypted-password "USER_PASSWORD"
-           :authorized-keys [ssh-pub-key]
-           :personal-key ssh-key-pair}
-   :test2 {:encrypted-password "ZvLZwke.Bvczw"
-           :authorized-keys [ssh-pub-key]
-           :personal-key ssh-key-pair}})
+  {:jem {:encrypted-password "kpwejjj0r04u09rg90rfj"
+         :authorized-keys [jem-key-host jem-key-vm]}
+   :shantanu {:encrypted-password "kpwejjj0r04u09rg90rfj"
+              :authorized-keys [shantanu-key]}})
 
 (defn integrated-group-spec [count]
   (merge
