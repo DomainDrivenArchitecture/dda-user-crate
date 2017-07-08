@@ -1,10 +1,12 @@
 # dda-user-crate
 
+This crate is part of [dda-pallet](https://domaindrivenarchitecture.org/pages/dda-pallet/).
+
 ## compatability
 dda-pallet is compatible to the following versions
  * pallet 0.8.x
  * clojure 1.7
- * (x)ubunutu14.04 / 16.04
+ * (x)ubunutu 16.04
 
 ## Features
  * creating os-users on target nodes
@@ -39,3 +41,6 @@ on the node by calling:
 dda.pallet.crate.dda-user-crate.instantiate-existing> (apply-install)
 
 Encrypted passwords can be generated e.g. by `mkpasswd test1234`.
+
+## See also
+* Howto getting started: https://domaindrivenarchitecture.org/posts/2017-07-07-first-steps-with-dda-pallet/
