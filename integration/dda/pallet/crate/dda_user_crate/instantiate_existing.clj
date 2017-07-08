@@ -16,6 +16,7 @@
 (ns dda.pallet.crate.dda-user-crate.instantiate-existing
   (:require
     [schema.core :as s]
+    [pallet.repl :as pr]
     [dda.cm.operation :as operation]
     [dda.cm.existing :as existing]
     [dda.pallet.crate.dda-user-crate.user.os-user :as os-user]
@@ -23,40 +24,36 @@
     [dda.pallet.crate.dda-user-crate.group :as group]
     [dda.pallet.domain.dda-user-crate :as domain]))
 
+(def provisioning-ip
+    "192.168.56.104")
+
+(def provisioning-user
+  {:login "initial"
+   :password "secure1234"})
+
 (def ssh-pub-key
   (os-user/read-ssh-pub-key-to-config))
 
-(def ssh-priv-key "$YOUR_PRIVATE_KEY")
-
-(def ssh-key-pair
-  {:public-key ssh-pub-key
-   :private-key ssh-priv-key})
-
-(def domain-config
-  {:test {:encrypted-password  "USER_PASSWORD"
-          :authorized-keys [ssh-pub-key]
-          :personal-key ssh-key-pair}})
-
-(def provisioning-ip
-    "TARGET_IP")
-
-(def provisioning-user
-  {:login "EXISTING_USER_LOGIN"
-   :password "EXISTING_USER_PASSWORD"})
+(def user-config
+   {:user-name {:encrypted-password  "xxx"
+                :authorized-keys [ssh-pub-key]}})
 
 (def provider
-  (existing/provider provisioning-ip "node-id" "dda-user-group"))
+  (existing/provider provisioning-ip "user-node" "dda-user-group"))
 
 (def integrated-group-spec
   (merge
-   (group/dda-user-group (domain/crate-stack-configuration domain-config))
+   (group/dda-user-group (domain/crate-stack-configuration user-config))
    (existing/node-spec provisioning-user)))
 
 (defn apply-install []
-  (operation/do-apply-install (provider) (integrated-group-spec)))
+  (pr/session-summary
+    (operation/do-apply-install provider integrated-group-spec)))
 
 (defn apply-config []
-  (operation/do-apply-configure (provider) (integrated-group-spec)))
+  (pr/session-summary
+    (operation/do-apply-configure provider integrated-group-spec)))
 
 (defn server-test []
-  (operation/do-server-test (provider) (integrated-group-spec)))
+  (pr/session-summary
+    (operation/do-server-test provider integrated-group-spec)))

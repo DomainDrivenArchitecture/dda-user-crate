@@ -39,11 +39,23 @@
   :public-key "AAAAB3NzaC1yc2EAAAADAQABAAABAQCeO+eiYDonq3OfxyaUx259y/1OqbhLciD4UlCkguD5PgOuXw+kCXS1Wbdor9cvU8HnsL2j70sPSwCWkcDrrGQ0kpC0GuNO47pKawAOSv07ELpSIIp/nPK5AX2+qI1H3MADBWBE5N1L7sdgatON2A/cC3u5pzcWDaEH7/IJdOkRm8H+qqG+uva6ceFUoYFiJKDixmsmaUXhhDcfYhfpAPBUCSes+HTeT/hk6pdLTX9xXd4H5wyAc+j1e6kPq9ZcxvzZNr9qEMIFjnNL/S9w1ozxQa3sKJQHj8SyVZDlwjvepGS7fKrdlRps938A7I3Y4BaXGX//M1y2HNbUWbMOllLL"
   :comment "mje@jergerProject"})
 
+(def ssh-pub-key
+  (os-user/read-ssh-pub-key-to-config))
+
+(def ssh-priv-key "$YOUR_PRIVATE_KEY")
+
+(def ssh-key-pair
+  {:public-key ssh-pub-key
+   :private-key ssh-priv-key})
+
 (def domain-config
   {:jem {:encrypted-password "kpwejjj0r04u09rg90rfj"
          :authorized-keys [jem-key-host jem-key-vm]}
    :shantanu {:encrypted-password "kpwejjj0r04u09rg90rfj"
-              :authorized-keys [shantanu-key]}})
+              :authorized-keys [shantanu-key]}
+   :test {:encrypted-password  "USER_PASSWORD"
+          :authorized-keys [ssh-pub-key]
+          :personal-key ssh-key-pair}})
 
 (defn integrated-group-spec [count]
   (merge
