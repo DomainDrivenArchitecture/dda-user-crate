@@ -38,7 +38,7 @@ You can add more public-keys to the authorized-keys. Please note that adding you
 private-key is optional. After defining your configuration you can start the execution
 on the node by calling:
 
-dda.pallet.crate.dda-user-crate.instantiate-existing> (apply-install)
+dda.pallet.dda-user-crate.infra.instantiate-existing> (apply-install)
 
 Encrypted passwords can be generated e.g. by `mkpasswd test1234`.
 

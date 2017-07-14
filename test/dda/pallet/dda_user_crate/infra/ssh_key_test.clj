@@ -13,34 +13,25 @@
 ; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
-(ns dda.pallet.crate.dda-user-crate.user.ssh-key
+(ns dda.pallet.dda-user-crate.infra.ssh-key-test
   (:require
+   [clojure.test :refer :all]
    [schema.core :as s]
-   [clojure.string :as str]))
+   [dda.pallet.dda-user-crate.infra.user.ssh-key :as sut]))
 
-(def ssh-public-key-config
-  {:type s/Str
-   :public-key s/Str
-   :comment s/Str})
+(def valid-ssh-pub-key-config
+  {:type "type"
+   :public-key "pub-key"
+   :comment "a comment"})
 
-(def ssh-private-key-config s/Str)
+(def valid-ssh-priv-key-config
+  "private key")
 
 (def ssh-key-pair-config
-  {:public-key ssh-public-key-config
-   :private-key ssh-private-key-config})
+  {:public-key valid-ssh-pub-key-config
+   :private-key valid-ssh-priv-key-config})
 
-(defn format-public-key
-  "returns a formatted public-key from an ssh-config"
-  [ssh-public-key-config]
-  (str
-   (:type ssh-public-key-config) " "
-   (:public-key ssh-public-key-config) " "
-   (:comment ssh-public-key-config)))
-
-(s/defn string-to-pub-key-config [pub-key :- s/Str] :- ssh-public-key-config
-  "function takes a public-key as a string and returns it as a ssh-public-key-config"
-  (let [col (clojure.string/split pub-key #" ")]
-    {:type (first col)
-     :public-key (second col)
-     :comment (nth col 2)}))
-
+(deftest test-configs
+  (is (s/validate sut/ssh-public-key-config valid-ssh-pub-key-config))
+  (is (s/validate sut/ssh-private-key-config valid-ssh-priv-key-config))
+  (is (s/validate sut/ssh-key-pair-config ssh-key-pair-config)))

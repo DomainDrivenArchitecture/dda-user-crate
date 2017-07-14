@@ -13,9 +13,9 @@
 ; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
-(ns dda.pallet.crate.dda-user-crate.user.os-user-0-3
+(ns dda.pallet.dda-user-crate.infra.user.os-user-0-3
   (:require
-   [dda.pallet.crate.dda-user-crate.user.ssh-key-0-3 :as ssh-key]))
+   [dda.pallet.dda-user-crate.infra.user.ssh-key-0-3 :as ssh-key]))
 
 (defrecord OsUser
   [user-name

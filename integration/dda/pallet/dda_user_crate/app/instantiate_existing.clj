@@ -13,16 +13,14 @@
 ; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
-(ns dda.pallet.crate.dda-user-crate.instantiate-existing
+(ns dda.pallet.dda-user-crate.app.instantiate-existing
   (:require
     [schema.core :as s]
     [pallet.repl :as pr]
     [dda.cm.operation :as operation]
     [dda.cm.existing :as existing]
-    [dda.pallet.crate.dda-user-crate.user.os-user :as os-user]
-    [dda.pallet.domain.dda-user-crate :as user]
-    [dda.pallet.crate.dda-user-crate.group :as group]
-    [dda.pallet.domain.dda-user-crate :as domain]))
+    [dda.pallet.dda-user-crate.infra.user.os-user :as os-user]
+    [dda.pallet.dda-user-crate.app :as app]))
 
 (def provisioning-ip
     "192.168.56.104")
@@ -41,19 +39,19 @@
 (def provider
   (existing/provider provisioning-ip "user-node" "dda-user-group"))
 
-(def integrated-group-spec
+(def provisioning-spec
   (merge
-   (group/dda-user-group (domain/crate-stack-configuration user-config))
+   (app/dda-user-group (app/app-configuration user-config))
    (existing/node-spec provisioning-user)))
 
 (defn apply-install []
   (pr/session-summary
-    (operation/do-apply-install provider integrated-group-spec)))
+    (operation/do-apply-install provider provisioning-spec)))
 
 (defn apply-config []
   (pr/session-summary
-    (operation/do-apply-configure provider integrated-group-spec)))
+    (operation/do-apply-configure provider provisioning-spec)))
 
 (defn server-test []
   (pr/session-summary
-    (operation/do-server-test provider integrated-group-spec)))
+    (operation/do-server-test provider provisioning-spec)))

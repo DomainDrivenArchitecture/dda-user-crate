@@ -13,13 +13,13 @@
 ; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
-(ns dda.pallet.crate.dda-user-crate
+(ns dda.pallet.dda-user-crate.infra
   (:require
    [schema.core :as s]
    [dda.pallet.core.dda-crate :as dda-crate]
-   [dda.pallet.crate.dda-user-crate.user :as user]
-   [dda.pallet.crate.dda-user-crate.user.os-user :as os-user]
-   [dda.pallet.crate.dda-user-crate.user.ssh-key :as ssh-key]))
+   [dda.pallet.dda-user-crate.infra.user :as user]
+   [dda.pallet.dda-user-crate.infra.user.os-user :as os-user]
+   [dda.pallet.dda-user-crate.infra.user.ssh-key :as ssh-key]))
 
 (def facility :dda-user)
 (def version [0 3 7])
@@ -72,3 +72,6 @@
   (dda-crate/make-dda-crate
    :facility facility
    :version version))
+
+(def with-user
+ (dda-crate/create-server-spec user-crate))
