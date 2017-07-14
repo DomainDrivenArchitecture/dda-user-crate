@@ -1,4 +1,4 @@
-(defproject dda/dda-user-crate "0.5.0"
+(defproject dda/dda-user-crate "0.5.1-SNAPSHOT"
   :description "A crate to handle users"
   :url "https://www.domaindrivenarchitecture.org"
   :license {:name "Apache License, Version 2.0"
@@ -6,7 +6,7 @@
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [prismatic/schema "1.1.6"]
                  [com.palletops/pallet "0.8.12" :exclusions [org.clojure/tools.cli]]
-                 [dda/dda-pallet "0.5.0-SNAPSHOT"]]
+                 [dda/dda-pallet "0.5.0"]]
   :profiles {:dev
              {:source-paths ["integration"]
               :resource-paths ["dev-resources"]
