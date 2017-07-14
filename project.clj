@@ -1,4 +1,4 @@
-(defproject dda/dda-user-crate "0.5.0-SNAPSHOT"
+(defproject dda/dda-user-crate "0.5.0"
   :description "A crate to handle users"
   :url "https://www.domaindrivenarchitecture.org"
   :license {:name "Apache License, Version 2.0"
