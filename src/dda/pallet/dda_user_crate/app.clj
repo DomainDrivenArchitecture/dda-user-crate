@@ -16,7 +16,7 @@
 (ns dda.pallet.dda-user-crate.app
   (:require
    [schema.core :as s]
-   [pallet.api :as api]
+   [dda.cm.group :as group]
    [dda.pallet.dda-config-crate.infra :as config-crate]
    [dda.pallet.dda-user-crate.infra :as infra]
    [dda.pallet.dda-user-crate.domain :as domain]))
@@ -41,9 +41,7 @@
   (domain/infra-configuration domain-config) group-key))
 
 (s/defn ^:always-validate dda-user-group
-  [config :- UserAppConfig]
-  (let [group-name (name (key (first (:group-specific-config config))))]
-    (api/group-spec
-      group-name
-      :extends [(config-crate/with-config config)
-                with-user])))
+  [app-config :- UserAppConfig]
+  (group/group-spec
+    app-config [(config-crate/with-config config)
+                with-user]))
