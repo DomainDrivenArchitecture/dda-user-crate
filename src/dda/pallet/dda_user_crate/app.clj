@@ -43,5 +43,5 @@
 (s/defn ^:always-validate dda-user-group
   [app-config :- UserAppConfig]
   (group/group-spec
-    app-config [(config-crate/with-config config)
+    app-config [(config-crate/with-config app-config)
                 with-user]))
