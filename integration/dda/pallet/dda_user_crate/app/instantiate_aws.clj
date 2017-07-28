@@ -16,8 +16,8 @@
 (ns dda.pallet.dda-user-crate.app.instantiate-aws
   (:require
     [clojure.inspector :as inspector]
-    [org.domaindrivenarchitecture.pallet.commons.session-tools :as session-tools]
-    [org.domaindrivenarchitecture.pallet.commons.pallet-schema :as ps]
+    [dda.pallet.commons.session-tools :as session-tools]
+    [dda.pallet.commons.pallet-schema :as ps]
     [dda.cm.operation :as operation]
     [dda.cm.aws :as cloud-target]
     [dda.pallet.dda-user-crate.infra.user.os-user :as os-user]
