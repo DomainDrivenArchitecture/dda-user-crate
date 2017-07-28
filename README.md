@@ -1,6 +1,6 @@
 # dda-user-crate
 
-![Clojars Project](https://img.shields.io/clojars/v/dda/dda-user-crate.svg)](https://clojars.org/dda/dda-user-crate)
+[![Clojars Project](https://img.shields.io/clojars/v/dda/dda-user-crate.svg)](https://clojars.org/dda/dda-user-crate)
 
 This crate is part of [dda-pallet](https://domaindrivenarchitecture.org/pages/dda-pallet/).
 
