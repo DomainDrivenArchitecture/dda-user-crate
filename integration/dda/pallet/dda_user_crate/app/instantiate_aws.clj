@@ -15,12 +15,13 @@
 ; limitations under the License.
 (ns dda.pallet.dda-user-crate.app.instantiate-aws
   (:require
+    [pallet.repl :as pr]
     [clojure.inspector :as inspector]
     [dda.pallet.commons.session-tools :as session-tools]
     [dda.pallet.commons.pallet-schema :as ps]
     [dda.cm.operation :as operation]
     [dda.cm.aws :as cloud-target]
-    [dda.pallet.dda-user-crate.infra.user.os-user :as os-user]
+    [dda.config.commons.user-env :as user-env]
     [dda.pallet.dda-user-crate.app :as app]))
 
 (def shantanu-key
@@ -39,7 +40,7 @@
   :comment "mje@jergerProject"})
 
 (def ssh-pub-key
-  (os-user/read-ssh-pub-key-to-config))
+  (user-env/read-ssh-pub-key-to-config))
 
 (def ssh-priv-key "$YOUR_PRIVATE_KEY")
 
@@ -64,12 +65,16 @@
 
 (defn converge-install
   ([count]
-   (operation/do-converge-install (cloud-target/provider) (provisioning-spec count)))
+   (pr/session-summary
+    (operation/do-converge-install (cloud-target/provider) (provisioning-spec count))))
   ([key-id key-passphrase count]
-   (operation/do-converge-install (cloud-target/provider key-id key-passphrase) (provisioning-spec count))))
+   (pr/session-summary
+    (operation/do-converge-install (cloud-target/provider key-id key-passphrase) (provisioning-spec count)))))
 
 (defn server-test
   ([count]
-   (operation/do-server-test (cloud-target/provider) (provisioning-spec count)))
+   (pr/session-summary
+    (operation/do-server-test (cloud-target/provider) (provisioning-spec count))))
   ([key-id key-passphrase count]
-   (operation/do-server-test (cloud-target/provider key-id key-passphrase) (provisioning-spec count))))
+   (pr/session-summary
+    (operation/do-server-test (cloud-target/provider key-id key-passphrase) (provisioning-spec count)))))

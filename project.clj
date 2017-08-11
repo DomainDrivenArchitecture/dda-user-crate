@@ -6,7 +6,7 @@
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [prismatic/schema "1.1.6"]
                  [com.palletops/pallet "0.8.12" :exclusions [org.clojure/tools.cli]]
-                 [dda/dda-pallet "0.5.2"]]
+                 [dda/dda-pallet "0.5.3-SNAPSHOT"]]
   :profiles {:dev
              {:source-paths ["integration"]
               :resource-paths ["dev-resources"]

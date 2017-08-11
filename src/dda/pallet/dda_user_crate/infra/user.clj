@@ -17,16 +17,14 @@
   (:require
    [clojure.string :as string]
    [pallet.actions :as actions]
-   [dda.pallet.dda-user-crate.infra.user.os-user :as os-user]
-   [dda.pallet.dda-user-crate.infra.user.ssh-key :as ssh-key]))
-
+   [dda.config.commons.user-env :as user-env]))
 
 (defn configure-authorized-keys
   "configure the authorized_keys for a given user, all existing
   authorized_keys will be overwritten."
   [user-name os-user-config]
-  (let [ssh-dir (os-user/user-ssh-dir user-name)
-        authorized-keys (map ssh-key/format-public-key
+  (let [ssh-dir (user-env/user-ssh-dir user-name)
+        authorized-keys (map user-env/format-public-key
                             (:authorized-keys os-user-config))]
     (actions/directory
       ssh-dir
@@ -47,7 +45,7 @@
   "configer the users ssh_key."
   [user-name os-user-config]
   (let [ssh-key (:personal-key os-user-config)
-        ssh-dir (os-user/user-ssh-dir user-name)]
+        ssh-dir (user-env/user-ssh-dir user-name)]
     (when (some? (:private-key ssh-key))
       (actions/directory
         ssh-dir
@@ -67,7 +65,7 @@
         :owner user-name
         :group user-name
         :mode "644"
-        :content (ssh-key/format-public-key (:public-key ssh-key))))))
+        :content (user-env/format-public-key (:public-key ssh-key))))))
 
 (defn configure-sudo
   "Add user to sudoers without password."

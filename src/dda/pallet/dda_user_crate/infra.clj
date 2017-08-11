@@ -18,33 +18,38 @@
    [schema.core :as s]
    [dda.pallet.core.dda-crate :as dda-crate]
    [dda.pallet.dda-user-crate.infra.user :as user]
-   [dda.pallet.dda-user-crate.infra.user.os-user :as os-user]
-   [dda.pallet.dda-user-crate.infra.user.ssh-key :as ssh-key]))
+   [dda.config.commons.user-env :as user-env]
+   [dda.config.commons.ssh-key :as ssh-key]))
 
 (def facility :dda-user)
 (def version [0 3 7])
 
+(def OsUser
+ {:encrypted-password s/Str
+  (s/optional-key :authorized-keys) [ssh-key/PublicSshKey]
+  (s/optional-key :personal-key) ssh-key/SshKeyPair})
+
 (def UserCrateConfig
-  {s/Keyword os-user/os-user-config})
+  {s/Keyword OsUser})
 
 (defn read-ssh-pub-key-to-config
   ( []
-   (os-user/read-ssh-pub-key-to-config))
+   (user-env/read-ssh-pub-key-to-config))
   ( [& {:keys [ssh-dir-path]}]
-    (os-user/read-ssh-pub-key-to-config :ssh-dir-path ssh-dir-path)))
+    (user-env/read-ssh-pub-key-to-config :ssh-dir-path ssh-dir-path)))
 
 (defn read-ssh-priv-key-to-config
   ( []
-   (os-user/read-ssh-priv-key-to-config))
+   (user-env/read-ssh-priv-key-to-config))
   ( [& {:keys [ssh-dir-path read-from-env?]}]
-    (os-user/read-ssh-priv-key-to-config
+    (user-env/read-ssh-priv-key-to-config
      :ssh-dir-path ssh-dir-path :read-from-env? read-from-env?)))
 
 (defn read-ssh-keys-to-pair-config
   ( []
-   (os-user/read-ssh-keys-to-pair-config))
+   (user-env/read-ssh-keys-to-pair-config))
   ( [& {:keys [ssh-dir-path read-from-env?]}]
-   (os-user/read-ssh-keys-to-pair-config
+   (user-env/read-ssh-keys-to-pair-config
     :ssh-dir-path ssh-dir-path
     :read-from-env? read-from-env?)))
 

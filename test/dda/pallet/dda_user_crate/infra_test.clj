@@ -13,11 +13,11 @@
 ; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
-(ns dda.pallet.dda-user-crate.infra.os-user-test
+(ns dda.pallet.dda-user-crate.infra-test
   (:require
    [clojure.test :refer :all]
    [schema.core :as s]
-   [dda.pallet.dda-user-crate.infra.user.os-user :as sut]))
+   [dda.pallet.dda-user-crate.infra :as sut]))
 
 (def ssh-pub-key
   {:type "type"
@@ -39,5 +39,5 @@
           :personal-key ssh-key-pair}))
 
 (deftest valid-configurations
-  (is (s/validate sut/os-user-config os-user-valid-config))
-  (is (s/validate sut/os-user-config os-user-valid-complete-config)))
+  (is (s/validate sut/OsUser os-user-valid-config))
+  (is (s/validate sut/OsUser os-user-valid-complete-config)))
