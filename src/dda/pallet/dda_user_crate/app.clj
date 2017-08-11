@@ -21,6 +21,8 @@
    [dda.pallet.dda-user-crate.infra :as infra]
    [dda.pallet.dda-user-crate.domain :as domain]))
 
+(def InfraResult domain/InfraResult)
+
 (def UserAppConfig
   {:group-specific-config
    {s/Keyword {:dda-user infra/UserCrateConfig}}})

@@ -21,6 +21,8 @@
 (def UserDomainConfig
   infra/UserCrateConfig)
 
-(s/defn ^:allways-validate infra-configuration
+(def InfraResult {infra/facility infra/UserCrateConfig})
+
+(s/defn ^:allways-validate infra-configuration :- InfraResult
   [domain-config :- UserDomainConfig]
   {infra/facility domain-config})
