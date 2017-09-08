@@ -41,28 +41,28 @@
         {:keys [public-key private-key passphrase]} trusted-key
         user-home (user-env/user-home-dir user-name)]
     (actions/remote-file
-      (str user-home "pub.key")
+      (str user-home "/pub.key")
       :content public-key
       :mode "600"
       :owner user-name
       :group user-name
       :action :create)
     (actions/remote-file
-      (str user-home "priv.key")
+      (str user-home "/priv.key")
       :content private-key
       :mode "600"
       :owner user-name
       :group user-name
       :action :create)
     (actions/directory
-      (str user-home ".gnupg")
+      (str user-home "/.gnupg")
       :mode "700"
       :owner user-name
       :group user-name
       :action :create)
     ;(actions/exec-script* "cd ~/.gnupg && echo \"allow-loopback-pinentry\"  >> gpg-agent.conf")
     (actions/remote-file
-      (str user-home ".gnupg/gpg-agent.conf")
+      (str user-home "/.gnupg/gpg-agent.conf")
       :mode "600"
       :content "allow-loopback-pinentry"
       :owner user-name
@@ -73,10 +73,9 @@
       :script-dir user-home
       :script-env {:HOME user-home}}
      (actions/exec-checked-script
-      "enable-and-start-vnc-service"
-      ("gpgconf" "--kill" "gpg-agent")
-      ("gpg2" "--import" ~(str user-home "pub.key"))
+      "import & trust gpg key"
+      ("gpg2" "--import" ~(str user-home "/pub.key"))
       ("echo" ~passphrase "|" "gpg2" "--pinentry-mode loopback"
               "--batch --passphrase-fd 0"
-              "--import" ~(str user-home "priv.key"))
+              "--import" ~(str user-home "/priv.key"))
       ("/usr/lib/gpg-trust-all.sh")))))
