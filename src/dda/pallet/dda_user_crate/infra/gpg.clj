@@ -19,6 +19,7 @@
    [clojure.java.io :as io]
    [pallet.actions :as actions]
    [pallet.action :as action]
+   [dda.config.commons.user-env :as user-env]
    [dda.pallet.dda-user-crate.infra.schema :as schema]))
 
 (s/defn install
@@ -38,7 +39,7 @@
    config :- schema/OsUser]
   (let [{:keys [trusted-key]} (:gpg config)
         {:keys [public-key private-key passphrase]} trusted-key
-        user-home (str "/home/" user-name "/")]
+        user-home (user-env/user-home-dir user-name)]
     (actions/remote-file
       (str user-home "pub.key")
       :content public-key
