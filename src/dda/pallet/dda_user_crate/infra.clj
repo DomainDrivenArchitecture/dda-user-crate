@@ -17,51 +17,45 @@
   (:require
    [schema.core :as s]
    [dda.pallet.core.dda-crate :as dda-crate]
+   [dda.pallet.dda-user-crate.infra.schema :as schema]
    [dda.pallet.dda-user-crate.infra.user :as user]
-   [dda.config.commons.user-env :as user-env]
-   [dda.config.commons.ssh-key :as ssh-key]))
+   [dda.pallet.dda-user-crate.infra.ssh :as ssh]
+   [dda.pallet.dda-user-crate.infra.gpg :as gpg]))
 
 (def facility :dda-user)
 (def version [0 3 7])
 
-(def OsUser
- {:encrypted-password s/Str
-  (s/optional-key :authorized-keys) [ssh-key/PublicSshKey]
-  (s/optional-key :personal-key) ssh-key/SshKeyPair})
+(def GpgKey schema/GpgKey)
 
-(def UserCrateConfig
-  {s/Keyword OsUser})
+(def OsUser schema/OsUser)
+
+(def UserCrateConfig schema/UserCrateConfig)
 
 (defn read-ssh-pub-key-to-config
-  ( []
-   (user-env/read-ssh-pub-key-to-config))
-  ( [& {:keys [ssh-dir-path]}]
-    (user-env/read-ssh-pub-key-to-config :ssh-dir-path ssh-dir-path)))
+  [& options]
+  (ssh/read-ssh-pub-key-to-config options))
 
 (defn read-ssh-priv-key-to-config
-  ( []
-   (user-env/read-ssh-priv-key-to-config))
-  ( [& {:keys [ssh-dir-path read-from-env?]}]
-    (user-env/read-ssh-priv-key-to-config
-     :ssh-dir-path ssh-dir-path :read-from-env? read-from-env?)))
+  [& options]
+  (ssh/read-ssh-priv-key-to-config options))
 
 (defn read-ssh-keys-to-pair-config
-  ( []
-   (user-env/read-ssh-keys-to-pair-config))
-  ( [& {:keys [ssh-dir-path read-from-env?]}]
-   (user-env/read-ssh-keys-to-pair-config
-    :ssh-dir-path ssh-dir-path
-    :read-from-env? read-from-env?)))
+  [& options]
+  (ssh/read-ssh-keys-to-pair-config options))
 
 (defn install-user [config]
   (doseq [[k v] config]
-    (user/create-sudo-user (name k) v)))
+    (user/create-sudo-user (name k) v)
+    (when (contains? v :gpg)
+      (gpg/install (name k) v))))
 
 (defn configure-user [config]
   (doseq [[k v] config]
-    (user/configure-authorized-keys (name k) v)
-    (user/configure-ssh-key (name k) v)
-    (user/configure-sudo (name k))))
+    (ssh/configure-authorized-keys (name k) v)
+    (ssh/configure-ssh-key (name k) v)
+    (user/configure-sudo (name k))
+    (when (contains? v :gpg)
+      (gpg/configure (name k) v))))
 
 (s/defmethod dda-crate/dda-install facility
   [dda-crate config]
