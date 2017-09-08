@@ -17,7 +17,7 @@
   (:require
     [schema.core :as s]
     [pallet.repl :as pr]
-    [dda.cm.operation :as operation]
+    [dda.pallet.commons.operation :as operation]
     [dda.cm.existing :as existing]
     [dda.config.commons.user-env :as user-env]
     [dda.pallet.dda-user-crate.app :as app]))
@@ -44,14 +44,29 @@
    (app/dda-user-group (app/app-configuration user-config))
    (existing/node-spec provisioning-user)))
 
-(defn apply-install []
-  (pr/session-summary
-    (operation/do-apply-install provider provisioning-spec)))
+(defn apply-install
+  [& options]
+  (let [{:keys [summarize-session]
+         :or {summarize-session true}} options]
+    (operation/do-apply-install
+     (provider)
+     (provisioning-spec)
+     :summarize-session summarize-session)))
 
-(defn apply-config []
-  (pr/session-summary
-    (operation/do-apply-configure provider provisioning-spec)))
+(defn apply-configure
+  [& options]
+  (let [{:keys [summarize-session]}
+        :or {summarize-session true} options]
+    (operation/do-apply-configure
+     (provider)
+     (provisioning-spec)
+     :summarize-session summarize-session)))
 
-(defn server-test []
-  (pr/session-summary
-    (operation/do-server-test provider provisioning-spec)))
+(defn test
+  [& options]
+  (let [{:keys [summarize-session]}
+        :or {summarize-session true} options]
+    (operation/do-server-test
+     (provider)
+     (provisioning-spec)
+     :summarize-session summarize-session)))

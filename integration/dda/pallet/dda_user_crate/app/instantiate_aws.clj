@@ -19,7 +19,7 @@
     [clojure.inspector :as inspector]
     [dda.pallet.commons.session-tools :as session-tools]
     [dda.pallet.commons.pallet-schema :as ps]
-    [dda.cm.operation :as operation]
+    [dda.pallet.commons.operation :as operation]
     [dda.cm.aws :as cloud-target]
     [dda.config.commons.user-env :as user-env]
     [dda.pallet.dda-user-crate.app :as app]))
@@ -64,17 +64,26 @@
     {:count count}))
 
 (defn converge-install
-  ([count]
-   (pr/session-summary
-    (operation/do-converge-install (cloud-target/provider) (provisioning-spec count))))
-  ([key-id key-passphrase count]
-   (pr/session-summary
-    (operation/do-converge-install (cloud-target/provider key-id key-passphrase) (provisioning-spec count)))))
+  [count & options]
+  (let [{:keys [gpg-key-id gpg-passphrase
+                summarize-session]
+         :or {summarize-session true}} options]
+    (operation/do-converge-install
+     (if (some? gpg-key-id)
+       (cloud-target/provider gpg-key-id gpg-passphrase)
+       (cloud-target/provider))
+     (provisioning-spec count)
+     :summarize-session summarize-session)))
+
 
 (defn server-test
-  ([count]
-   (pr/session-summary
-    (operation/do-server-test (cloud-target/provider) (provisioning-spec count))))
-  ([key-id key-passphrase count]
-   (pr/session-summary
-    (operation/do-server-test (cloud-target/provider key-id key-passphrase) (provisioning-spec count)))))
+   [count & options]
+   (let [{:keys [gpg-key-id gpg-passphrase
+                 summarize-session]
+          :or {summarize-session true}} options]
+     (operation/do-server-test
+      (if (some? gpg-key-id)
+        (cloud-target/provider gpg-key-id gpg-passphrase)
+        (cloud-target/provider))
+      (provisioning-spec count)
+      :summarize-session summarize-session)))
