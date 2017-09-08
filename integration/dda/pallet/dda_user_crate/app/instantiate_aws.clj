@@ -39,7 +39,7 @@
   :public-key "AAAAB3NzaC1yc2EAAAADAQABAAABAQCeO+eiYDonq3OfxyaUx259y/1OqbhLciD4UlCkguD5PgOuXw+kCXS1Wbdor9cvU8HnsL2j70sPSwCWkcDrrGQ0kpC0GuNO47pKawAOSv07ELpSIIp/nPK5AX2+qI1H3MADBWBE5N1L7sdgatON2A/cC3u5pzcWDaEH7/IJdOkRm8H+qqG+uva6ceFUoYFiJKDixmsmaUXhhDcfYhfpAPBUCSes+HTeT/hk6pdLTX9xXd4H5wyAc+j1e6kPq9ZcxvzZNr9qEMIFjnNL/S9w1ozxQa3sKJQHj8SyVZDlwjvepGS7fKrdlRps938A7I3Y4BaXGX//M1y2HNbUWbMOllLL"
   :comment "mje@jergerProject"})
 
-(def testuser-gpg-public-key "-----BEGIN PGP PUBLIC KEY BLOCK-----
+(def snakeoil-gpg-public-key "-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1
 
 mI0EWbJf3wEEALq5GqjqzlYRLLXa3oz0Ow/nPnzurAPr1+yn2UZinSMk6wgB6ayf
@@ -59,7 +59,7 @@ tszJa3+UaMuSzvG+Tlv8woAv8w==
 =WIFr
 -----END PGP PUBLIC KEY BLOCK-----")
 
-(def testuser-gpg-private-key "-----BEGIN PGP PRIVATE KEY BLOCK-----
+(def snakeoil-gpg-private-key "-----BEGIN PGP PRIVATE KEY BLOCK-----
 Version: GnuPG v1
 
 lQH+BFmyX98BBAC6uRqo6s5WESy12t6M9DsP5z587qwD69fsp9lGYp0jJOsIAems
@@ -107,9 +107,9 @@ orVoJcs081M33hIFGyiETDanGni2zMlrf5Roy5LO8b5OW/zCgC/z
 (def domain-config
   {:jem {:encrypted-password "kpwejjj0r04u09rg90rfj"
          :authorized-keys [jem-key-host jem-key-vm]
-         :gpg {:trusted-key {:public-key testuser-gpg-public-key
-                             :passphrase "passphrase"
-                             :private-key testuser-gpg-private-key}}}
+         :gpg {:trusted-key {:public-key snakeoil-gpg-public-key
+                             :private-key snakeoil-gpg-private-key
+                             :passphrase "passphrase"}}}
    :shantanu {:encrypted-password "kpwejjj0r04u09rg90rfj"
               :authorized-keys [shantanu-key]}
    :test {:encrypted-password  "USER_PASSWORD"
