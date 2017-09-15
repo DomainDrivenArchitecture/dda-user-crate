@@ -60,7 +60,6 @@
       :owner user-name
       :group user-name
       :action :create)
-    ;(actions/exec-script* "cd ~/.gnupg && echo \"allow-loopback-pinentry\"  >> gpg-agent.conf")
     (actions/remote-file
       (str user-home "/.gnupg/gpg-agent.conf")
       :mode "600"
