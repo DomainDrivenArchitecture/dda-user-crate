@@ -18,9 +18,9 @@
    [schema.core :as s]
    [dda.pallet.dda-user-crate.infra :as infra]))
 
-(def UserDomainConfig infra/UserCrateConfig
+(def UserDomainConfig infra/UserCrateConfig)
 
-  (def OsUser infra/OsUser))
+(def OsUser infra/OsUser)
 
 (def InfraResult {infra/facility infra/UserCrateConfig})
 
