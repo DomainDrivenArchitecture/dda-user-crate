@@ -73,6 +73,7 @@
       :script-env {:HOME user-home}}
      (actions/exec-checked-script
       "import & trust gpg key"
+      ("gpgconf" "--reload gpg-agent")
       ("gpg2" "--import" ~(str user-home "/pub.key"))
       ("echo" ~passphrase "|" "gpg2" "--pinentry-mode loopback"
               "--batch --passphrase-fd 0"
