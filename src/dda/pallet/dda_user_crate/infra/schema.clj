@@ -13,17 +13,20 @@
 ; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
-(ns dda.pallet.dda-user-crate.domain
+(ns dda.pallet.dda-user-crate.infra.schema
   (:require
-   [schema.core :as s]
-   [dda.pallet.dda-user-crate.infra :as infra]))
+   [schema.core :as s]   
+   [dda.config.commons.ssh-key :as ssh-key]))
 
-(def UserDomainConfig infra/UserCrateConfig)
+(def GpgKey {:public-key s/Str
+             (s/optional-key :passphrase) s/Str
+             (s/optional-key :private-key) s/Str})
 
-(def OsUser infra/OsUser)
+(def OsUser
+ {:encrypted-password s/Str
+  (s/optional-key :authorized-keys) [ssh-key/PublicSshKey]
+  (s/optional-key :personal-key) ssh-key/SshKeyPair
+  (s/optional-key :gpg) {:trusted-key GpgKey}})
 
-(def InfraResult {infra/facility infra/UserCrateConfig})
-
-(s/defn ^:allways-validate infra-configuration :- InfraResult
-  [domain-config :- UserDomainConfig]
-  {infra/facility domain-config})
+(def UserCrateConfig
+  {s/Keyword OsUser})

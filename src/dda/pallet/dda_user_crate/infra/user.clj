@@ -15,57 +15,7 @@
 ; limitations under the License.
 (ns dda.pallet.dda-user-crate.infra.user
   (:require
-   [clojure.string :as string]
-   [pallet.actions :as actions]
-   [dda.config.commons.user-env :as user-env]))
-
-(defn configure-authorized-keys
-  "configure the authorized_keys for a given user, all existing
-  authorized_keys will be overwritten."
-  [user-name os-user-config]
-  (let [ssh-dir (user-env/user-ssh-dir user-name)
-        authorized-keys (map user-env/format-public-key
-                            (:authorized-keys os-user-config))]
-    (actions/directory
-      ssh-dir
-      :owner user-name
-      :group user-name
-      :mode "755")
-    (actions/remote-file
-      (str ssh-dir "authorized_keys")
-      :overwrite-changes true
-      :owner user-name
-      :group user-name
-      :mode "644"
-      :content (string/join
-                \newline
-                authorized-keys))))
-
-(defn configure-ssh-key
-  "configer the users ssh_key."
-  [user-name os-user-config]
-  (let [ssh-key (:personal-key os-user-config)
-        ssh-dir (user-env/user-ssh-dir user-name)]
-    (when (some? (:private-key ssh-key))
-      (actions/directory
-        ssh-dir
-        :owner user-name
-        :group user-name
-        :mode "755")
-      (actions/remote-file
-        (str ssh-dir "id_rsa")
-        :overwrite-changes true
-        :owner user-name
-        :group user-name
-        :mode "600"
-        :content (:private-key ssh-key))
-      (actions/remote-file
-        (str ssh-dir "id_rsa.pub")
-        :overwrite-changes true
-        :owner user-name
-        :group user-name
-        :mode "644"
-        :content (user-env/format-public-key (:public-key ssh-key))))))
+   [pallet.actions :as actions]))
 
 (defn configure-sudo
   "Add user to sudoers without password."
