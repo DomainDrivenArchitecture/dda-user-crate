@@ -15,9 +15,18 @@
 ; limitations under the License.
 (ns dda.pallet.dda-user-crate.infra.user
   (:require
-   [pallet.actions :as actions]))
+   [pallet.actions :as actions]
+   [dda.config.commons.hash :as hash]))
 
-(defn configure-sudo
+(defn hashed-password [user-config]
+  (if (contains? user-config :hashed-password)
+      (:hashed-password user-config)
+      (hash/crypt-bash-escaped (:clear-password user-config))))
+
+(defn create-sudo-group []
+  (actions/group "sudo" :action :create))
+
+(defn configure-user-sudo
   "Add user to sudoers without password."
   [user-name]
   (actions/remote-file
@@ -27,18 +36,24 @@
    :mode "440"
    :literal true
    :content (str
-             user-name "    ALL = NOPASSWD: ALL\n"
-             "pallet    ALL=(" user-name ") NOPASSWD: ALL\n")))
+             user-name "    ALL = NOPASSWD: ALL\n")))
 
-(defn create-sudo-user
+(defn create-user
   "creates a sudo user with pw is encrypted handed over.
   Passwords can be generated e.g. by mkpasswd test123.
   So password test1234 is representet by 3hLlUVSs1Aa1c"
   [user-name user-config]
-  (actions/group "sudo" :action :create)
-  (actions/user user-name
-                :action :create
-                :create-home true
-                :shell :bash
-                :groups ["sudo"]
-                :password (:encrypted-password user-config)))
+  (let [{:keys [settings]
+         :or {settings #{:sudo}}} user-config]
+    (if (contains? settings :sudo)
+      (actions/user user-name
+                    :action :create
+                    :create-home true
+                    :shell :bash
+                    :groups ["sudo"]
+                    :password (hashed-password user-config))
+      (actions/user user-name
+                    :action :create
+                    :create-home true
+                    :shell :bash
+                    :password (hashed-password user-config)))))

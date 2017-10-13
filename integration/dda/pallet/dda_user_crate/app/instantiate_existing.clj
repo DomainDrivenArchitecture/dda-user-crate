@@ -33,7 +33,7 @@
   (user-env/read-ssh-pub-key-to-config))
 
 (def user-config
-   {:user-name {:encrypted-password  "xxx"
+   {:user-name {:hashed-password  "xxx"
                 :authorized-keys [ssh-pub-key]}})
 
 (def provider

@@ -3,10 +3,7 @@
   :url "https://www.domaindrivenarchitecture.org"
   :license {:name "Apache License, Version 2.0"
              :url "https://www.apache.org/licenses/LICENSE-2.0.html"}
-  :dependencies [[org.clojure/clojure "1.7.0"]
-                 [prismatic/schema "1.1.7"]
-                 [com.palletops/pallet "0.8.12" :exclusions [org.clojure/tools.cli]]
-                 [dda/dda-pallet "0.5.4"]]
+  :dependencies [[dda/dda-pallet "0.5.5-SNAPSHOT"]]
   :profiles {:dev
              {:source-paths ["integration"]
               :resource-paths ["dev-resources"]
@@ -18,8 +15,8 @@
               :plugins
               [[lein-sub "0.3.0"]]}
              :leiningen/reply
-               {:dependencies [[org.slf4j/jcl-over-slf4j "1.8.0-alpha2"]]
-                :exclusions [commons-logging]}}
+             {:dependencies [[org.slf4j/jcl-over-slf4j "1.8.0-alpha2"]]
+              :exclusions [commons-logging]}}
   :local-repo-classpath true
   :repositories [["snapshots" :clojars]
                  ["releases" :clojars]]

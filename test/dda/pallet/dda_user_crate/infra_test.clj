@@ -31,7 +31,7 @@
    :private-key ssh-priv-key})
 
 (def os-user-valid-config
-  {:encrypted-password "secret-pw"})
+  {:hashed-password "secret-pw"})
 
 (def os-user-valid-complete-config
   (merge os-user-valid-config

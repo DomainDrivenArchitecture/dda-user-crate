@@ -32,7 +32,7 @@ For example:
 
 ```
 (def domain-config
-  :[user-name] { :encrypted-password "$ENCRYPTED_PASSWORD_TO_BE_USED"
+  :[user-name] { :hashed-password "$ENCRYPTED_PASSWORD_TO_BE_USED"
                  :authorized-keys [ssh-pub-key]
                  :personal-key ssh-key-pair})
 ```

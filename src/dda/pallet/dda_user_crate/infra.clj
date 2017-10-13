@@ -44,18 +44,23 @@
   (ssh/read-ssh-keys-to-pair-config options))
 
 (defn install-user [config]
+  (user/create-sudo-group)
   (doseq [[k v] config]
-    (user/create-sudo-user (name k) v)
+    (user/create-user (name k) v)
     (when (contains? v :gpg)
       (gpg/install (name k) v))))
 
 (defn configure-user [config]
   (doseq [[k v] config]
-    (ssh/configure-authorized-keys (name k) v)
-    (ssh/configure-ssh-key (name k) v)
-    (user/configure-sudo (name k))
-    (when (contains? v :gpg)
-      (gpg/configure (name k) v))))
+    (let [{:keys [settings]
+           :or {settings #{:sudo}}} v]
+      (ssh/configure-authorized-keys (name k) v)
+      (when (contains? v :personal-key)
+        (ssh/configure-ssh-key (name k) v))
+      (when (contains? settings :sudo)
+        (user/configure-user-sudo (name k)))
+      (when (contains? v :gpg)
+        (gpg/configure (name k) v)))))
 
 (s/defmethod dda-crate/dda-install facility
   [dda-crate config]

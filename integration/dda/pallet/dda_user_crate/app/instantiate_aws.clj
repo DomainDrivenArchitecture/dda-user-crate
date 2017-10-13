@@ -20,7 +20,7 @@
     [dda.pallet.commons.session-tools :as session-tools]
     [dda.pallet.commons.pallet-schema :as ps]
     [dda.pallet.commons.operation :as operation]
-    [dda.cm.aws :as cloud-target]
+    [dda.pallet.commons.aws :as cloud-target]
     [dda.config.commons.user-env :as user-env]
     [dda.pallet.dda-user-crate.app :as app]))
 
@@ -105,16 +105,17 @@ orVoJcs081M33hIFGyiETDanGni2zMlrf5Roy5LO8b5OW/zCgC/z
    :private-key ssh-priv-key})
 
 (def domain-config
-  {:jem {:encrypted-password "kpwejjj0r04u09rg90rfj"
+  {:jem {:clear-password "snakeoil"
          :authorized-keys [jem-key-host jem-key-vm]
          :gpg {:trusted-key {:public-key snakeoil-gpg-public-key
                              :private-key snakeoil-gpg-private-key
                              :passphrase "passphrase"}}}
-   :shantanu {:encrypted-password "kpwejjj0r04u09rg90rfj"
+   :shantanu {:hashed-password "kpwejjj0r04u09rg90rfj"
               :authorized-keys [shantanu-key]}
-   :test {:encrypted-password  "USER_PASSWORD"
+   :test {:hashed-password  "USER_PASSWORD"
           :authorized-keys [ssh-pub-key]
-          :personal-key ssh-key-pair}})
+          :personal-key ssh-key-pair
+          :settings #{}}})
 
 (defn provisioning-spec [count]
   (merge
@@ -127,22 +128,33 @@ orVoJcs081M33hIFGyiETDanGni2zMlrf5Roy5LO8b5OW/zCgC/z
   (let [{:keys [gpg-key-id gpg-passphrase
                 summarize-session]
          :or {summarize-session true}} options]
-    (operation/do-converge-install
+   (operation/do-converge-install
      (if (some? gpg-key-id)
        (cloud-target/provider gpg-key-id gpg-passphrase)
        (cloud-target/provider))
      (provisioning-spec count)
      :summarize-session summarize-session)))
 
+(defn configure
+ [& options]
+ (let [{:keys [gpg-key-id gpg-passphrase
+               summarize-session]
+        :or {summarize-session true}} options]
+  (operation/do-apply-configure
+    (if (some? gpg-key-id)
+      (cloud-target/provider gpg-key-id gpg-passphrase)
+      (cloud-target/provider))
+    (provisioning-spec 0)
+    :summarize-session summarize-session)))
 
-(defn server-test
-   [count & options]
-   (let [{:keys [gpg-key-id gpg-passphrase
-                 summarize-session]
-          :or {summarize-session true}} options]
-     (operation/do-server-test
-      (if (some? gpg-key-id)
-        (cloud-target/provider gpg-key-id gpg-passphrase)
-        (cloud-target/provider))
-      (provisioning-spec count)
-      :summarize-session summarize-session)))
+(defn serverspec
+  [& options]
+  (let [{:keys [gpg-key-id gpg-passphrase
+                summarize-session]
+         :or {summarize-session true}} options]
+   (operation/do-server-test
+     (if (some? gpg-key-id)
+       (cloud-target/provider gpg-key-id gpg-passphrase)
+       (cloud-target/provider))
+     (provisioning-spec 0)
+     :summarize-session summarize-session)))

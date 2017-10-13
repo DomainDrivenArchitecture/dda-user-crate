@@ -16,7 +16,7 @@
 (ns dda.pallet.dda-user-crate.infra.ssh
   (:require
    [clojure.string :as string]
-   [schema.core :as s]   
+   [schema.core :as s]
    [pallet.actions :as actions]
    [dda.config.commons.user-env :as user-env]))
 
@@ -69,11 +69,6 @@
   (let [ssh-key (:personal-key os-user-config)
         ssh-dir (user-env/user-ssh-dir user-name)]
     (when (some? (:private-key ssh-key))
-      (actions/directory
-        ssh-dir
-        :owner user-name
-        :group user-name
-        :mode "755")
       (actions/remote-file
         (str ssh-dir "id_rsa")
         :overwrite-changes true

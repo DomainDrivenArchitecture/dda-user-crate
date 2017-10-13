@@ -13,31 +13,20 @@
 ; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
-(ns dda.pallet.dda-user-crate.infra.schema
+(ns dda.pallet.dda-user-crate.infra.user-test
   (:require
+   [clojure.test :refer :all]
    [schema.core :as s]
-   [dda.config.commons.ssh-key :as ssh-key]))
+   [dda.pallet.dda-user-crate.infra.user :as sut]))
 
-(def GpgKey {:public-key s/Str
-             (s/optional-key :passphrase) s/Str
-             (s/optional-key :private-key) s/Str})
+(def hashed-config
+  {:hashed-password "hashed"})
 
-(def Gpg
-  {(s/optional-key :gpg) {:trusted-key GpgKey}})
+(def clear-config
+  {:clear-password "clear"})
 
-(def Ssh
- {(s/optional-key :authorized-keys) [ssh-key/PublicSshKey]
-  (s/optional-key :personal-key) ssh-key/SshKeyPair})
-
-(def Settings {(s/optional-key :settings)
-               (hash-set (s/enum :sudo))})
-
-(def User
-  (s/either
-    (merge {:hashed-password s/Str}
-           Gpg Ssh Settings)
-    (merge {:clear-password s/Str}
-           Gpg Ssh Settings)))
-
-(def UserCrateConfig
-  {s/Keyword User})
+(deftest valid-configurations
+  (is (= "hashed"
+         (sut/hashed-password hashed-config)))
+  (is (not (= "clear"
+              (sut/hashed-password clear-config)))))
