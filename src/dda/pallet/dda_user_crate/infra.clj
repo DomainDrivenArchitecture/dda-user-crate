@@ -27,7 +27,7 @@
 
 (def GpgKey schema/GpgKey)
 
-(def OsUser schema/OsUser)
+(def User schema/User)
 
 (def UserCrateConfig schema/UserCrateConfig)
 

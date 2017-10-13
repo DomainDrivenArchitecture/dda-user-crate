@@ -24,7 +24,7 @@
 
 (s/defn install
   [user-name :- s/Str
-   config :- schema/OsUser]
+   config :- schema/User]
   (actions/package "gnupg2")
   (actions/remote-file
     "/usr/lib/gpg-trust-all.sh"
@@ -36,7 +36,7 @@
 
 (s/defn configure
   [user-name :- s/Str
-   config :- schema/OsUser]
+   config :- schema/User]
   (let [{:keys [trusted-key]} (:gpg config)
         {:keys [public-key private-key passphrase]} trusted-key
         user-home (user-env/user-home-dir user-name)]

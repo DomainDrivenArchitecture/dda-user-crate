@@ -20,7 +20,7 @@
 
 (def UserDomainConfig infra/UserCrateConfig)
 
-(def OsUser infra/OsUser)
+(def User infra/User)
 
 (def InfraResult {infra/facility infra/UserCrateConfig})
 

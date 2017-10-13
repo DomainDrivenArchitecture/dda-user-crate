@@ -15,18 +15,18 @@
 ; limitations under the License.
 (ns dda.pallet.dda-user-crate.infra.schema
   (:require
-   [schema.core :as s]   
+   [schema.core :as s]
    [dda.config.commons.ssh-key :as ssh-key]))
 
 (def GpgKey {:public-key s/Str
              (s/optional-key :passphrase) s/Str
              (s/optional-key :private-key) s/Str})
 
-(def OsUser
+(def User
  {:encrypted-password s/Str
   (s/optional-key :authorized-keys) [ssh-key/PublicSshKey]
   (s/optional-key :personal-key) ssh-key/SshKeyPair
   (s/optional-key :gpg) {:trusted-key GpgKey}})
 
 (def UserCrateConfig
-  {s/Keyword OsUser})
+  {s/Keyword User})

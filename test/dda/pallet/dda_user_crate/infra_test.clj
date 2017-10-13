@@ -39,5 +39,5 @@
           :personal-key ssh-key-pair}))
 
 (deftest valid-configurations
-  (is (s/validate sut/OsUser os-user-valid-config))
-  (is (s/validate sut/OsUser os-user-valid-complete-config)))
+  (is (s/validate sut/User os-user-valid-config))
+  (is (s/validate sut/User os-user-valid-complete-config)))

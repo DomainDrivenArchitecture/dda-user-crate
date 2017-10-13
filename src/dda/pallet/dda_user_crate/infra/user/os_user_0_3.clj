@@ -17,7 +17,7 @@
   (:require
    [dda.pallet.dda-user-crate.infra.user.ssh-key-0-3 :as ssh-key]))
 
-(defrecord OsUser
+(defrecord User
   [user-name
    encrypted-password
    authorized-keys
@@ -45,7 +45,7 @@
   ([user-name encrypted-password authorized-keys]
    (new-os-user user-name encrypted-password authorized-keys nil))
   ([user-name encrypted-password authorized-keys personal-key]
-   (OsUser. user-name encrypted-password authorized-keys personal-key)))
+   (User. user-name encrypted-password authorized-keys personal-key)))
 
 
 (defn new-os-user-from-config
