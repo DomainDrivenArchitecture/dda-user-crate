@@ -20,6 +20,7 @@
    [dda.pallet.dda-user-crate.infra.schema :as schema]
    [dda.pallet.dda-user-crate.infra.user :as user]
    [dda.pallet.dda-user-crate.infra.ssh :as ssh]
+   [dda.pallet.dda-user-crate.infra.bash :as bash]
    [dda.pallet.dda-user-crate.infra.gpg :as gpg]))
 
 (def facility :dda-user)
@@ -53,12 +54,14 @@
 (defn configure-user [config]
   (doseq [[k v] config]
     (let [{:keys [settings]
-           :or {settings #{:sudo}}} v]
+           :or {settings #{:sudo :bashrc-d}}} v]
       (ssh/configure-authorized-keys (name k) v)
       (when (contains? v :personal-key)
         (ssh/configure-ssh-key (name k) v))
       (when (contains? settings :sudo)
         (user/configure-user-sudo (name k)))
+      (when (contains? settings :bashrc-d)
+        (bash/configure-bashrc-d (name k) v))
       (when (contains? v :gpg)
         (gpg/configure (name k) v)))))
 

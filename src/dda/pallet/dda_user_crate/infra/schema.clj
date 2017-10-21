@@ -30,7 +30,7 @@
   (s/optional-key :personal-key) ssh-key/SshKeyPair})
 
 (def Settings {(s/optional-key :settings)
-               (hash-set (s/enum :sudo))})
+               (hash-set (s/enum :sudo :bashrc-d))})
 
 (def User
   (s/either
