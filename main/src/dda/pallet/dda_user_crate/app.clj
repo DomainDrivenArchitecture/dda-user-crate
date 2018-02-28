@@ -27,7 +27,7 @@
   {:group-specific-config
    {s/Keyword {:dda-user infra/UserCrateConfig}}})
 
-(s/defn ^:allways-validate create-app-configuration :- UserAppConfig
+(s/defn ^:always-validate create-app-configuration :- UserAppConfig
  [config :- infra/UserCrateConfig
   group-key :- s/Keyword]
  {:group-specific-config
