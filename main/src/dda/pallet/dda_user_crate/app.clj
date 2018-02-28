@@ -21,29 +21,41 @@
    [dda.pallet.dda-user-crate.infra :as infra]
    [dda.pallet.dda-user-crate.domain :as domain]))
 
-(def InfraResult domain/InfraResult)
-
-(def UserAppConfig
-  {:group-specific-config
-   {s/Keyword {:dda-user infra/UserCrateConfig}}})
-
-(s/defn ^:always-validate create-app-configuration :- UserAppConfig
- [config :- infra/UserCrateConfig
-  group-key :- s/Keyword]
- {:group-specific-config
-    {group-key config}})
-
 (def with-user infra/with-user)
 
-(defn app-configuration
-  [domain-config
-   & {:keys [group-key] :or {group-key :dda-user-group}}]
- (s/validate domain/UserDomainConfig domain-config)
- (create-app-configuration
-  (domain/infra-configuration domain-config) group-key))
+(def UserDomainConfig domain/UserDomainConfig)
 
-(s/defn ^:always-validate dda-user-group
-  [app-config :- UserAppConfig]
-  (group/group-spec
-    app-config [(config-crate/with-config app-config)
-                with-user]))
+(def UserDomainConfigResolved domain/UserDomainConfigResolved)
+
+(def InfraResult domain/InfraResult)
+
+(def DdaUserAppConfig
+  {:group-specific-config
+   {s/Keyword InfraResult}})
+
+(s/defn ^:always-validate
+  app-configuration-resolved :- UserAppConfig
+  [config :- UserDomainConfigResolved
+   & options]
+  (let [{:keys [group-key] :or {group-key infra/facility}} options]
+    {:group-specific-config {group-key config}}))
+
+(s/defn ^:always-validate
+  app-configuration :- UserAppConfig
+  [config :- UserDomainConfig
+   & options]
+  (let [resolved-domain-config (secret/resolve-secrets domain-config UserDomainConfig)]
+    (apply app-configuration-resolved resolved-domain-config options)))
+
+(s/defmethod group-spec infra/facility
+  [crate-app domain-config]
+  (let [app-config (app-configuration-resolved domain-config)]
+    (group/group-spec
+     app-config [(config-crate/with-config app-config)
+                 with-user])))
+
+(def crate-app (make-dda-crate-app
+                  :facility infra/facility
+                  :domain-schema UserDomainConfig
+                  :domain-schema-resolved UserDomainConfigResolved
+                  :default-domain-file "user.edn"))

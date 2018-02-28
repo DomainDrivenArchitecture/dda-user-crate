@@ -16,14 +16,38 @@
 (ns dda.pallet.dda-user-crate.domain
   (:require
    [schema.core :as s]
+   [dda.pallet.commons.secret :as secret]
    [dda.pallet.dda-user-crate.infra :as infra]))
 
-(def UserDomainConfig infra/UserCrateConfig)
+(def GpgKey {:public-key secret/Secret
+             (s/optional-key :passphrase) secret/Secret
+             (s/optional-key :private-key) secret/Secret})
 
-(def User infra/User)
+(def Gpg
+  {(s/optional-key :gpg) {:trusted-key GpgKey}})
+
+(def Ssh
+ {(s/optional-key :authorized-keys) [ssh-key/PublicSshKey]
+  (s/optional-key :personal-key) ssh-key/SshKeyPair})
+
+(def Settings {(s/optional-key :settings)
+               (hash-set (s/enum :sudo :bashrc-d))})
+
+(def User
+  (s/either
+    (merge {:hashed-password secret/Secret}
+           Gpg Ssh Settings)
+    (merge {:clear-password secret/Secret}
+           Gpg Ssh Settings)))
+
+
+(def UserDomainConfig {s/Keyword User})
+
+(def UserDomainConfigResolved (secret/create-resolved-schema UserDomainConfig))
 
 (def InfraResult {infra/facility infra/UserCrateConfig})
 
-(s/defn ^:always-validate infra-configuration :- InfraResult
-  [domain-config :- UserDomainConfig]
+(s/defn ^:always-validate
+  infra-configuration :- InfraResult
+  [domain-config :- UserDomainConfigResolved]
   {infra/facility domain-config})

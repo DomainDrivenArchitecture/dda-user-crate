@@ -26,14 +26,14 @@
                    :leiningen/reply
                    {:dependencies [[org.slf4j/jcl-over-slf4j "1.8.0-beta0"]]
                     :exclusions [commons-logging]}
-                   :repl-options {:init-ns dda.pallet.dda-managed-ide.app.instantiate-existing}}
+                   :repl-options {:init-ns dda.pallet.dda-user-crate.app.instantiate-aws}}
              :test {:test-paths ["test/src"]
                     :resource-paths ["test/resources"]
                     :dependencies [[com.palletops/pallet "0.8.12" :classifier "tests"]]}
              :uberjar {:source-paths ["uberjar/src"]
                        :resource-paths ["uberjar/resources"]
                        :aot :all
-                       :main dda.pallet.dda-managed-ide.main
+                       :main dda.pallet.dda-user-crate.main
                        :dependencies [[org.clojure/tools.cli "0.3.5"]
                                       [ch.qos.logback/logback-classic "1.2.3"]
                                       [org.slf4j/jcl-over-slf4j "1.8.0-beta0"]]}}

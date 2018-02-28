@@ -16,7 +16,7 @@
 (ns dda.pallet.dda-user-crate.infra
   (:require
    [schema.core :as s]
-   [dda.pallet.core.dda-crate :as dda-crate]
+   [dda.pallet.core.infra :as core-infra]
    [dda.pallet.dda-user-crate.infra.schema :as schema]
    [dda.pallet.dda-user-crate.infra.user :as user]
    [dda.pallet.dda-user-crate.infra.ssh :as ssh]
@@ -65,20 +65,19 @@
       (when (contains? v :gpg)
         (gpg/configure (name k) v)))))
 
-(s/defmethod dda-crate/dda-install facility
+(s/defmethod core-infra/dda-install facility
   [dda-crate config]
   "user-crate: install routine"
   (install-user config))
 
-(s/defmethod dda-crate/dda-configure facility
+(s/defmethod core-infra/dda-configure facility
   [dda-crate config]
   "user-crate: configure routine"
   (configure-user config))
 
 (def user-crate
-  (dda-crate/make-dda-crate
-   :facility facility
-   :version version))
+  (core-infra/make-dda-crate-infra
+   :facility facility))
 
 (def with-user
- (dda-crate/create-server-spec user-crate))
+ (core-infra/create-infra-plan user-crate))
