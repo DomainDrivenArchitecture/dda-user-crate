@@ -15,7 +15,9 @@
 ; limitations under the License.
 (ns dda.pallet.dda-user-crate.infra
   (:require
+   [clojure.tools.logging :as logging]
    [schema.core :as s]
+   [pallet.actions :as actions]
    [dda.pallet.core.infra :as core-infra]
    [dda.pallet.dda-user-crate.infra.schema :as schema]
    [dda.pallet.dda-user-crate.infra.user :as user]
@@ -24,7 +26,6 @@
    [dda.pallet.dda-user-crate.infra.gpg :as gpg]))
 
 (def facility :dda-user)
-(def version [0 3 7])
 
 (def GpgKey schema/GpgKey)
 

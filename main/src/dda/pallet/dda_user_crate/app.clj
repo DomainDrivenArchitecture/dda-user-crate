@@ -15,6 +15,7 @@
 ; limitations under the License.
 (ns dda.pallet.dda-user-crate.app
   (:require
+   [clojure.tools.logging :as logging]
    [schema.core :as s]
    [dda.cm.group :as group]
    [dda.pallet.commons.secret :as secret]
@@ -32,15 +33,14 @@
 (def InfraResult domain/InfraResult)
 
 (def DdaUserAppConfig
-  {:group-specific-config
-   {s/Keyword InfraResult}})
+  {:group-specific-config {s/Keyword InfraResult}})
 
 (s/defn ^:always-validate
   app-configuration-resolved :- DdaUserAppConfig
   [config :- UserDomainConfigResolved
    & options]
   (let [{:keys [group-key] :or {group-key infra/facility}} options]
-    {:group-specific-config {group-key config}}))
+    {:group-specific-config {group-key (domain/infra-configuration config)}}))
 
 (s/defn ^:always-validate
   app-configuration :- DdaUserAppConfig
@@ -49,12 +49,13 @@
   (let [resolved-domain-config (secret/resolve-secrets domain-config UserDomainConfig)]
     (apply app-configuration-resolved resolved-domain-config options)))
 
-(s/defmethod core-app/group-spec infra/facility
-  [crate-app domain-config]
-  (let [app-config (app-configuration-resolved domain-config)]
-    (group/group-spec
-     app-config [(config-crate/with-config app-config)
-                 with-user])))
+(s/defmethod ^:always-validate
+  core-app/group-spec infra/facility
+  [crate-app
+   app-config :- DdaUserAppConfig]
+  (group/group-spec
+    app-config [(config-crate/with-config app-config)
+                with-user]))
 
 (def crate-app (core-app/make-dda-crate-app
                   :facility infra/facility
