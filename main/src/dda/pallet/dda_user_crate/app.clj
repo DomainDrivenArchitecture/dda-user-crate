@@ -17,6 +17,8 @@
   (:require
    [schema.core :as s]
    [dda.cm.group :as group]
+   [dda.pallet.commons.secret :as secret]
+   [dda.pallet.core.app :as core-app]
    [dda.pallet.dda-config-crate.infra :as config-crate]
    [dda.pallet.dda-user-crate.infra :as infra]
    [dda.pallet.dda-user-crate.domain :as domain]))
@@ -34,27 +36,27 @@
    {s/Keyword InfraResult}})
 
 (s/defn ^:always-validate
-  app-configuration-resolved :- UserAppConfig
+  app-configuration-resolved :- DdaUserAppConfig
   [config :- UserDomainConfigResolved
    & options]
   (let [{:keys [group-key] :or {group-key infra/facility}} options]
     {:group-specific-config {group-key config}}))
 
 (s/defn ^:always-validate
-  app-configuration :- UserAppConfig
-  [config :- UserDomainConfig
+  app-configuration :- DdaUserAppConfig
+  [domain-config :- UserDomainConfig
    & options]
   (let [resolved-domain-config (secret/resolve-secrets domain-config UserDomainConfig)]
     (apply app-configuration-resolved resolved-domain-config options)))
 
-(s/defmethod group-spec infra/facility
+(s/defmethod core-app/group-spec infra/facility
   [crate-app domain-config]
   (let [app-config (app-configuration-resolved domain-config)]
     (group/group-spec
      app-config [(config-crate/with-config app-config)
                  with-user])))
 
-(def crate-app (make-dda-crate-app
+(def crate-app (core-app/make-dda-crate-app
                   :facility infra/facility
                   :domain-schema UserDomainConfig
                   :domain-schema-resolved UserDomainConfigResolved

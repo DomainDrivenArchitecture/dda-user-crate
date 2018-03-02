@@ -22,6 +22,7 @@
     [dda.pallet.commons.operation :as operation]
     [dda.pallet.commons.aws :as cloud-target]
     [dda.config.commons.user-env :as user-env]
+    [dda.pallet.core.app :as core-app]
     [dda.pallet.dda-user-crate.app :as app]))
 
 (def shantanu-key
@@ -119,7 +120,7 @@ orVoJcs081M33hIFGyiETDanGni2zMlrf5Roy5LO8b5OW/zCgC/z
 
 (defn provisioning-spec [count]
   (merge
-    (app/dda-user-group (app/app-configuration domain-config))
+    (core-app/group-spec (app/app-configuration domain-config))
     (cloud-target/node-spec "jem")
     {:count count}))
 
@@ -152,7 +153,7 @@ orVoJcs081M33hIFGyiETDanGni2zMlrf5Roy5LO8b5OW/zCgC/z
   (let [{:keys [gpg-key-id gpg-passphrase
                 summarize-session]
          :or {summarize-session true}} options]
-   (operation/do-server-test
+   (operation/do-test
      (if (some? gpg-key-id)
        (cloud-target/provider gpg-key-id gpg-passphrase)
        (cloud-target/provider))

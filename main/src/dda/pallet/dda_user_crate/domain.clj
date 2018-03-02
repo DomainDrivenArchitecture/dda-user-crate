@@ -17,6 +17,7 @@
   (:require
    [schema.core :as s]
    [dda.pallet.commons.secret :as secret]
+   [dda.config.commons.ssh-key :as ssh-key]
    [dda.pallet.dda-user-crate.infra :as infra]))
 
 (def GpgKey {:public-key secret/Secret
