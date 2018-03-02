@@ -40,7 +40,7 @@
   :public-key "AAAAB3NzaC1yc2EAAAADAQABAAABAQCeO+eiYDonq3OfxyaUx259y/1OqbhLciD4UlCkguD5PgOuXw+kCXS1Wbdor9cvU8HnsL2j70sPSwCWkcDrrGQ0kpC0GuNO47pKawAOSv07ELpSIIp/nPK5AX2+qI1H3MADBWBE5N1L7sdgatON2A/cC3u5pzcWDaEH7/IJdOkRm8H+qqG+uva6ceFUoYFiJKDixmsmaUXhhDcfYhfpAPBUCSes+HTeT/hk6pdLTX9xXd4H5wyAc+j1e6kPq9ZcxvzZNr9qEMIFjnNL/S9w1ozxQa3sKJQHj8SyVZDlwjvepGS7fKrdlRps938A7I3Y4BaXGX//M1y2HNbUWbMOllLL"
   :comment "mje@jergerProject"})
 
-(def snakeoil-gpg-public-key "-----BEGIN PGP PUBLIC KEY BLOCK-----
+(def snakeoil-gpg-public-key {:plain "-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1
 
 mI0EWbJf3wEEALq5GqjqzlYRLLXa3oz0Ow/nPnzurAPr1+yn2UZinSMk6wgB6ayf
@@ -58,9 +58,9 @@ J/wzlkhuyRpR9Ht+VdzARdzFEQLo77TLGEA1N/Sa2afgD3VxveR4LZaWhFK6F670
 CN8eNvWgBPPb5UT/wngyJZTPWkkcKUx0v5k4J6K1aCXLNPNTN94SBRsohEw2pxp4
 tszJa3+UaMuSzvG+Tlv8woAv8w==
 =WIFr
------END PGP PUBLIC KEY BLOCK-----")
+-----END PGP PUBLIC KEY BLOCK-----"})
 
-(def snakeoil-gpg-private-key "-----BEGIN PGP PRIVATE KEY BLOCK-----
+(def snakeoil-gpg-private-key {:plain "-----BEGIN PGP PRIVATE KEY BLOCK-----
 Version: GnuPG v1
 
 lQH+BFmyX98BBAC6uRqo6s5WESy12t6M9DsP5z587qwD69fsp9lGYp0jJOsIAems
@@ -94,68 +94,74 @@ ZQcF/w0D/1tl0A0aynm4vHJowg4n/DOWSG7JGlH0e35V3MBF3MURAujvtMsYQDU3
 orVoJcs081M33hIFGyiETDanGni2zMlrf5Roy5LO8b5OW/zCgC/z
 =0/aC
 -----END PGP PRIVATE KEY BLOCK-----
-")
+"})
 
 (def ssh-pub-key
   (user-env/read-ssh-pub-key-to-config))
 
-(def ssh-priv-key "$YOUR_PRIVATE_KEY")
+(def ssh-priv-key {:plain "$YOUR_PRIVATE_KEY"})
 
 (def ssh-key-pair
   {:public-key ssh-pub-key
    :private-key ssh-priv-key})
 
-(def domain-config
-  {:jem {:clear-password "snakeoil"
+(def domain-config2
+  {:jem {:clear-password {:plain "snakeoil"}
          :authorized-keys [jem-key-host jem-key-vm]
          :gpg {:trusted-key {:public-key snakeoil-gpg-public-key
                              :private-key snakeoil-gpg-private-key
-                             :passphrase "passphrase"}}}
-   :shantanu {:hashed-password "kpwejjj0r04u09rg90rfj"
+                             :passphrase {:plain "passphrase"}}}}
+   :shantanu {:hashed-password {:plain "kpwejjj0r04u09rg90rfj"}
               :authorized-keys [shantanu-key]}
-   :test {:hashed-password  "USER_PASSWORD"
+   :test {:hashed-password  {:plain "USER_PASSWORD"}
           :authorized-keys [ssh-pub-key]
           :personal-key ssh-key-pair
           :settings #{}}})
 
-(defn provisioning-spec [count]
+(defn provisioning-spec [domain-config target-config count]
   (merge
-    (core-app/group-spec (app/app-configuration domain-config))
-    (cloud-target/node-spec "jem")
+    (core-app/group-spec app/crate-app (app/app-configuration domain-config))
+    (cloud-target/node-spec target-config)
     {:count count}))
 
 (defn converge-install
   [count & options]
-  (let [{:keys [gpg-key-id gpg-passphrase
+  (let [{:keys [gpg-key-id gpg-passphrase domain targets
                 summarize-session]
-         :or {summarize-session true}} options]
+         :or {domain "integration/resources/user.edn"
+              targets "integration/resources/jem-aws-target.edn"
+              summarize-session true}} options
+        target-config (cloud-target/load-targets targets)
+        domain-config (core-app/load-domain app/crate-app domain)]
    (operation/do-converge-install
-     (if (some? gpg-key-id)
-       (cloud-target/provider gpg-key-id gpg-passphrase)
-       (cloud-target/provider))
-     (provisioning-spec count)
+     (cloud-target/provider (:context target-config))
+     (provisioning-spec domain-config (:node-spec target-config) count)
      :summarize-session summarize-session)))
 
 (defn configure
  [& options]
- (let [{:keys [gpg-key-id gpg-passphrase
+ (let [{:keys [gpg-key-id gpg-passphrase domain targets
                summarize-session]
-        :or {summarize-session true}} options]
+        :or {domain "integration/resources/user.edn"
+             targets "integration/resources/jem-aws-target.edn"
+             summarize-session true}} options
+       target-config (cloud-target/load-targets targets)
+       domain-config (core-app/load-domain app/crate-app domain)]
   (operation/do-apply-configure
-    (if (some? gpg-key-id)
-      (cloud-target/provider gpg-key-id gpg-passphrase)
-      (cloud-target/provider))
-    (provisioning-spec 0)
+    (cloud-target/provider (:context target-config))
+    (provisioning-spec domain-config (:node-spec target-config) 0)
     :summarize-session summarize-session)))
 
 (defn serverspec
   [& options]
-  (let [{:keys [gpg-key-id gpg-passphrase
+  (let [{:keys [gpg-key-id gpg-passphrase domain targets
                 summarize-session]
-         :or {summarize-session true}} options]
-   (operation/do-test
-     (if (some? gpg-key-id)
-       (cloud-target/provider gpg-key-id gpg-passphrase)
-       (cloud-target/provider))
-     (provisioning-spec 0)
-     :summarize-session summarize-session)))
+         :or {domain "integration/resources/user.edn"
+              targets "integration/resources/jem-aws-target.edn"
+              summarize-session true}} options
+        target-config (cloud-target/load-targets targets)
+        domain-config (core-app/load-domain app/crate-app domain)]
+    (operation/do-test
+      (cloud-target/provider (:context target-config))
+      (provisioning-spec domain-config (:node-spec target-config) 0)
+      :summarize-session summarize-session)))
