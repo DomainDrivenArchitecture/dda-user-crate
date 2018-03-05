@@ -16,57 +16,35 @@
 (ns dda.pallet.dda-user-crate.app.instantiate-existing
   (:require
     [schema.core :as s]
-    [pallet.repl :as pr]
-    [dda.pallet.commons.operation :as operation]
-    [dda.cm.existing :as existing]
-    [dda.config.commons.user-env :as user-env]
+    [dda.pallet.core.app :as core-app]
     [dda.pallet.dda-user-crate.app :as app]))
 
-(def provisioning-ip
-    "192.168.56.104")
+(defn converge-install
+  [count & options]
+  (let [{:keys [domain targets summarize-session]
+         :or {domain "integration/resources/user.edn"
+              targets "integration/resources/existing-targets.edn"
+              summarize-session true}} options]
+    (core-app/existing-install app/crate-app
+                          {:domain domain
+                           :targets targets})))
 
-(def provisioning-user
-  {:login "initial"
-   :password "secure1234"})
+(defn configure
+ [& options]
+ (let [{:keys [domain targets summarize-session]
+        :or {domain "integration/resources/user.edn"
+             targets "integration/resources/existing-targets.edn"
+             summarize-session true}} options]
+  (core-app/existing-configure app/crate-app
+                          {:domain domain
+                           :targets targets})))
 
-(def ssh-pub-key
-  (user-env/read-ssh-pub-key-to-config))
-
-(def user-config
-   {:user-name {:hashed-password  "xxx"
-                :ssh-authorized-keys [ssh-pub-key]}})
-
-(def provider
-  (existing/provider provisioning-ip "user-node" "dda-user-group"))
-
-(def provisioning-spec
-  (merge
-   (app/dda-user-group (app/app-configuration user-config))
-   (existing/node-spec provisioning-user)))
-
-(defn apply-install
+(defn serverspec
   [& options]
-  (let [{:keys [summarize-session]
-         :or {summarize-session true}} options]
-    (operation/do-apply-install
-     (provider)
-     (provisioning-spec)
-     :summarize-session summarize-session)))
-
-(defn apply-configure
-  [& options]
-  (let [{:keys [summarize-session]}
-        :or {summarize-session true} options]
-    (operation/do-apply-configure
-     (provider)
-     (provisioning-spec)
-     :summarize-session summarize-session)))
-
-(defn test
-  [& options]
-  (let [{:keys [summarize-session]}
-        :or {summarize-session true} options]
-    (operation/do-server-test
-     (provider)
-     (provisioning-spec)
-     :summarize-session summarize-session)))
+  (let [{:keys [domain targets summarize-session]
+         :or {domain "integration/resources/user.edn"
+              targets "integration/resources/existing-targets.edn"
+              summarize-session true}} options]
+    (core-app/existing-serverspec app/crate-app
+                             {:domain domain
+                              :targets targets})))
