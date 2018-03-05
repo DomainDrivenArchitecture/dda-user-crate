@@ -18,36 +18,15 @@
    [clojure.string :as string]
    [schema.core :as s]
    [pallet.actions :as actions]
-   [dda.config.commons.user-env :as user-env]))
-
-(defn read-ssh-pub-key-to-config
-  ( []
-   (user-env/read-ssh-pub-key-to-config))
-  ( [& {:keys [ssh-dir-path]}]
-    (user-env/read-ssh-pub-key-to-config :ssh-dir-path ssh-dir-path)))
-
-(defn read-ssh-priv-key-to-config
-  ( []
-   (user-env/read-ssh-priv-key-to-config))
-  ( [& {:keys [ssh-dir-path read-from-env?]}]
-    (user-env/read-ssh-priv-key-to-config
-     :ssh-dir-path ssh-dir-path :read-from-env? read-from-env?)))
-
-(defn read-ssh-keys-to-pair-config
-  ( []
-   (user-env/read-ssh-keys-to-pair-config))
-  ( [& {:keys [ssh-dir-path read-from-env?]}]
-   (user-env/read-ssh-keys-to-pair-config
-    :ssh-dir-path ssh-dir-path
-    :read-from-env? read-from-env?)))
+   [dda.config.commons.ssh-key :as ssh-common]))
 
 (defn configure-authorized-keys
   "configure the authorized_keys for a given user, all existing
   authorized_keys will be overwritten."
   [user-name os-user-config]
-  (let [ssh-dir (user-env/user-ssh-dir user-name)
-        authorized-keys (map user-env/format-public-key
-                            (:authorized-keys os-user-config))]
+  (let [ssh-dir (ssh-common/user-ssh-dir user-name)
+        authorized-keys (map ssh-common/format-public-key
+                            (:ssh-authorized-keys os-user-config))]
     (actions/directory
       ssh-dir
       :owner user-name
@@ -66,8 +45,8 @@
 (defn configure-ssh-key
   "configer the users ssh_key."
   [user-name os-user-config]
-  (let [ssh-key (:personal-key os-user-config)
-        ssh-dir (user-env/user-ssh-dir user-name)]
+  (let [ssh-key (:ssh-key os-user-config)
+        ssh-dir (ssh-common/user-ssh-dir user-name)]
     (when (some? (:private-key ssh-key))
       (actions/remote-file
         (str ssh-dir "id_rsa")
@@ -82,4 +61,4 @@
         :owner user-name
         :group user-name
         :mode "644"
-        :content (user-env/format-public-key (:public-key ssh-key))))))
+        :content (ssh-common/format-public-key (:public-key ssh-key))))))

@@ -18,13 +18,13 @@
    [schema.core :as s]
    [pallet.actions :as actions]
    [pallet.action :as action]
-   [dda.config.commons.user-env :as user-env]
+   [dda.config.commons.ssh-key :as ssh-common]
    [dda.pallet.dda-user-crate.infra.schema :as schema]))
 
 (s/defn configure-bashrc-d
   [user-name :- s/Str
    config :- schema/User]
-  (let [user-home (user-env/user-home-dir user-name)]
+  (let [user-home (ssh-common/user-home-dir user-name)]
     (actions/directory
       (str user-home "/.bashrc.d")
       :owner user-name

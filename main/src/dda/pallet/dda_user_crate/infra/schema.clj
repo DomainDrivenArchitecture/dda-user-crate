@@ -26,8 +26,8 @@
   {(s/optional-key :gpg) {:trusted-key GpgKey}})
 
 (def Ssh
- {(s/optional-key :authorized-keys) [ssh-key/PublicSshKey]
-  (s/optional-key :personal-key) ssh-key/SshKeyPair})
+ {(s/optional-key :ssh-authorized-keys) [ssh-key/PublicSshKey]
+  (s/optional-key :ssh-key) ssh-key/SshKeyPair})
 
 (def Settings {(s/optional-key :settings)
                (hash-set (s/enum :sudo :bashrc-d))})

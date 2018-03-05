@@ -33,18 +33,6 @@
 
 (def UserCrateConfig schema/UserCrateConfig)
 
-(defn read-ssh-pub-key-to-config
-  [& options]
-  (ssh/read-ssh-pub-key-to-config options))
-
-(defn read-ssh-priv-key-to-config
-  [& options]
-  (ssh/read-ssh-priv-key-to-config options))
-
-(defn read-ssh-keys-to-pair-config
-  [& options]
-  (ssh/read-ssh-keys-to-pair-config options))
-
 (defn install-user [config]
   (user/create-sudo-group)
   (doseq [[k v] config]
@@ -57,7 +45,7 @@
     (let [{:keys [settings]
            :or {settings #{:sudo :bashrc-d}}} v]
       (ssh/configure-authorized-keys (name k) v)
-      (when (contains? v :personal-key)
+      (when (contains? v :ssh-key)
         (ssh/configure-ssh-key (name k) v))
       (when (contains? settings :sudo)
         (user/configure-user-sudo (name k)))

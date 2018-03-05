@@ -35,8 +35,8 @@
 
 (def os-user-valid-complete-config
   (merge os-user-valid-config
-         {:authorized-keys [ssh-pub-key]
-          :personal-key ssh-key-pair}))
+         {:ssh-authorized-keys [ssh-pub-key]
+          :ssh-key ssh-key-pair}))
 
 (deftest valid-configurations
   (is (s/validate sut/User os-user-valid-config))
