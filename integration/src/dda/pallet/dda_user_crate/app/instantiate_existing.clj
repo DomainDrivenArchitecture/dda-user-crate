@@ -34,7 +34,7 @@
 
 (def user-config
    {:user-name {:hashed-password  "xxx"
-                :authorized-keys [ssh-pub-key]}})
+                :ssh-authorized-keys [ssh-pub-key]}})
 
 (def provider
   (existing/provider provisioning-ip "user-node" "dda-user-group"))
