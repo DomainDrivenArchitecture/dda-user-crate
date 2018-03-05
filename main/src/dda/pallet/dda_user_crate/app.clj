@@ -52,10 +52,11 @@
 (s/defmethod ^:always-validate
   core-app/group-spec infra/facility
   [crate-app
-   app-config :- DdaUserAppConfig]
-  (group/group-spec
-    app-config [(config-crate/with-config app-config)
-                with-user]))
+   domain-config :- UserDomainConfigResolved]
+  (let [app-config (app-configuration-resolved domain-config)]
+    (group/group-spec
+      app-config [(config-crate/with-config app-config)
+                  with-user])))
 
 (def crate-app (core-app/make-dda-crate-app
                   :facility infra/facility
