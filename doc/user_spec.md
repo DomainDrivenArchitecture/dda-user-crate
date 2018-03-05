@@ -7,6 +7,14 @@
 (def Gpg
   {(s/optional-key :gpg) {:trusted-key GpgKey}})
 
+(def PublicSshKey
+  {:type s/Str
+   :public-key s/Str
+   :comment s/Str})
+(def PrivateSshKey s/Str)
+(def SshKeyPair
+  {:public-key PublicSshKey
+   :private-key PrivateSshKey})
 (def Ssh
  {(s/optional-key :ssh-authorized-keys) [ssh-key/PublicSshKey]
   (s/optional-key :ssh-key) ssh-key/SshKeyPair})
