@@ -16,8 +16,10 @@
 (ns dda.pallet.dda-user-crate.domain
   (:require
    [schema.core :as s]
+   [dda.config.commons.ssh-key :as ssh-commons]
    [dda.pallet.commons.secret :as secret]
-   [dda.pallet.commons.ssh-key :as ssh-key]
+   [clojure.tools.logging :as logging]
+   [dda.pallet.dda-user-crate.domain.ssh :as ssh]
    [dda.pallet.dda-user-crate.infra :as infra]))
 
 (def GpgKey {:public-key secret/Secret
@@ -27,19 +29,15 @@
 (def Gpg
   {(s/optional-key :gpg) {:trusted-key GpgKey}})
 
-(def Ssh
- {(s/optional-key :authorized-keys) [ssh-key/PublicSshKey]
-  (s/optional-key :personal-key) ssh-key/SshKeyPair})
-
 (def Settings {(s/optional-key :settings)
                (hash-set (s/enum :sudo :bashrc-d))})
 
 (def User
   (s/either
     (merge {:hashed-password secret/Secret}
-           Gpg Ssh Settings)
+           Gpg ssh/Ssh Settings)
     (merge {:clear-password secret/Secret}
-           Gpg Ssh Settings)))
+           Gpg ssh/Ssh Settings)))
 
 
 (def UserDomainConfig {s/Keyword User})
@@ -48,7 +46,27 @@
 
 (def InfraResult {infra/facility infra/UserCrateConfig})
 
+(defn-
+  user-infra-configuration
+  [user-domain-config]
+  (merge
+    (when (contains? user-domain-config :hashed-password)
+      {:hashed-password (:hashed-password user-domain-config)})
+    (when (contains? user-domain-config :clear-password)
+      {:clear-password (:clear-password user-domain-config)})
+    (when (contains? user-domain-config :gpg)
+      {:gpg (:gpg user-domain-config)})
+    (when (contains? user-domain-config :ssh-authorized-keys)
+      {:ssh-authorized-keys (ssh/authorized-keys-infra-configuration
+                              (:ssh-authorized-keys user-domain-config))})
+    (when (contains? user-domain-config :ssh-key)
+      {:ssh-key (ssh/key-pair-infra-configuration (:ssh-key user-domain-config))})
+    (when (contains? user-domain-config :settings)
+      {:settings (:settings user-domain-config)})))
+
+
 (s/defn ^:always-validate
   infra-configuration :- InfraResult
   [domain-config :- UserDomainConfigResolved]
-  {infra/facility domain-config})
+  {infra/facility
+    (apply merge (map (fn [[k v]] {k (user-infra-configuration v)}) domain-config))})
