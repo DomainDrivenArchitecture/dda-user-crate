@@ -26,22 +26,22 @@
   [["-h" "--help"]
    ["-s" "--serverspec"]
    ["-c" "--configure"]
-   ["-t" "--targets TARGETS.edn" "edn file containing the targets to install on."
+   ["-t" "--targets targets.edn" "edn file containing the targets to install on."
     :default "localhost-target.edn"]])
 
 (defn usage [options-summary]
   (str/join
    \newline
-   ["dda-managed-ide installs a variety of standard software and configs on your personal desktop"
+   ["dda-user-crate provision user to an existing- or cloud-target"
     ""
-    "Usage: java -jar dda-managed-ide-[version]-standalone.jar [options] ide-spec-file"
+    "Usage: java -jar dda-user-crate-[version]-standalone.jar [options] user.edn"
     ""
     "Options:"
     options-summary
     ""
     "ide-spec-file"
     "  - follows the edn format."
-    "  - has to be a valid DdaVmDomainConfig (see: https://github.com/DomainDrivenArchitecture/dda-managed-ide)"
+    "  - has to be a valid UserDomainConfig (see: https://github.com/DomainDrivenArchitecture/dda-user-crate)"
     ""]))
 
 (defn error-msg [errors]
