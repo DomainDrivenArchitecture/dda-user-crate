@@ -19,7 +19,7 @@
     [dda.pallet.core.app :as core-app]
     [dda.pallet.dda-user-crate.app :as app]))
 
-(defn converge-install
+(defn install
   [count & options]
   (let [{:keys [domain targets summarize-session]
          :or {domain "integration/resources/user.edn"
