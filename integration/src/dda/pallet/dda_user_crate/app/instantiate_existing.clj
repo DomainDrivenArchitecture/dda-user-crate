@@ -20,7 +20,7 @@
     [dda.pallet.dda-user-crate.app :as app]))
 
 (defn install
-  [count & options]
+  [& options]
   (let [{:keys [domain targets summarize-session]
          :or {domain "integration/resources/user.edn"
               targets "integration/resources/existing-targets.edn"
