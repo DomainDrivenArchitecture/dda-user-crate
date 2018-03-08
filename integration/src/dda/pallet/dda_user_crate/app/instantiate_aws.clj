@@ -15,7 +15,6 @@
 ; limitations under the License.
 (ns dda.pallet.dda-user-crate.app.instantiate-aws
   (:require
-    [pallet.repl :as pr]
     [clojure.inspector :as inspector]
     [dda.pallet.core.app :as core-app]
     [dda.pallet.dda-user-crate.app :as app]))
