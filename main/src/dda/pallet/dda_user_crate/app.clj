@@ -17,7 +17,6 @@
   (:require
    [clojure.tools.logging :as logging]
    [schema.core :as s]
-   [dda.cm.group :as group]
    [dda.pallet.commons.secret :as secret]
    [dda.pallet.core.app :as core-app]
    [dda.pallet.dda-config-crate.infra :as config-crate]
@@ -54,7 +53,7 @@
   [crate-app
    domain-config :- UserDomainConfigResolved]
   (let [app-config (app-configuration-resolved domain-config)]
-    (group/group-spec
+    (core-app/pallet-group-spec
       app-config [(config-crate/with-config app-config)
                   with-user])))
 
