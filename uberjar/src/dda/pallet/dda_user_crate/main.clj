@@ -19,6 +19,7 @@
   (:require
     [clojure.string :as str]
     [clojure.tools.cli :as cli]
+    [dda.config.commons.styled-output :as styled]
     [dda.pallet.core.app :as core-app]
     [dda.pallet.dda-user-crate.app :as app]))
 
@@ -27,7 +28,8 @@
    ["-s" "--serverspec"]
    ["-c" "--configure"]
    ["-t" "--targets targets.edn" "edn file containing the targets to install on."
-    :default "localhost-target.edn"]])
+    :default "localhost-target.edn"]
+   ["-v" "--verbose"]])
 
 (defn usage [options-summary]
   (str/join
@@ -39,7 +41,7 @@
     "Options:"
     options-summary
     ""
-    "ide-spec-file"
+    "user.edn"
     "  - follows the edn format."
     "  - has to be a valid UserDomainConfig (see: https://github.com/DomainDrivenArchitecture/dda-user-crate)"
     ""]))
@@ -53,15 +55,19 @@
   (System/exit status))
 
 (defn -main [& args]
-  (let [{:keys [options arguments errors summary help]} (cli/parse-opts args cli-options)]
+  (let [{:keys [options arguments errors summary help]} (cli/parse-opts args cli-options)
+        verbose (if (contains? options :verbose) 1 0)]
     (cond
       help (exit 0 (usage summary))
       errors (exit 1 (error-msg errors))
       (not= (count arguments) 1) (exit 1 (usage summary))
-      (:serverspec options) (core-app/existing-serverspec
-                              app/crate-app
-                              {:domain (first arguments)
-                               :targets (:targets options)})
+      (:serverspec options) (if (core-app/existing-serverspec
+                                  app/crate-app
+                                  {:domain (first arguments)
+                                   :targets (:targets options)
+                                   :verbosity verbose})
+                                (exit 0 (styled/styled "ALL TESTS PASSED" :green))
+                                (exit 2 (styled/styled "SOME TESTS FAILED" :red)))
       (:configure options) (core-app/existing-configure
                              app/crate-app
                              {:domain (first arguments)
