@@ -21,8 +21,8 @@
                     [com.palletops/pallet "0.8.12" :classifier "tests"]
                     [ch.qos.logback/logback-classic "1.3.0-alpha4"]
                     [org.slf4j/jcl-over-slf4j "1.8.0-beta1"]]
-                   :plugins
-                   [[lein-sub "0.3.0"]]
+                   :plugins [[lein-sub "0.3.0"]
+                             [lein-pprint "1.1.2"]]
                    :leiningen/reply
                    {:dependencies [[org.slf4j/jcl-over-slf4j "1.8.0-beta0"]]
                     :exclusions [commons-logging]}
