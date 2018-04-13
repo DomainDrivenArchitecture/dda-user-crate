@@ -16,7 +16,6 @@
 (ns dda.pallet.dda-user-crate.domain.ssh
   (:require
    [schema.core :as s]
-   [clojure.tools.logging :as logging]
    [dda.config.commons.ssh-key :as ssh-commons]
    [dda.pallet.commons.secret :as secret]))
 
