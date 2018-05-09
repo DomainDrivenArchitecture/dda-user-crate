@@ -28,30 +28,17 @@ This crate manages user & user credential setup.
 ## Usage documentation
 This crate installs and configures software on your virtual machine. You can provision pre-created virtual machines (see paragraph "Prepare vm" below) or cloud instances.
 
-### Prepare vm
-If you want to use this crate, please ensure you meet the preconditions for the remote machine, i.e. xubuntu and openssh-server installed. If not yet installed, you may use the steps below:
-1. Install xubuntu16.04.02
-2. Login with your initial user and use:
-```
-sudo apt-get update
-sudo apt-get upgrade
-sudo apt-get install openssh-server
-```
-In case you want to install the software on the local machine rather than remote, you wouldn't need openssh-server but only a Java runtime environment. If not yet available, you can install Java by:
-```
-sudo apt-get install openjdk-7-jre-headless
-```
 ### Usage Summary
-1. Download the jar-file from the releases page of this repository (e.g. dda-manage-ide-x.x.x-standalone.jar).
+1. Download the jar-file from the releases page of this repository (e.g. dda-user-crate-x.x.x-standalone.jar).
 2. Deploy the jar-file on the source machine
-3. Create the files `ide.edn` (Domain-Schema for your desktop) and `target.edn` (Schema for Targets to be provisioned) according to the reference and our example configurations. Please create them in the same folder where you've saved the jar-file. For more information about these files refer to the corresponding information below.
+3. Create the files `user.edn` (Domain-Schema for your desktop) and `target.edn` (Schema for Targets to be provisioned) according to the reference and our example configurations. Please create them in the same folder where you've saved the jar-file. For more information about these files refer to the corresponding information below.
 4. Start the installation:
 ```bash
-java -jar dda-managed-ide-standalone.jar --targets targets.edn ide.edn
+java -jar dda-user-crate-1.0.2-standalone.jar --targets targets.edn user.edn
 ```
-If you want to install the ide on your localhost you don't need a target config.
+If you want to install users on your localhost you don't need a target config.
 ```bash
-java -jar dda-managed-ide-0.2.0-standalone.jar ide.edn
+java -jar dda-user-crate-1.0.2-standalone.jar user.edn
 ```
 
 ### Configuration
@@ -91,7 +78,7 @@ In case of problems you may want to have a look at the log-file:
 `less logs/pallet.log`
 
 ## Reference
-Some details about the architecture: We provide two levels of API. **Domain** is a high-level API with many build in conventions. If this conventions don't fit your needs, you can use our low-level **infra** API and realize your own conventions.
+Some details about the architecture: We provide two levels of API. **domain** is a high-level API with many build in conventions. If this conventions don't fit your needs, you can use our low-level **infra** API and realize your own conventions.
 
 ### Domain API
 
@@ -121,7 +108,7 @@ The schema for the targets config is:
 The "targets.edn" uses this schema.
 
 #### User config
-The schema for the ide configuration is:
+The schema for the user configuration is:
 ```clojure
 (def Secret
   (either
