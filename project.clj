@@ -3,7 +3,7 @@
   :url "https://www.domaindrivenarchitecture.org"
   :license {:name "Apache License, Version 2.0"
              :url "https://www.apache.org/licenses/LICENSE-2.0.html"}
-  :dependencies [[dda/dda-pallet "2.1.1"]]
+  :dependencies [[dda/dda-pallet "2.1.2"]]
   :source-paths ["main/src"]
   :resource-paths ["main/resources"]
   :repositories [["snapshots" :clojars]
@@ -34,7 +34,7 @@
                        :resource-paths ["uberjar/resources"]
                        :aot :all
                        :main dda.pallet.dda-user-crate.main
-                       :dependencies [[org.clojure/tools.cli "0.3.5"]
+                       :dependencies [[org.clojure/tools.cli "0.3.7"]
                                       [ch.qos.logback/logback-classic "1.3.0-alpha4"]
                                       [org.slf4j/jcl-over-slf4j "1.8.0-beta1"]]}}
   :local-repo-classpath true)
