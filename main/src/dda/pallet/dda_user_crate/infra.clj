@@ -29,9 +29,15 @@
 
 (def GpgKey schema/GpgKey)
 
+(def Ssh schema/Ssh)
+
 (def User schema/User)
 
 (def UserCrateConfig schema/UserCrateConfig)
+
+(s/defn filter-ssh :- Ssh
+  [config :- User]
+  (select-keys config [:ssh-authorized-keys :ssh-key]))
 
 (defn install-user [config]
   (user/create-sudo-group)
@@ -44,9 +50,9 @@
   (doseq [[k v] config]
     (let [{:keys [settings]
            :or {settings #{:sudo :bashrc-d}}} v]
-      (ssh/configure-authorized-keys (name k) v)
+      (ssh/configure-authorized-keys (name k) (filter-ssh v))
       (when (contains? v :ssh-key)
-        (ssh/configure-ssh-key (name k) v))
+        (ssh/configure-ssh-key (name k) (filter-ssh v)))
       (when (contains? settings :sudo)
         (user/configure-user-sudo (name k)))
       (when (contains? settings :bashrc-d)

@@ -30,14 +30,15 @@
   {:public-key ssh-pub-key
    :private-key ssh-priv-key})
 
-(def os-user-valid-config
+(def os-user-valid-minimal-config
   {:hashed-password "secret-pw"})
 
 (def os-user-valid-complete-config
-  (merge os-user-valid-config
+  (merge os-user-valid-minimal-config
          {:ssh-authorized-keys [ssh-pub-key]
           :ssh-key ssh-key-pair}))
 
 (deftest valid-configurations
-  (is (s/validate sut/User os-user-valid-config))
-  (is (s/validate sut/User os-user-valid-complete-config)))
+  (is (s/validate sut/User os-user-valid-minimal-config))
+  (is (s/validate sut/User os-user-valid-complete-config))
+  (is (s/validate sut/Ssh (sut/filter-ssh os-user-valid-complete-config))))

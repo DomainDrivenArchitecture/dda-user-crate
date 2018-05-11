@@ -16,16 +16,14 @@
 (ns dda.pallet.dda-user-crate.infra.schema
   (:require
    [schema.core :as s]
-   [dda.config.commons.ssh-key :as ssh-key]
-   [dda.pallet.dda-user-crate.infra.gpg :as gpg]))
+   [dda.pallet.dda-user-crate.infra.gpg :as gpg]
+   [dda.pallet.dda-user-crate.infra.ssh :as ssh]))
 
 (def GpgKey gpg/GpgKey)
 
 (def Gpg gpg/Gpg)
 
-(def Ssh
- {(s/optional-key :ssh-authorized-keys) [ssh-key/PublicSshKey]
-  (s/optional-key :ssh-key) ssh-key/SshKeyPair})
+(def Ssh ssh/Ssh)
 
 (def Settings {(s/optional-key :settings)
                (hash-set (s/enum :sudo :bashrc-d))})

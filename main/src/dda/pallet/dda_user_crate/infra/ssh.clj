@@ -18,15 +18,20 @@
    [clojure.string :as string]
    [schema.core :as s]
    [pallet.actions :as actions]
-   [dda.config.commons.ssh-key :as ssh-common]))
+   [dda.config.commons.ssh-key :as ssh-key]))
 
-(defn configure-authorized-keys
+(def Ssh
+ {(s/optional-key :ssh-authorized-keys) [ssh-key/PublicSshKey]
+  (s/optional-key :ssh-key) ssh-key/SshKeyPair})
+
+(s/defn configure-authorized-keys
   "configure the authorized_keys for a given user, all existing
   authorized_keys will be overwritten."
-  [user-name os-user-config]
-  (let [ssh-dir (ssh-common/user-ssh-dir user-name)
-        authorized-keys (map ssh-common/format-public-key
-                            (:ssh-authorized-keys os-user-config))]
+  [user-name :- s/Str
+   ssh-config :- Ssh]
+  (let [ssh-dir (ssh-key/user-ssh-dir user-name)
+        authorized-keys (map ssh-key/format-public-key
+                            (:ssh-authorized-keys ssh-config))]
     (actions/directory
       ssh-dir
       :owner user-name
@@ -42,11 +47,12 @@
                 \newline
                 authorized-keys))))
 
-(defn configure-ssh-key
+(s/defn configure-ssh-key
   "configer the users ssh_key."
-  [user-name os-user-config]
-  (let [ssh-key (:ssh-key os-user-config)
-        ssh-dir (ssh-common/user-ssh-dir user-name)]
+  [user-name :- s/Str
+   ssh-config :- Ssh]
+  (let [ssh-dir (ssh-key/user-ssh-dir user-name)
+        ssh-key (:ssh-key ssh-config)]
     (when (some? (:private-key ssh-key))
       (actions/remote-file
         (str ssh-dir "id_rsa")
@@ -61,4 +67,4 @@
         :owner user-name
         :group user-name
         :mode "644"
-        :content (ssh-common/format-public-key (:public-key ssh-key))))))
+        :content (ssh-key/format-public-key (:public-key ssh-key))))))
