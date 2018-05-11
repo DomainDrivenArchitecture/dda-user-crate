@@ -38,7 +38,7 @@
   (doseq [[k v] config]
     (user/create-user (name k) v)
     (when (contains? v :gpg)
-      (gpg/install (name k) v))))
+      (gpg/install (name k) (:gpg v)))))
 
 (defn configure-user [config]
   (doseq [[k v] config]
@@ -52,7 +52,7 @@
       (when (contains? settings :bashrc-d)
         (bash/configure-bashrc-d (name k) v))
       (when (contains? v :gpg)
-        (gpg/configure (name k) v)))))
+        (gpg/configure (name k) (:gpg v))))))
 
 (s/defmethod core-infra/dda-install facility
   [dda-crate config]

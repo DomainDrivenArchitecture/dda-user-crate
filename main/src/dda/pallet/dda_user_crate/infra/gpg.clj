@@ -19,12 +19,21 @@
    [clojure.java.io :as io]
    [pallet.actions :as actions]
    [pallet.action :as action]
-   [dda.config.commons.ssh-key :as ssh-common]
-   [dda.pallet.dda-user-crate.infra.schema :as schema]))
+   [dda.config.commons.ssh-key :as ssh-common]))
+
+(def GpgKey {:public-key s/Str
+             (s/optional-key :passphrase) s/Str
+             (s/optional-key :private-key) s/Str})
+
+(def GpgConfig
+  {:trusted-key GpgKey})
+
+(def Gpg
+  {(s/optional-key :gpg) GpgConfig})
 
 (s/defn install
   [user-name :- s/Str
-   config :- schema/User]
+   config :- GpgConfig]
   (actions/package "gnupg2")
   (actions/remote-file
     "/usr/lib/gpg-trust-all.sh"
@@ -36,8 +45,8 @@
 
 (s/defn configure
   [user-name :- s/Str
-   config :- schema/User]
-  (let [{:keys [trusted-key]} (:gpg config)
+   config :- GpgConfig]
+  (let [{:keys [trusted-key]} config
         {:keys [public-key private-key passphrase]} trusted-key
         user-home (ssh-common/user-home-dir user-name)]
     (actions/remote-file
