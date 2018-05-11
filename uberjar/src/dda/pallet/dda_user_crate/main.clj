@@ -34,7 +34,8 @@
 (defn usage [options-summary]
   (str/join
    \newline
-   ["dda-user-crate provision user to an existing- or cloud-target"
+   ["dda-user-crate provision over ssh or locally users to an existing- or cloud-targets. One"
+    "shoot provisioning is supported but also continuous configuration application is possible."
     ""
     "Usage: java -jar dda-user-crate-[version]-standalone.jar [options] user.edn"
     ""

@@ -14,7 +14,8 @@ dda-pallet is compatible to the following versions
 * (x)ubunutu 16.04
 
 ## Features
-This crate manages user & user credential setup.
+This crate provisions over ssh or locally users to an existing- or cloud-targets.
+One shoot provisioning is supported but also continuous configuration application is possible.
 
 * create users on target nodes
 * set passwords for users (either clear or hashed).
