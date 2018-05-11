@@ -20,7 +20,7 @@
    [pallet.action :as action]
    [dda.config.commons.user-home :as user-home]))
 
-(s/defn configure-bashrc-d
+(s/defn install-bashrc-d
   [user-name :- s/Str]
   (let [user-home (user-home/user-home-dir user-name)]
     (actions/directory

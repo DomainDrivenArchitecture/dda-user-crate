@@ -17,6 +17,7 @@
   (:require
    [clojure.tools.logging :as logging]
    [schema.core :as s]
+   [pallet.action :as action]
    [pallet.actions :as actions]
    [dda.pallet.core.infra :as core-infra]
    [dda.pallet.dda-user-crate.infra.schema :as schema]
@@ -40,25 +41,31 @@
   (select-keys config [:ssh-authorized-keys :ssh-key]))
 
 (defn install-user [config]
-  (user/create-sudo-group)
-  (doseq [[k v] config]
-    (user/create-user (name k) v)
-    (when (contains? v :gpg)
-      (gpg/install (name k) (:gpg v)))))
+  (action/with-action-options
+   {:sudo-user "root"}
+   (user/create-sudo-group)
+   (doseq [[k v] config]
+     (let [{:keys [settings gpg]
+            :or {settings #{:sudo :bashrc-d}}} v]
+       (user/create-user (name k) v)
+       (when (contains? v :gpg)
+         (gpg/install (name k) gpg))
+       (when (contains? settings :bashrc-d)
+         (bash/install-bashrc-d (name k)))))))
 
 (defn configure-user [config]
-  (doseq [[k v] config]
-    (let [{:keys [settings]
-           :or {settings #{:sudo :bashrc-d}}} v]
-      (ssh/configure-authorized-keys (name k) (filter-ssh v))
-      (when (contains? v :ssh-key)
-        (ssh/configure-ssh-key (name k) (filter-ssh v)))
-      (when (contains? settings :sudo)
-        (user/configure-user-sudo (name k)))
-      (when (contains? settings :bashrc-d)
-        (bash/configure-bashrc-d (name k)))
-      (when (contains? v :gpg)
-        (gpg/configure (name k) (:gpg v))))))
+  (action/with-action-options
+   {:sudo-user "root"}
+   (doseq [[k v] config]
+     (let [{:keys [settings gpg]
+            :or {settings #{:sudo :bashrc-d}}} v]
+       (ssh/configure-authorized-keys (name k) (filter-ssh v))
+       (when (contains? v :ssh-key)
+         (ssh/configure-ssh-key (name k) (filter-ssh v)))
+       (when (contains? settings :sudo)
+         (user/configure-user-sudo (name k)))
+       (when (contains? v :gpg)
+         (gpg/configure (name k) gpg))))))
 
 (s/defmethod core-infra/dda-install facility
   [dda-crate config]
