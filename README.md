@@ -29,16 +29,16 @@ This crate manages user & user credential setup.
 This crate installs and configures software on your virtual machine. You can provision pre-created virtual machines (see paragraph "Prepare vm" below) or cloud instances.
 
 ### Usage Summary
-1. Download the jar-file from the releases page of this repository (e.g. dda-user-crate-x.x.x-standalone.jar).
+1. Download the jar-file from the releases page of this repository (e.g. `curl -L -o dda-user.jar https://github.com/DomainDrivenArchitecture/dda-user-crate/releases/download/1.0.4/dda-user-crate-1.0.4-standalone.jar`)
 2. Deploy the jar-file on the source machine
 3. Create the files `user.edn` (Domain-Schema for your desktop) and `target.edn` (Schema for Targets to be provisioned) according to the reference and our example configurations. Please create them in the same folder where you've saved the jar-file. For more information about these files refer to the corresponding information below.
 4. Start the installation:
 ```bash
-java -jar dda-user-crate-1.0.2-standalone.jar --targets targets.edn user.edn
+java -jar dda-user.jar --targets targets.edn user.edn
 ```
 If you want to install users on your localhost you don't need a target config.
 ```bash
-java -jar dda-user-crate-1.0.2-standalone.jar user.edn
+java -jar dda-user.jar user.edn
 ```
 
 ### Configuration
@@ -80,9 +80,7 @@ In case of problems you may want to have a look at the log-file:
 ## Reference
 Some details about the architecture: We provide two levels of API. **domain** is a high-level API with many build in conventions. If this conventions don't fit your needs, you can use our low-level **infra** API and realize your own conventions.
 
-### Domain API
-
-#### Targets
+### Targets
 The schema for the targets config is:
 ```clojure
 (def ExistingNode
@@ -107,7 +105,7 @@ The schema for the targets config is:
 
 The "targets.edn" uses this schema.
 
-#### User config
+### Domain API
 The schema for the user configuration is:
 ```clojure
 (def Secret
@@ -188,7 +186,6 @@ For installation & configuration with the dda-user-crate the schema is:
 
 (def UserCrateConfig
   {s/Keyword User})
-
 ```
 
 ## License
