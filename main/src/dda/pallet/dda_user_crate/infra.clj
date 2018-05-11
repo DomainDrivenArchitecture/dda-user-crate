@@ -56,7 +56,7 @@
       (when (contains? settings :sudo)
         (user/configure-user-sudo (name k)))
       (when (contains? settings :bashrc-d)
-        (bash/configure-bashrc-d (name k) v))
+        (bash/configure-bashrc-d (name k)))
       (when (contains? v :gpg)
         (gpg/configure (name k) (:gpg v))))))
 
