@@ -20,7 +20,7 @@
                     [org.domaindrivenarchitecture/pallet-aws "0.2.8.2"]
                     [com.palletops/pallet "0.8.12" :classifier "tests"]
                     [ch.qos.logback/logback-classic "1.3.0-alpha4"]
-                    [org.slf4j/jcl-over-slf4j "1.8.0-beta1"]]
+                    [org.slf4j/jcl-over-slf4j "1.8.0-beta2"]]
                    :plugins [[lein-sub "0.3.0"]
                              [lein-pprint "1.1.2"]]
                    :leiningen/reply
@@ -36,5 +36,5 @@
                        :main dda.pallet.dda-user-crate.main
                        :dependencies [[org.clojure/tools.cli "0.3.7"]
                                       [ch.qos.logback/logback-classic "1.3.0-alpha4"]
-                                      [org.slf4j/jcl-over-slf4j "1.8.0-beta1"]]}}
+                                      [org.slf4j/jcl-over-slf4j "1.8.0-beta2"]]}}
   :local-repo-classpath true)
