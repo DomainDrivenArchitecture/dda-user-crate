@@ -3,19 +3,7 @@
   :url "https://www.domaindrivenarchitecture.org"
   :license {:name "Apache License, Version 2.0"
              :url "https://www.apache.org/licenses/LICENSE-2.0.html"}
-  :dependencies [
-                 ;[dda/pallet-common "0.4.1-SNAPSHOT"]
-                 ;[org.clojure/core.incubator "0.1.4"]
-                 ;[org.clojure/tools.logging "0.4.0"]
-                 ;[org.clojure/tools.macro "0.1.5"]
-                 ;[org.clojure/tools.cli "0.3.7"]
-                 ;[org.clojure/algo.monads "0.1.6"]
-                 ;[com.palletops/chiba "0.2.0"]
-                 ;[clj-ssh "0.5.14"]
-                 ;[enlive "1.1.6" :exclusions [org.clojure/clojure]]
-                 ;[prismatic/schema "1.1.9"]
-                 ;[commons-codec "1.11"]
-                 [dda/dda-pallet "2.1.3-SNAPSHOT"]]
+  :dependencies [[dda/dda-pallet "2.2.0"]]
   :source-paths ["main/src"]
   :resource-paths ["main/resources"]
   :repositories [["snapshots" :clojars]
