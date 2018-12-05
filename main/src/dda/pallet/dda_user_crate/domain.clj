@@ -25,9 +25,11 @@
 (def GpgKey {:public-key secret/Secret
              (s/optional-key :passphrase) secret/Secret
              (s/optional-key :private-key) secret/Secret})
-
 (def Gpg
   {(s/optional-key :gpg) {:trusted-key GpgKey}})
+
+(def Ssh ssh/Ssh)
+(def SshResolved ssh/SshResolved)
 
 (def Settings {(s/optional-key :settings)
                (hash-set (s/enum :sudo :bashrc-d))})
@@ -35,13 +37,11 @@
 (def User
   (s/either
     (merge {:hashed-password secret/Secret}
-           Gpg ssh/Ssh Settings)
+           Gpg Ssh Settings)
     (merge {:clear-password secret/Secret}
-           Gpg ssh/Ssh Settings)))
-
+           Gpg Ssh Settings)))
 
 (def UserDomainConfig {s/Keyword User})
-
 (def UserDomainConfigResolved (secret/create-resolved-schema UserDomainConfig))
 
 (def InfraResult {infra/facility infra/UserCrateConfig})

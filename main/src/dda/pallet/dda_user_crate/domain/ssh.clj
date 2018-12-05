@@ -30,8 +30,8 @@
   (s/optional-key :ssh-key) SshSimpleKeyPair})
 
 (def SshSimpleKeyPairResolved (secret/create-resolved-schema SshSimpleKeyPair))
-
 (def SshAuthorizedKeysResolved (secret/create-resolved-schema SshAuthorizedKeys))
+(def SshResolved (secret/create-resolved-schema Ssh))
 
 (s/defn  ^:always-validate
   key-pair-infra-configuration :- ssh-commons/SshKeyPair
