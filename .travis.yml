@@ -10,7 +10,7 @@ stages:
 env:
   global:
     - DOCKER_USERNAME: domaindrivenarchitecture
-    - secure:
+    - secure: "ZDGe2gY0afPwKRvmQWZLEGyTiAhj+Hqwf0qwTWRIIFx1oYYcCwkNNujiOGRstXnDi3ylnvPmhp/M0fAOa/xRoVOPDEsv2/Hme0ngbMbhratN5Ft2lPKT5msrPaLdmEm5sHxkz0L4I93fAQNIMDJFfEpOESI81hgFhQDaTGy/ilMGLy4HwCHg72KiLF10TA/sVnVZfDpKfZOwmx+obxVFKxRiKLJG0Clr16qXxTZXt9hvnyoHhYKbeDtlQNc/PsEQv7j6oCMRthNTYyY3vhX4NZ56nzXjgxmYOMdH9zvutwn8zo+H5JAKQSoYjxlZN1BL2jsRbnBTPBjv/j+IomOeWKXZLyjjQvIB8sZ7Zx2UwqknipzowvwyWhNv2JDnYOF27+K7Ve/iZ3DsUqtbkO3Mn7LxKZrTTeg3IwSPBXUhM9smaX+AVpLREeEFJsW82PwvA85aBWA6IV0hPwejeOVaWA1m5rWjrZYUWAnC4JvbmE4UmeJoYWbDb8YlJQkZBPoBA5q7D4RErZkt9Y2X+YWWEisWK3S4PpgYK4cbt0IMd0TksphdpsF63xprLqhG4YmefUmdwjIsAyHdaFMQVj2etaAA+W4njpqw133BVniLFJZJseEE5IjY4EYzOw7KnyLqxZlT0O1Uo4teO+dFKOytGmmslXF87bjUzhJUUP1wJDo="
 jobs:
   include:
     - stage: build
@@ -18,20 +18,20 @@ jobs:
         - # build
         - lein test
         - lein uberjar
-        - md5sum target/dda-user-crate-standalone.jar > target/dda-user-crate-standalone.jar.md5
+        - md5sum target/dda-user-standalone.jar > target/dda-user-standalone.jar.md5
         - # create docker image
         - docker build -t dda-user-crate --file integration/docker/image/Dockerfile .
         - # integration test on docker image level
         - docker build -t dda-user-crate-test --file integration/docker/test/Dockerfile .
       deploy:
-        skip_cleanup: true
-        provider: releases
-        overwrite: true
-        draft: true
-        api_key:
-          secure:
-        file:
-          - target/dda-user-crate-standalone.jar
-          - target/dda-user-crate-standalone.jar.md5
-        provider: script
-        script: bash integration/docker/publish.sh dda-user-crate
+        - provider: releases
+          skip_cleanup: true
+          overwrite: true
+          draft: true
+          api_key:
+            secure: "ppcNpCqLBWzTDLuPZia1Toz/BuBHtNthlWvQ7EBd6kOGby8TmFuqeOf4TOUYVX7DDOtOdJ9RKZtwhqLvhhNzmN0UjRY1mgyFQvVytZfSNhiX/2//ldAt05Mu3ozi8jm1lnLTj8pEL354ZhemgYEFhzm8dvLCLo+a83knUaGU2FURd5VV4IKMxqpSLc9mz9BbEXUWncQcy9LDZF/CBiiZKUAhcIwBfa7hGh3uDcvHiBNL+F/RZGjyQyaH/qmOFFAPkZFBYpJHGbT767ejjl6oxabKeccznxqSSevAAZasTa8PKg4lXvm0+RvUekKgObyueU+t4Fc/Md+n8yHwlgjRgyQ0oAeEMsERSsVjuqT0itkoiTYLZtRZ3PGjVl+izit9yW6l+Er1I7xfOwY0WCVkkpQFMhICruZgvD8krkd8Z4dXQj2NilZCptD6jcv/CQxBmEjNZWcftxf1wai5qon5KiR3cLSFq5lx7DNApkuCp2rgSFWNAsznmdRnW8xk975aFpUULHEWlESLu2dZt9MRyIQsISqAhrTrSu+mtulOfNlt5kG2USMWwRs6pbVuXF5R8+G8sJWZEgF1ESg1W1TgVb2YD/ejWCI9p+EgCh9U2ql6JZr3g0cZdWKv3HJGSThHXfoE/40qgeyAhbROaNATXRIbnQJcFocsZ34PlGEkBcs="
+          file:
+            - target/dda-user-standalone.jar
+            - target/dda-user-standalone.jar.md5
+        - provider: script
+          script: bash integration/docker/publish.sh dda-user-crate
