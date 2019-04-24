@@ -19,15 +19,33 @@
     [dda.pallet.core.app :as core-app]
     [dda.pallet.dda-user-crate.app :as app]))
 
+(defn- get-results-of-session
+  "gets the results of the session in some form"
+  [session]
+  (let [results (:results session)
+        phases (map #(-> % :result) results)
+        exit-codes (map #(-> % :exit) (flatten phases))
+        every-exit-code (every? #(or (= 0 %) (= nil %)) exit-codes)]
+    (spit "phases.edn" (prn-str phases))
+    (spit "results.edn" (prn-str results))
+    (spit "exit-codes.edn" (prn-str exit-codes))
+    (println every-exit-code)))
+
+
 (defn install
   [& options]
   (let [{:keys [domain targets summarize-session]
          :or {domain "user.edn"
               targets "targets.edn"
               summarize-session true}} options]
-    (core-app/existing-install app/crate-app
-                          {:domain domain
-                           :targets targets})))
+    (let [session (get-results-of-session
+                    (core-app/existing-install
+                                            app/crate-app
+                                            {:domain domain
+                                             :targets targets}))])))
+
+
+
 
 (defn configure
  [& options]
