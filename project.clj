@@ -3,7 +3,7 @@
   :url "https://www.domaindrivenarchitecture.org"
   :license {:name "Apache License, Version 2.0"
             :url "https://www.apache.org/licenses/LICENSE-2.0.html"}
-  :dependencies [[dda/dda-pallet "2.2.4-SNAPSHOT"]]
+  :dependencies [[dda/dda-pallet "2.3.0-SNAPSHOT"]]
   :source-paths ["main/src"]
   :resource-paths ["main/resources"]
   :target-path "target/%s/"

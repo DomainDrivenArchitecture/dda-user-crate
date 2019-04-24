@@ -17,11 +17,11 @@
 (ns dda.pallet.dda-user-crate.main
   (:gen-class)
   (:require
-    [clojure.string :as str]
-    [clojure.tools.cli :as cli]
-    [dda.config.commons.styled-output :as styled]
-    [dda.pallet.core.app :as core-app]
-    [dda.pallet.dda-user-crate.app :as app]))
+   [clojure.string :as str]
+   [clojure.tools.cli :as cli]
+   [dda.config.commons.styled-output :as styled]
+   [dda.pallet.core.app :as core-app]
+   [dda.pallet.dda-user-crate.app :as app]))
 
 (def cli-options
   [["-h" "--help"]
@@ -73,7 +73,8 @@
                              app/crate-app
                              {:domain (first arguments)
                               :targets (:targets options)})
-      :default (core-app/existing-install
-                 app/crate-app
-                 {:domain (first arguments)
-                  :targets (:targets options)}))))
+      :default (let [session (core-app/existing-install
+                              app/crate-app
+                              {:domain (first arguments)
+                               :targets (:targets options)})]
+                 (spit "out.edn" (prn-str session))))))
