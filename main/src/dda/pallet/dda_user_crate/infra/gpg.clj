@@ -22,6 +22,7 @@
    [dda.config.commons.ssh-key :as ssh-common]))
 
 (def GpgKey {:public-key s/Str
+             :public-key-id s/Str
              (s/optional-key :passphrase) s/Str
              (s/optional-key :private-key) s/Str})
 
@@ -43,11 +44,11 @@
     :group user-name
     :action :create))
 
-(s/defn configure
+(s/defn configure-user
   [user-name :- s/Str
    config :- GpgConfig]
   (let [{:keys [trusted-key]} config
-        {:keys [public-key private-key passphrase]} trusted-key
+        {:keys [public-key public-key-id private-key passphrase]} trusted-key
         user-home (ssh-common/user-home-dir user-name)]
     (actions/remote-file
       (str user-home "/pub.key")
@@ -72,7 +73,7 @@
     (actions/remote-file
       (str user-home "/.gnupg/gpg-agent.conf")
       :mode "600"
-      :content "allow-loopback-pinentry"
+      :content (slurp (io/resource "gpg-agent.conf"))
       :owner user-name
       :group user-name
       :action :create)
@@ -82,9 +83,9 @@
       :script-env {:HOME user-home}}
      (actions/exec-checked-script
       "import & trust gpg key"
-      ("gpgconf" "--reload gpg-agent")
-      ("gpg2" "--import" ~(str user-home "/pub.key"))
-      ("echo" ~passphrase "|" "gpg2" "--pinentry-mode loopback"
-              "--batch --passphrase-fd 0"
-              "--import" ~(str user-home "/priv.key"))
-      ("/usr/lib/gpg-trust-all.sh")))))
+      ("su" ~user-name "-c" "\"gpgconf" "--kill" "gpg-agent\"")
+      ("su" ~user-name "-c" "\"gpgconf" "--launch" "gpg-agent\"")
+      ("su" ~user-name "-c" "\"gpg" "--import" ~(str user-home "/pub.key") "\"")
+      ("su" ~user-name "-c" "\"echo" ~passphrase "|" "/usr/lib/gnupg/gpg-preset-passphrase" "--preset" ~public-key-id "\"")
+      ("su" ~user-name "-c" "\"gpg" "--batch" "--import" ~(str user-home "/priv.key") "\"")
+      ("su" ~user-name "-c" "\"/usr/lib/gpg-trust-all.sh\"")))))

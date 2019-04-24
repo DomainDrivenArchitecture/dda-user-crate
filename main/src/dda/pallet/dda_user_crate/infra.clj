@@ -65,7 +65,7 @@
        (when (contains? settings :sudo)
          (user/configure-user-sudo (name k)))
        (when (contains? v :gpg)
-         (gpg/configure (name k) gpg))))))
+         (gpg/configure-user (name k) gpg))))))
 
 (s/defmethod core-infra/dda-install facility
   [dda-crate config]

@@ -1,6 +1,7 @@
 # Infra-Schema
 ```clojure
 (def GpgKey {:public-key s/Str
+             :public-key-id s/Str
              (s/optional-key :passphrase) s/Str
              (s/optional-key :private-key) s/Str})
 

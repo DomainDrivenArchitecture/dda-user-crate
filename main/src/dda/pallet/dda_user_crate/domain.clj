@@ -17,6 +17,8 @@
   (:require
    [schema.core :as s]
    [dda.config.commons.ssh-key :as ssh-commons]
+   [dda.config.commons.gpg-key :as gpg-commons]
+   [dda.config.commons.map-utils :as mu]
    [dda.pallet.commons.secret :as secret]
    [clojure.tools.logging :as logging]
    [dda.pallet.dda-user-crate.domain.ssh :as ssh]
@@ -49,20 +51,21 @@
 (defn-
   user-infra-configuration
   [user-domain-config]
-  (merge
-    (when (contains? user-domain-config :hashed-password)
-      {:hashed-password (:hashed-password user-domain-config)})
-    (when (contains? user-domain-config :clear-password)
-      {:clear-password (:clear-password user-domain-config)})
-    (when (contains? user-domain-config :gpg)
-      {:gpg (:gpg user-domain-config)})
-    (when (contains? user-domain-config :ssh-authorized-keys)
-      {:ssh-authorized-keys (ssh/authorized-keys-infra-configuration
-                              (:ssh-authorized-keys user-domain-config))})
-    (when (contains? user-domain-config :ssh-key)
-      {:ssh-key (ssh/key-pair-infra-configuration (:ssh-key user-domain-config))})
-    (when (contains? user-domain-config :settings)
-      {:settings (:settings user-domain-config)})))
+  (let [{:keys [hashed-password clear-password gpg ssh-authorized-keys ssh-key settings]} user-domain-config]
+    (merge
+     (when (contains? user-domain-config :hashed-password)
+       {:hashed-password hashed-password})
+     (when (contains? user-domain-config :clear-password)
+       {:clear-password clear-password})
+     (when (contains? user-domain-config :gpg)
+       {:gpg (mu/deep-merge gpg
+                            {:trusted-key {:public-key-id (gpg-commons/hex-id (get-in gpg [:trusted-key :public-key]))}})})
+     (when (contains? user-domain-config :ssh-authorized-keys)
+       {:ssh-authorized-keys (ssh/authorized-keys-infra-configuration ssh-authorized-keys)})
+     (when (contains? user-domain-config :ssh-key)
+       {:ssh-key (ssh/key-pair-infra-configuration ssh-key)})
+     (when (contains? user-domain-config :settings)
+       {:settings settings}))))
 
 
 (s/defn ^:always-validate
