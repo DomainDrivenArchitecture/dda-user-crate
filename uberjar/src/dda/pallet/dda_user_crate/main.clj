@@ -19,21 +19,9 @@
   (:require
    [clojure.string :as str]
    [clojure.tools.cli :as cli]
-   [dda.config.commons.styled-output :as styled]
+   [dda.pallet.core.main-helper :as mh]
    [dda.pallet.core.app :as core-app]
    [dda.pallet.dda-user-crate.app :as app]))
-
-(defn- get-results-of-session
-  "gets the results of the session in some form"
-  [session]
-  (let [results (:results session)
-        phases (map #(-> % :result) results)
-        exit-codes (map #(-> % :exit) (flatten phases))
-        every-exit-code (every? #(or (= 0 %) (= nil %)) exit-codes)]
-    (spit "phases.edn" (prn-str phases))
-    (spit "results.edn" (prn-str results))
-    (spit "exit-codes.edn" (prn-str exit-codes))
-    (println every-exit-code)))
 
 (def cli-options
   [["-h" "--help"]
@@ -79,16 +67,18 @@
                                   {:domain (first arguments)
                                    :targets (:targets options)
                                    :verbosity verbose})
-                                (exit 0 (styled/styled "ALL TESTS PASSED" :green))
-                                (exit 2 (styled/styled "SOME TESTS FAILED" :red)))
-      (:configure options) (get-results-of-session
-                             (core-app/existing-configure
-                               app/crate-app
-                               {:domain (first arguments)
-                                :targets (:targets options)}))
-      :default (let [session (get-results-of-session
-                               (core-app/existing-install
-                                 app/crate-app
-                                 {:domain (first arguments)
-                                  :targets (:targets options)}))]
-                 (spit "out.edn" (prn-str session))))))
+                                (mh/exit-test-passed)
+                                (mh/exit-test-failed))
+      (:configure options) (if (core-app/existing-configure
+                                  app/crate-app
+                                  {:domain (first arguments)
+                                   :targets (:targets options)})
+                             (mh/exit-default-success)
+                             (mh/exit-default-error))
+      :default (let [result (core-app/existing-install
+                                app/crate-app
+                                {:domain (first arguments)
+                                :targets (:targets options)})]
+                  (if result
+                      (mh/exit-default-success)
+                      (mh/exit-default-error))))))
