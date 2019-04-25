@@ -47,21 +47,13 @@
     "  - has to be a valid UserDomainConfig (see: https://github.com/DomainDrivenArchitecture/dda-user-crate)"
     ""]))
 
-(defn error-msg [errors]
-  (str "The following errors occurred while parsing your command:\n\n"
-       (str/join \newline errors)))
-
-(defn exit [status msg]
-  (println msg)
-  (System/exit status))
-
 (defn -main [& args]
   (let [{:keys [options arguments errors summary help]} (cli/parse-opts args cli-options)
         verbose (if (contains? options :verbose) 1 0)]
     (cond
-      help (exit 0 (usage summary))
-      errors (exit 1 (error-msg errors))
-      (not= (count arguments) 1) (exit 1 (usage summary))
+      help (mh/exit 0 (usage summary))
+      errors (mh/exit 1 (mh/error-msg errors))
+      (not= (count arguments) 1) (mh/exit 1 (usage summary))
       (:serverspec options) (if (core-app/existing-serverspec
                                   app/crate-app
                                   {:domain (first arguments)
