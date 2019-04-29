@@ -19,6 +19,8 @@
    [schema.core :as s]
    [dda.pallet.dda-user-crate.domain :as sut]))
 
+; a comment
+
 (def gpg-pub-key "-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1
 

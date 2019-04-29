@@ -1,9 +1,9 @@
-(defproject dda/dda-user-crate "2.0.0-SNAPSHOT"
+(defproject dda/dda-user-crate "2.0.0"
   :description "A crate to handle users"
   :url "https://www.domaindrivenarchitecture.org"
   :license {:name "Apache License, Version 2.0"
             :url "https://www.apache.org/licenses/LICENSE-2.0.html"}
-  :dependencies [[dda/dda-pallet "3.0.0-SNAPSHOT"]]
+  :dependencies [[dda/dda-pallet "3.0.0"]]
   :source-paths ["main/src"]
   :resource-paths ["main/resources"]
   :target-path "target/%s/"

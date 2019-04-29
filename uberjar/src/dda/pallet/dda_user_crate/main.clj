@@ -23,14 +23,6 @@
    [dda.pallet.core.app :as core-app]
    [dda.pallet.dda-user-crate.app :as app]))
 
-(def cli-options
-  [["-h" "--help"]
-   ["-s" "--serverspec"]
-   ["-c" "--configure"]
-   ["-t" "--targets targets.edn" "edn file containing the targets to install on."
-    :default "localhost-target.edn"]
-   ["-v" "--verbose"]])
-
 (defn usage [options-summary]
   (str/join
    \newline
@@ -48,7 +40,7 @@
     ""]))
 
 (defn -main [& args]
-  (let [{:keys [options arguments errors summary help]} (cli/parse-opts args cli-options)
+  (let [{:keys [options arguments errors summary help]} (cli/parse-opts args mh/cli-options)
         verbose (if (contains? options :verbose) 1 0)]
     (cond
       help (mh/exit 0 (usage summary))
