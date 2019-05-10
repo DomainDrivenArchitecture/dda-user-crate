@@ -1,2 +1,12 @@
-{:file [{:path "/home/test-user1"}
-        {:path "/home/test-user2"}]}
+{:file [{:path "/home/test-user1" :user "test-user1" :group "test-user1"}
+        {:path "/home/test-user1/.ssh" :user "test-user1" :group "test-user1" :mod "755"}
+        {:path "/home/test-user1/.ssh/authorized_keys" :user "test-user1" :group "test-user1" :mod "644"}
+        {:path "/home/test-user1/.ssh/id_rsa" :user "test-user1" :group "test-user1" :mod "600"}
+        {:path "/home/test-user1/.ssh/id_rsa.pub" :user "test-user1" :group "test-user1" :mod "644"}
+        {:path "/home/test-user2" :user "test-user2" :group "test-user2"}
+        {:path "/home/test-user2/.gnupg" :user "test-user2" :group "test-user2" :mod "700"}
+        {:path "/home/test-user2/.gnupg/pubring.kbx" :user "test-user2" :group "test-user2" :mod "664"}
+        {:path "/home/test-user2/.gnupg/private-keys-v1.d" :user "test-user2" :group "test-user2" :mod "700"}
+        {:path "/home/test-user2/.gnupg/trustdb.gpg" :user "test-user2" :group "test-user2" :mod "600"}]
+ :command [{:cmd "su test-user2 -c \"gpg --export-ownertrust | grep 4A04A1F4F7650705\"" 
+            :exit-code 0 :stdout "3BD06CF6D4B25CA2D7B2FF1C4A04A1F4F7650705:6:"}]}
