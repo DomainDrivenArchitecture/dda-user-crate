@@ -51,42 +51,38 @@
         {:keys [public-key public-key-id private-key passphrase]} trusted-key
         user-home (ssh-common/user-home-dir user-name)]
     (actions/remote-file
-      (str user-home "/pub.key")
-      :content public-key
-      :mode "600"
-      :owner user-name
-      :group user-name
-      :action :create)
+     (str user-home "/pub.key")
+     :content public-key
+     :mode "600"
+     :owner user-name
+     :group user-name
+     :action :create)
     (actions/remote-file
-      (str user-home "/priv.key")
-      :content private-key
-      :mode "600"
-      :owner user-name
-      :group user-name
-      :action :create)
+     (str user-home "/priv.key")
+     :content private-key
+     :mode "600"
+     :owner user-name
+     :group user-name
+     :action :create)
     (actions/directory
-      (str user-home "/.gnupg")
-      :mode "700"
-      :owner user-name
-      :group user-name
-      :action :create)
+     (str user-home "/.gnupg")
+     :mode "700"
+     :owner user-name
+     :group user-name
+     :action :create)
     (actions/remote-file
-      (str user-home "/.gnupg/gpg-agent.conf")
-      :mode "600"
-      :content (slurp (io/resource "gpg-agent.conf"))
-      :owner user-name
-      :group user-name
-      :action :create)
-    (action/with-action-options
-     {:sudo-user user-name
-      :script-dir user-home
-      :script-env {:HOME user-home}}
-     (actions/exec-checked-script
-      "import & trust gpg key"
-      ("su" ~user-name "-c" "\"gpg" "--import" ~(str user-home "/pub.key\""))
-      ("su" ~user-name "-c" "\"gpgconf" "--kill" "gpg-agent\"")
-      ("su" ~user-name "-c" "\"gpgconf" "--launch" "gpg-agent\"")
-      ("su" ~user-name "-c" "\"echo" ~passphrase "|" 
-            "/usr/lib/gnupg/gpg-preset-passphrase" "--preset" ~public-key-id "\"")
-      ("su" ~user-name "-c" "\"gpg" "--batch" "--import" ~(str user-home "/priv.key\""))
-      ("su" ~user-name "-c" "\"/usr/lib/gpg-trust-all.sh\"")))))
+     (str user-home "/.gnupg/gpg-agent.conf")
+     :mode "600"
+     :content (slurp (io/resource "gpg-agent.conf"))
+     :owner user-name
+     :group user-name
+     :action :create)
+    (actions/exec-checked-script
+     "import & trust gpg key"
+     ("su" ~user-name "-c" "\"gpg" "--import" ~(str user-home "/pub.key\""))
+     ("su" ~user-name "-c" "\"gpgconf" "--kill" "gpg-agent\"")
+     ("su" ~user-name "-c" "\"gpgconf" "--launch" "gpg-agent\"")
+     ("su" ~user-name "-c" "\"echo" ~passphrase "|"
+           "/usr/lib/gnupg/gpg-preset-passphrase" "--preset" ~public-key-id "\"")
+     ("su" ~user-name "-c" "\"gpg" "--batch" "--import" ~(str user-home "/priv.key\""))
+     ("su" ~user-name "-c" "\"/usr/lib/gpg-trust-all.sh\""))))
