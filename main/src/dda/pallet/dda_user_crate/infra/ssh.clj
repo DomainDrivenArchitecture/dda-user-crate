@@ -16,6 +16,7 @@
 (ns dda.pallet.dda-user-crate.infra.ssh
   (:require
    [clojure.string :as string]
+   [clojure.java.io :as io]
    [schema.core :as s]
    [pallet.actions :as actions]
    [dda.config.commons.ssh-key :as ssh-key]))
@@ -84,6 +85,7 @@
 (s/defn configure-user 
   [user-name :- s/Str
    ssh-config :- Ssh]
-  (ssh/configure-authorized-keys user-name ssh-config)
+  (configure-ssh-client user-name ssh-config)
+  (configure-authorized-keys user-name ssh-config)
   (when (contains? ssh-config :ssh-key)
-    (ssh/configure-ssh-key user-name ssh-config))
+    (configure-ssh-key user-name ssh-config)))
