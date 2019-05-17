@@ -80,9 +80,7 @@
     (actions/exec-checked-script
      "import & trust gpg key"
      ("su" ~user-name "-c" "\"gpg" "--import" ~(str user-home "/pub.key\""))
-     ("su" ~user-name "-c" "\"gpgconf" "--kill" "gpg-agent\"")
-     ("su" ~user-name "-c" "\"gpgconf" "--launch" "gpg-agent\"")
-     ("su" ~user-name "-c" "\"echo" ~passphrase "|"
-           "/usr/lib/gnupg/gpg-preset-passphrase" "--preset" ~public-key-id "\"")
      ("su" ~user-name "-c" "\"gpg" "--batch" "--import" ~(str user-home "/priv.key\""))
-     ("su" ~user-name "-c" "\"/usr/lib/gpg-trust-all.sh\""))))
+     ("su" ~user-name "-c" "\"/usr/lib/gpg-trust-all.sh\"")
+     ("su" ~user-name "-c" "\"gpgconf" "--kill" "gpg-agent\"")
+     ("su" ~user-name "-c" "\"gpgconf" "--launch" "gpg-agent\""))))
