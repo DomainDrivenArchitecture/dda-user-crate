@@ -85,7 +85,7 @@
 (s/defn configure-user 
   [user-name :- s/Str
    ssh-config :- Ssh]
-  (configure-ssh-client user-name ssh-config)
+  (configure-ssh-client user-name)
   (configure-authorized-keys user-name ssh-config)
   (when (contains? ssh-config :ssh-key)
     (configure-ssh-key user-name ssh-config)))
