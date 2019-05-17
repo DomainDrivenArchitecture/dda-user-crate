@@ -59,9 +59,7 @@
    (doseq [[k v] config]
      (let [{:keys [settings gpg]
             :or {settings #{:sudo :bashrc-d}}} v]
-       (ssh/configure-authorized-keys (name k) (filter-ssh v))
-       (when (contains? v :ssh-key)
-         (ssh/configure-ssh-key (name k) (filter-ssh v)))
+       (ssh/configure-user (name k) (filter-ssh v))
        (when (contains? settings :sudo)
          (user/configure-user-sudo (name k)))
        (when (contains? v :gpg)

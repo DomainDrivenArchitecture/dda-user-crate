@@ -24,6 +24,23 @@
  {(s/optional-key :ssh-authorized-keys) [ssh-key/PublicSshKey]
   (s/optional-key :ssh-key) ssh-key/SshKeyPair})
 
+(s/defn configure-ssh-client
+  "configure the ssh client."
+  [user-name :- s/Str]
+  (let [ssh-dir (ssh-key/user-ssh-dir user-name)]
+    (actions/directory
+     ssh-dir
+     :owner user-name
+     :group user-name
+     :mode "755")
+    (actions/remote-file
+     (str ssh-dir "config")
+     :overwrite-changes true
+     :owner user-name
+     :group user-name
+     :mode "644"
+     :content (slurp (io/resource "ssh_config")))))
+
 (s/defn configure-authorized-keys
   "configure the authorized_keys for a given user, all existing
   authorized_keys will be overwritten."
@@ -32,11 +49,6 @@
   (let [ssh-dir (ssh-key/user-ssh-dir user-name)
         authorized-keys (map ssh-key/format-public-key
                             (:ssh-authorized-keys ssh-config))]
-    (actions/directory
-      ssh-dir
-      :owner user-name
-      :group user-name
-      :mode "755")
     (actions/remote-file
       (str ssh-dir "authorized_keys")
       :overwrite-changes true
@@ -68,3 +80,10 @@
         :group user-name
         :mode "644"
         :content (ssh-key/format-public-key (:public-key ssh-key))))))
+
+(s/defn configure-user 
+  [user-name :- s/Str
+   ssh-config :- Ssh]
+  (ssh/configure-authorized-keys user-name ssh-config)
+  (when (contains? ssh-config :ssh-key)
+    (ssh/configure-ssh-key user-name ssh-config))
