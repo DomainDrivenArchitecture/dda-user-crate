@@ -28,14 +28,10 @@
       :owner user-name
       :group user-name
       :mode "755")
-    (action/with-action-options
-     {:sudo-user user-name
-      :script-dir user-home
-      :script-env {:HOME user-home}}
-     (actions/exec-checked-script
+    (actions/exec-checked-script
       "enable sourcing for bashrc files"
-      ("printf"
-       "'
+      ("sudo" "-H" "-u" ~user-name "bash" "-c"
+       "'printf \"
 # source .bashrc.d files
 if [ -d ~/.bashrc.d ]; then
   for i in ~/.bashrc.d/*.sh; do
@@ -45,4 +41,4 @@ if [ -d ~/.bashrc.d ]; then
   done
   unset i
 fi
-'" ">>" "~/.bashrc")))))
+\" >>  ~/.bashrc'"))))

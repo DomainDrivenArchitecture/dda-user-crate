@@ -7,10 +7,6 @@ services:
 stages:
   - build
 
-env:
-  global:
-    - DOCKER_USERNAME: domaindrivenarchitecture
-    - secure: "ZDGe2gY0afPwKRvmQWZLEGyTiAhj+Hqwf0qwTWRIIFx1oYYcCwkNNujiOGRstXnDi3ylnvPmhp/M0fAOa/xRoVOPDEsv2/Hme0ngbMbhratN5Ft2lPKT5msrPaLdmEm5sHxkz0L4I93fAQNIMDJFfEpOESI81hgFhQDaTGy/ilMGLy4HwCHg72KiLF10TA/sVnVZfDpKfZOwmx+obxVFKxRiKLJG0Clr16qXxTZXt9hvnyoHhYKbeDtlQNc/PsEQv7j6oCMRthNTYyY3vhX4NZ56nzXjgxmYOMdH9zvutwn8zo+H5JAKQSoYjxlZN1BL2jsRbnBTPBjv/j+IomOeWKXZLyjjQvIB8sZ7Zx2UwqknipzowvwyWhNv2JDnYOF27+K7Ve/iZ3DsUqtbkO3Mn7LxKZrTTeg3IwSPBXUhM9smaX+AVpLREeEFJsW82PwvA85aBWA6IV0hPwejeOVaWA1m5rWjrZYUWAnC4JvbmE4UmeJoYWbDb8YlJQkZBPoBA5q7D4RErZkt9Y2X+YWWEisWK3S4PpgYK4cbt0IMd0TksphdpsF63xprLqhG4YmefUmdwjIsAyHdaFMQVj2etaAA+W4njpqw133BVniLFJZJseEE5IjY4EYzOw7KnyLqxZlT0O1Uo4teO+dFKOytGmmslXF87bjUzhJUUP1wJDo="
 jobs:
   include:
     - stage: build
