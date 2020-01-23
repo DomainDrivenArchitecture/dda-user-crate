@@ -18,9 +18,9 @@ jobs:
         - sha256sum target/uberjar/dda-user-standalone.jar > target/uberjar/dda-user-standalone.jar.sha256
         - sha512sum target/uberjar/dda-user-standalone.jar > target/uberjar/dda-user-standalone.jar.sha512
         - # create docker image
-        - docker build -t dda-user-crate --file integration/docker/image/Dockerfile .
+        - docker build -t dda-user-crate-as-root --file integration/docker/image_as_root/Dockerfile .
         - # integration test on docker image level
-        - docker build -t dda-user-crate-test --file integration/docker/test/Dockerfile .
+        - docker build -t dda-user-crate-as-root-test --file integration/docker/test_as_root/Dockerfile .
       deploy:
         - provider: releases
           skip_cleanup: true
