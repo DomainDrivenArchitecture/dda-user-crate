@@ -1,4 +1,4 @@
-FROM dda-user-crate
+FROM dda-user-crate-as-root
 
 RUN apt-get -yqq install curl > /dev/null
 
