@@ -17,10 +17,10 @@
                    :resource-paths ["integration/resources"
                                     "test/resources"]
                    :dependencies
-                   [[org.clojure/test.check "0.10.0-alpha4"]
-                    [org.clojure/core.async "0.4.490"]
-                    [ch.qos.logback/logback-classic "1.3.0-alpha4"]
-                    [org.slf4j/jcl-over-slf4j "1.8.0-beta4"]]
+                   [[org.clojure/test.check "0.10.0"]
+                    [org.clojure/core.async "0.7.559"]
+                    [ch.qos.logback/logback-classic "1.3.0-alpha5"]
+                    [org.slf4j/jcl-over-slf4j "2.0.0-alpha1"]]
                    :plugins [[lein-sub "0.3.0"]
                              [lein-pprint "1.1.2"]]
                    :leiningen/reply
@@ -36,9 +36,9 @@
                        :main dda.pallet.dda-user-crate.main
                        :uberjar-name "dda-user-standalone.jar"
                        :dependencies [[org.clojure/tools.cli "0.4.2"]
-                                      [ch.qos.logback/logback-classic "1.3.0-alpha4"
+                                      [ch.qos.logback/logback-classic "1.3.0-alpha5"
                                        :exclusions [com.sun.mail/javax.mail]]
-                                      [org.slf4j/jcl-over-slf4j "1.8.0-beta4"]]}}
+                                      [org.slf4j/jcl-over-slf4j "2.0.0-alpha1"]]}}
   :release-tasks [["vcs" "assert-committed"]
                   ["change" "version" "leiningen.release/bump-version" "release"]
                   ["vcs" "commit"]
