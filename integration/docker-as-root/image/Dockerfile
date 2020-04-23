@@ -6,7 +6,7 @@ RUN apt-get update > /dev/null \
 
 RUN apt-get -qqy install curl apt-utils sudo gnupg > /dev/null
 
-COPY target/uberjar/dda-user-standalone.jar /app/dda-user-standalone.jar
-COPY integration/docker/image_as_root/user.edn /app/user.edn
+COPY dda-user-standalone.jar /app/dda-user-standalone.jar
+COPY user.edn /app/user.edn
 
 RUN java -jar /app/dda-user-standalone.jar /app/user.edn

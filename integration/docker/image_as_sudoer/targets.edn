@@ -1,4 +1,0 @@
-{:existing [{:node-name "user-test"
-             :node-ip "0.0.0.0:32768"}]
- :provisioning-user {:login "install-user"
-                     :password {:plain "insecure"}}}
