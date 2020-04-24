@@ -18,7 +18,7 @@ jobs:
         - sha256sum target/uberjar/dda-user-standalone.jar > target/uberjar/dda-user-standalone.jar.sha256
         - sha512sum target/uberjar/dda-user-standalone.jar > target/uberjar/dda-user-standalone.jar.sha512
         - # integration test as root
-        - cd integration/docker-as-root pyb image test
+        - cd integration/docker-as-root && pyb image test
       deploy:
         - provider: releases
           skip_cleanup: true
