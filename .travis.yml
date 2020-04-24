@@ -4,7 +4,7 @@ language: clojure
 before_install:
   - sudo apt-get -y install python3-pip python3-setuptools
   - pip3 install pybuilder ddadevops deprecation
-  - pip3 install python_terraform
+  - pip3 install python_terraform boto3
 addons:
   apt:
     update: true
