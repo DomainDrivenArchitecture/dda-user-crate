@@ -1,0 +1,5 @@
+#!/bin/bash
+
+mkdir -p {{ssh-dir}}
+chmod 755 {{ssh-dir}}
+install --owner {{user}} --group {{user}} --mode "644" config {{ssh-dir}}

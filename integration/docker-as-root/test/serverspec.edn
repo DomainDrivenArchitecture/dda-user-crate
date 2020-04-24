@@ -1,5 +1,6 @@
 {:file [{:path "/home/test-user1" :user "test-user1" :group "test-user1"}
         {:path "/home/test-user1/.ssh" :user "test-user1" :group "test-user1" :mod "755"}
+        {:path "/home/test-user1/.ssh/config" :user "test-user1" :group "test-user1" :mod "644"}
         {:path "/home/test-user1/.ssh/authorized_keys" :user "test-user1" :group "test-user1" :mod "644"}
         {:path "/home/test-user1/.ssh/id_rsa" :user "test-user1" :group "test-user1" :mod "600"}
         {:path "/home/test-user1/.ssh/id_rsa.pub" :user "test-user1" :group "test-user1" :mod "644"}

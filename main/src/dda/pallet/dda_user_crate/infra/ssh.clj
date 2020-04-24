@@ -19,28 +19,13 @@
    [clojure.java.io :as io]
    [schema.core :as s]
    [pallet.actions :as actions]
+   [dda.provision :as p]
+   [dda.provision.pallet :as pp]
    [dda.config.commons.ssh-key :as ssh-key]))
 
 (def Ssh
  {(s/optional-key :ssh-authorized-keys) [ssh-key/PublicSshKey]
   (s/optional-key :ssh-key) ssh-key/SshKeyPair})
-
-(s/defn configure-ssh-client
-  "configure the ssh client."
-  [user-name :- s/Str]
-  (let [ssh-dir (ssh-key/user-ssh-dir user-name)]
-    (actions/directory
-     ssh-dir
-     :owner user-name
-     :group user-name
-     :mode "755")
-    (actions/remote-file
-     (str ssh-dir "config")
-     :overwrite-changes true
-     :owner user-name
-     :group user-name
-     :mode "644"
-     :content (slurp (io/resource "ssh_config")))))
 
 (s/defn configure-authorized-keys
   "configure the authorized_keys for a given user, all existing
@@ -82,10 +67,15 @@
         :mode "644"
         :content (ssh-key/format-public-key (:public-key ssh-key))))))
 
-(s/defn configure-user 
+(s/defn configure-user
   [user-name :- s/Str
    ssh-config :- Ssh]
-  (configure-ssh-client user-name)
+  (p/copy-resources-to-user
+   ::pp/pallet user-name "dda-user-crate" "ssh"
+   [{::p/filename "configure.sh" ::p/config {:user user-name
+                                             :ssh-dir (ssh-key/user-ssh-dir user-name)}}
+    {::p/filename "config"}])
+  (p/exec-as-user ::pp/pallet user-name "dda-user-crate" "ssh" "configure.sh")
   (configure-authorized-keys user-name ssh-config)
   (when (contains? ssh-config :ssh-key)
     (configure-ssh-key user-name ssh-config)))

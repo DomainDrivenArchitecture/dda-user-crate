@@ -19,20 +19,44 @@
     </encoder>
   </appender>
 
-  <logger name="clj-ssh.ssh" level="INFO">
+  <logger name="clj-ssh.ssh" level="ERROR">
+    <appender-ref ref="CONSOLE" />
     <appender-ref ref="PALLETFILE" />
   </logger>
 
   <logger name="pallet" level="DEBUG">
+    <appender-ref ref="CONSOLE" />
+    <appender-ref ref="PALLETFILE" />
+  </logger>
+
+  <logger name="pallet.ssh" level="ERROR">
+    <appender-ref ref="CONSOLE" />
+    <appender-ref ref="PALLETFILE" />
+  </logger>
+
+  <logger name="pallet.algo" level="ERROR">
+    <appender-ref ref="CONSOLE" />
+    <appender-ref ref="PALLETFILE" />
+  </logger>
+
+  <logger name="pallet.executors" level="INFO">
+    <appender-ref ref="CONSOLE" />
     <appender-ref ref="PALLETFILE" />
   </logger>
 
   <logger name="dda" level="DEBUG">
+    <appender-ref ref="CONSOLE" />
     <appender-ref ref="PALLETFILE" />
   </logger>
 
-  <root level="INFO">
+  <logger name="meissa" level="DEBUG">
     <appender-ref ref="CONSOLE" />
+    <appender-ref ref="PALLETFILE" />
+  </logger>
+
+  <root level="DEBUG">
+    <appender-ref ref="CONSOLE" />
+    <appender-ref ref="PALLETFILE" />
   </root>
 
 </configuration>
