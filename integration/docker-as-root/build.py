@@ -13,7 +13,7 @@ class MyBuild(DevopsDockerBuild):
 from subprocess import run
 @init
 def initialize(project):
-    project.build_depends_on('ddadevops>=0.6.0')
+    project.build_depends_on('ddadevops>=0.6.1')
     stage = 'notused'
     dockerhub_user = 'notused'
     dockerhub_password = 'notused'
