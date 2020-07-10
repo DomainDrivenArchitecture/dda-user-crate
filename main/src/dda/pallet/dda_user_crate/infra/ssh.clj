@@ -16,7 +16,6 @@
 (ns dda.pallet.dda-user-crate.infra.ssh
   (:require
    [clojure.string :as string]
-   [clojure.java.io :as io]
    [schema.core :as s]
    [pallet.actions :as actions]
    [dda.provision :as p]
