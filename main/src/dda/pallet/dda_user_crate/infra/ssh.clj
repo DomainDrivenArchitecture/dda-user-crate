@@ -71,10 +71,11 @@
    ssh-config :- Ssh]
   (p/copy-resources-to-user
    ::pp/pallet user-name "dda-user-crate" "ssh"
-   [{::p/filename "configure.sh" ::p/config {:user user-name
-                                             :ssh-dir (ssh-key/user-ssh-dir user-name)}}
-    {::p/filename "config"}])
-  (p/exec-as-user ::pp/pallet user-name "dda-user-crate" "ssh" "configure.sh")
+   [{:filename "configure.sh" :config {:user user-name
+                                       :ssh-dir (ssh-key/user-ssh-dir user-name)}}
+    {:filename "config"}])
+  (p/exec-file-on-target-as-user
+   ::pp/pallet user-name "dda-user-crate" "ssh" "configure.sh")
   (configure-authorized-keys user-name ssh-config)
   (when (contains? ssh-config :ssh-key)
     (configure-ssh-key user-name ssh-config)))

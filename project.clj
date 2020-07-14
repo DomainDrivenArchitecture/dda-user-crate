@@ -3,7 +3,7 @@
   :url "https://www.domaindrivenarchitecture.org"
   :license {:name "Apache License, Version 2.0"
             :url "https://www.apache.org/licenses/LICENSE-2.0.html"}
-  :dependencies [[dda/dda-pallet "3.1.1"]]
+  :dependencies [[dda/dda-pallet "3.1.2"]]
   :source-paths ["main/src"]
   :resource-paths ["main/resources"]
   :target-path "target/%s/"
@@ -17,7 +17,7 @@
                    :resource-paths ["integration/resources"
                                     "test/resources"]
                    :dependencies
-                   [[org.clojure/test.check "1.0.0"]
+                   [[org.clojure/test.check "1.1.0"]
                     [ch.qos.logback/logback-classic "1.3.0-alpha5"]
                     [org.slf4j/jcl-over-slf4j "2.0.0-alpha1"]]
                    :leiningen/reply
