@@ -10,9 +10,11 @@ PROJECT_ROOT_PATH = '../..'
 class MyBuild(DevopsDockerBuild):
     pass
 
+import sys
 from subprocess import run
 @init
 def initialize(project):
+    print (sys.version_info)
     project.build_depends_on('ddadevops>=0.6.1')
     stage = 'notused'
     dockerhub_user = 'notused'
