@@ -2,7 +2,7 @@ dda-user-cratedist: trusty
 language: clojure
 
 before_install:
-  - sudo apt-get -y install python3-pip python3-setuptools
+  - sudo apt-get -y install python3-pip python3-setuptools python3.6
   - pip3 install pybuilder ddadevops deprecation python_terraform boto3
 addons:
   apt:
