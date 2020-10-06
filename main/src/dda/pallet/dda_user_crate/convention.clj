@@ -13,7 +13,7 @@
 ; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
-(ns dda.pallet.dda-user-crate.domain
+(ns dda.pallet.dda-user-crate.convention
   (:require
    [schema.core :as s]
    [dda.config.commons.ssh-key :as ssh-commons]
@@ -21,7 +21,7 @@
    [dda.config.commons.map-utils :as mu]
    [dda.pallet.commons.secret :as secret]
    [clojure.tools.logging :as logging]
-   [dda.pallet.dda-user-crate.domain.ssh :as ssh]
+   [dda.pallet.dda-user-crate.convention.ssh :as ssh]
    [dda.pallet.dda-user-crate.infra :as infra]))
 
 (def GpgKey {:public-key secret/Secret

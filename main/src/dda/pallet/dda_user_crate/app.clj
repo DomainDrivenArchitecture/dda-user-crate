@@ -21,7 +21,7 @@
    [dda.pallet.core.app :as core-app]
    [dda.pallet.dda-config-crate.infra :as config-crate]
    [dda.pallet.dda-user-crate.infra :as infra]
-   [dda.pallet.dda-user-crate.domain :as domain]))
+   [dda.pallet.dda-user-crate.convention :as domain]))
 
 (def with-user infra/with-user)
 
@@ -59,6 +59,6 @@
 
 (def crate-app (core-app/make-dda-crate-app
                   :facility infra/facility
-                  :domain-schema UserDomainConfig
-                  :domain-schema-resolved UserDomainConfigResolved
-                  :default-domain-file "user.edn"))
+                  :convention-schema UserDomainConfig
+                  :convention-schema-resolved UserDomainConfigResolved
+                  :default-convention-file "user.edn"))
