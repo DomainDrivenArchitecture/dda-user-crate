@@ -3,15 +3,15 @@
 [![Clojars Project](https://img.shields.io/clojars/v/dda/dda-user-crate.svg)](https://clojars.org/dda/dda-user-crate)
 [![Build Status](https://travis-ci.org/DomainDrivenArchitecture/dda-user-crate.svg?branch=master)](https://travis-ci.org/DomainDrivenArchitecture/dda-user-crate)
 
-[![Slack](https://img.shields.io/badge/chat-clojurians-green.svg?style=flat)](https://clojurians.slack.com/messages/#dda-pallet/) | [<img src="https://meissa-gmbh.de/img/community/Mastodon_Logotype.svg" width=20 alt="team@social.meissa-gmbh.de"> team@social.meissa-gmbh.de](https://social.meissa-gmbh.de/@team) | [Website & Blog](https://domaindrivenarchitecture.org)
+[<img src="https://domaindrivenarchitecture.org/img/delta-chat.svg" width=20 alt="DeltaChat"> chat over e-mail](mailto:buero@meissa-gmbh.de?subject=community-chat) | [<img src="https://meissa-gmbh.de/img/community/Mastodon_Logotype.svg" width=20 alt="team@social.meissa-gmbh.de"> team@social.meissa-gmbh.de](https://social.meissa-gmbh.de/@team) | [Website & Blog](https://domaindrivenarchitecture.org)
 
 This crate is part of [dda-pallet](https://domaindrivenarchitecture.org/pages/dda-pallet/).
 
 ## compatability
 dda-pallet is compatible to the following versions
-* pallet 0.8.x
-* clojure 1.7
-* (x)ubunutu 16.04
+* pallet 0.9.x
+* clojure 1.10
+* (x)ubunutu 20.04
 
 ## Features
 This crate provisions over ssh or locally users to an existing- or cloud-targets.
