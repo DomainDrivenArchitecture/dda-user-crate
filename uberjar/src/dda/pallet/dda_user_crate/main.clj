@@ -36,7 +36,7 @@
     ""
     "user.edn"
     "  - follows the edn format."
-    "  - has to be a valid UserDomainConfig (see: https://github.com/DomainDrivenArchitecture/dda-user-crate)"
+    "  - has to be a valid UserConventionConfig (see: https://github.com/DomainDrivenArchitecture/dda-user-crate)"
     ""]))
 
 (defn -main [& args]
@@ -48,21 +48,21 @@
       (not= (count arguments) 1) (mh/exit 1 (usage summary))
       (:serverspec options) (if (core-app/existing-serverspec
                                   app/crate-app
-                                  {:domain (first arguments)
+                                  {:convention (first arguments)
                                    :targets (:targets options)
                                    :verbosity verbose})
                                 (mh/exit-test-passed)
                                 (mh/exit-test-failed))
       (:configure options) (if (core-app/existing-configure
                                   app/crate-app
-                                  {:domain (first arguments)
+                                  {:convention (first arguments)
                                    :targets (:targets options)})
                              (mh/exit-default-success)
                              (mh/exit-default-error))
       :default (let [result (core-app/existing-install
                                 app/crate-app
-                                {:domain (first arguments)
-                                :targets (:targets options)})]
+                                {:convention (first arguments)
+                                 :targets (:targets options)})]
                   (if result
                       (mh/exit-default-success)
                       (mh/exit-default-error))))))
