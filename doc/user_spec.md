@@ -35,7 +35,7 @@
 
 ```
 
-# Domain-Schema
+# Convention-Schema
 ```clojure
 (def GpgKey {:public-key secret/Secret                          ; the gpg public key - has to be a valid gpg key.
              (s/optional-key :passphrase) secret/Secret         ; gpg keys passphrase
@@ -67,7 +67,7 @@
            Settings)))
 ```
 
-# Domain-Example
+# Convention-Example
 ```clojure
 {:test-user1                                                      ; the user-name, root also works.
     {:clear-password {:plain "xxx"}                               ; the users password

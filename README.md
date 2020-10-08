@@ -32,7 +32,7 @@ This crate installs and configures software on your virtual machine. You can pro
 ### Usage Summary
 1. Download the jar-file from the releases page of this repository (e.g. `curl -L -o dda-user.jar https://github.com/DomainDrivenArchitecture/dda-user-crate/releases/download/1.0.4/dda-user-crate-1.0.4-standalone.jar`)
 2. Deploy the jar-file on the source machine
-3. Create the files `user.edn` (Domain-Schema for your desktop) and `target.edn` (Schema for Targets to be provisioned) according to the reference and our example configurations. Please create them in the same folder where you've saved the jar-file. For more information about these files refer to the corresponding information below.
+3. Create the files `user.edn` (Convention-Schema for your desktop) and `target.edn` (Schema for Targets to be provisioned) according to the reference and our example configurations. Please create them in the same folder where you've saved the jar-file. For more information about these files refer to the corresponding information below.
 4. Start the installation:
 ```bash
 java -jar dda-user.jar --targets targets.edn user.edn
@@ -106,7 +106,7 @@ The schema for the targets config is:
 
 The "targets.edn" uses this schema.
 
-### Domain API
+### Convention API
 The schema for the user configuration is:
 ```clojure
 (def Secret
